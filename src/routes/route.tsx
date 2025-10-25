@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import SplashScree from "../pages/SplashScree";
+import SplashScreen from "../pages/SplashScreen";
 import RegisterPage from "../pages/RegisterPage";
 import RegisterResultPage from "../pages/RegisterResultPage";
-import Protected from "../layout/Protected";
+import Protected from "../layout/MainLayout/Protected";
 import HomePage from "../pages/HomePage";
 import PaymentDetailPage from "../pages/PaymentDetailPage";
 import QRPage from "../pages/QRPage";
@@ -10,11 +10,12 @@ import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 import HistoryPage from "../pages/HistoryPage";
 import NotificationPage from "../pages/NotificationPage";
 import NotfoundPage from "../pages/NotfoundPage";
+import MainLayout from "../layout/MainLayout/MainLayout";
 
 export const APP_ROUTES = createBrowserRouter([
   {
     index: true,
-    element: <SplashScree />,
+    element: <SplashScreen />,
     errorElement: <NotfoundPage />,
   },
   {
@@ -26,32 +27,37 @@ export const APP_ROUTES = createBrowserRouter([
     element: <RegisterResultPage />,
   },
   {
-    path: "home",
-    element: <Protected />,
+    element: (
+      <Protected>
+        <MainLayout />
+      </Protected>
+    ),
     children: [
       {
-        index: true,
+        path: "home",
         element: <HomePage />,
-      },
-      {
-        path: ":id",
-        element: <PaymentDetailPage />,
-      },
-      {
-        path: ":id/qr",
-        element: <QRPage />,
-      },
-      {
-        path: ":id/success",
-        element: <PaymentSuccessPage />,
-      },
-      {
-        path: ":id/fail",
-        element: <PaymentSuccessPage />,
-      },
-      {
-        path: ":id/pending",
-        element: <PaymentSuccessPage />,
+        children: [
+          {
+            path: ":id",
+            element: <PaymentDetailPage />,
+          },
+          {
+            path: ":id/qr",
+            element: <QRPage />,
+          },
+          {
+            path: ":id/success",
+            element: <PaymentSuccessPage />,
+          },
+          {
+            path: ":id/fail",
+            element: <PaymentSuccessPage />,
+          },
+          {
+            path: ":id/pending",
+            element: <PaymentSuccessPage />,
+          },
+        ],
       },
       {
         path: "term",
