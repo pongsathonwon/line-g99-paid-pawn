@@ -5,9 +5,12 @@ import { useMutation } from "@tanstack/react-query";
 import { AUTH_API } from "../../api/endpoint/auth";
 import type { TMaybe } from "../../types/base.type";
 
+const MOCK_SUCCESS_LOGIN = { error: null, token: "test-token" };
+const MOCK_FAIL_LOGIN = { error: "mock fail login", token: null };
+
 function AuthContextProvider({ children }: React.PropsWithChildren) {
   const { lineCtx } = useLineContext();
-  const uid = lineCtx.profile?.userId ?? "";
+  const uid = lineCtx?.profile?.userId ?? "";
   // migrate this to reducer
   const [token, setToken] = React.useState<TMaybe<string>>(null);
   const [error, setError] = React.useState<TMaybe<string>>(null);
@@ -30,9 +33,9 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
     // call login api
     loginMutation.mutateAsync({ uid });
   }, [uid]);
-
+  const ctx = error !== null ? { error, token: null } : { error: null, token };
   return (
-    <AuthContext.Provider value={{ error, token }}>
+    <AuthContext.Provider value={MOCK_SUCCESS_LOGIN}>
       {children}
     </AuthContext.Provider>
   );

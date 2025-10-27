@@ -1,9 +1,11 @@
 import { axiosClient } from "../axios"
 
 const login = async (req: TAuthLoginReq) => {
-    const { data } = await axiosClient.post<TAuthLoginRes>('/login', req);
-    return data
+    // const { data } = await axiosClient.post<TAuthLoginRes>('/login', req);
+    // return data
+    return Promise.resolve({ token: 'test token' })
 }
+
 
 const register = async (req: TAuthRegisterReq) => {
     const { data } = await axiosClient.post<TAuthLoginRes>('/register', req)

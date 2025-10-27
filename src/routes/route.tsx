@@ -14,7 +14,7 @@ import MainLayout from "../layout/MainLayout/MainLayout";
 
 export const APP_ROUTES = createBrowserRouter([
   {
-    index: true,
+    path: "",
     element: <SplashScreen />,
     errorElement: <NotfoundPage />,
   },

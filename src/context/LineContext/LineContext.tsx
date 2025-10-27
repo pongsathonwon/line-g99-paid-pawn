@@ -1,4 +1,5 @@
 import React from "react";
+import type { TMaybe } from "../../types/base.type";
 
 export const LineContext = React.createContext<TLineContext | null>(null);
 
@@ -28,5 +29,5 @@ export type TLineLogout = {
 export type TLineStatus = TLineLogin | TLineLogout;
 
 export type TLineContext = {
-  lineCtx: TLineStatus;
+  lineCtx: TMaybe<TLineStatus>;
 };

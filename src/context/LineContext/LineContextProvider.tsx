@@ -6,6 +6,7 @@ import {
   type TLineStatus,
 } from "./LineContext";
 import { liff } from "@line/liff";
+import type { TMaybe } from "../../types/base.type";
 
 const MOCK_SUCCESS: TLineLogin = {
   isLogin: true,
@@ -21,10 +22,13 @@ const MOCK_FAIL: TLineLogout = {
 };
 
 function LineContextProvider({ children }: PropsWithChildren) {
-  const [lineCtx, setLineCtx] = useState<TLineStatus>(MOCK_SUCCESS);
+  const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(null);
   const init = async () => {
     try {
-      await liff.init({ liffId: import.meta.env.VITE_LIFF_ID });
+      await liff.init({
+        liffId: import.meta.env.VITE_LIFF_ID,
+        // withLoginOnExternalBrowser: true,
+      });
     } catch (err) {
       console.error("error here");
     }
