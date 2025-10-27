@@ -3,13 +3,18 @@ import { Outlet } from "react-router-dom";
 
 function MainLayout() {
   return (
-    <section>
-      <div> main layout here</div>
-      <div>
+    <div className="flex flex-col h-screen">
+      <header className="sticky top-0">
+        <div>
+          <h1>curvy curvy shomthing</h1>
+        </div>
+        header
+      </header>
+      <section className="flex-1">
         <Outlet />
-      </div>
-      <nav>bottm navigation</nav>
-    </section>
+      </section>
+      <nav className="sticky bottom-0">bottm navigation</nav>
+    </div>
   );
 }
 

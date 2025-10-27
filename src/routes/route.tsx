@@ -35,8 +35,12 @@ export const APP_ROUTES = createBrowserRouter([
     children: [
       {
         path: "home",
-        element: <HomePage />,
+
         children: [
+          {
+            path: "",
+            element: <HomePage />,
+          },
           {
             path: ":id",
             element: <PaymentDetailPage />,
