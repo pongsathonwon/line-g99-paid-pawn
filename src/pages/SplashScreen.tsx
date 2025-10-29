@@ -1,13 +1,39 @@
-import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../context/AuthContext/AuthContext";
+import { Button, ButtonIcon } from "@/component";
+import { QrCode, Phone } from "lucide-react";
+import { Icon } from "@iconify/react";
 
-function SplashScreen() {
-  //navigation logic here
-  // const { error, token } = useAuthContext();
-  // const loginSuccess = error === null;
-  // if (loginSuccess && token) return <Navigate to="/home" />;
-  // if (loginSuccess && !token) return <Navigate to="/register" />;
-  return <div>SplashScreen</div>;
+export default function HomePage() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 gap-6">
+      {/* ปุ่มกลุ่มแรก */}
+      <div className="flex flex-col gap-3">
+        <ButtonIcon icon={<QrCode size={18} />} variant="primary">
+          บันทึก QR Code
+        </ButtonIcon>
+        <ButtonIcon
+          icon={<Icon icon="circum:save-down-1" width="24" height="24" />}
+          variant="secondary"
+        >
+          บันทึก QR Code
+        </ButtonIcon>
+      </div>
+
+      {/* ปุ่มกลุ่มสอง */}
+      <div className="flex flex-col gap-3">
+        <ButtonIcon icon={<QrCode size={18} />} variant="primary">
+          เข้าสู่ระบบเพื่อดูสัญญา
+        </ButtonIcon>
+        <ButtonIcon icon={<QrCode size={18} />} variant="secondary">
+          เข้าสู่ระบบเพื่อดูสัญญา
+        </ButtonIcon>
+      </div>
+
+      {/* ปุ่มขอบสีทอง */}
+      <div className="mt-6">
+        <ButtonIcon icon={<Phone size={18} />} variant="outline">
+          ติดต่อเจ้าหน้าที่
+        </ButtonIcon>
+      </div>
+    </div>
+  );
 }
-
-export default SplashScreen;

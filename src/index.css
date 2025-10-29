@@ -33,4 +33,10 @@
 
   /* Shadows */
   --shadow-base: 0px 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* Button color */
+  --color-button-primary: #d40000;
+  --color-button-secondary: #b20202;
+  --color-button-outline: #d9a028;
+
 }
