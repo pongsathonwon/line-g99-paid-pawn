@@ -3,26 +3,23 @@ import { Button } from "./Button";
 import type { ButtonProps } from "./Button";
 
 interface ButtonIconProps extends ButtonProps {
-  icon: ReactNode;
-  iconPosition?: "left" | "right";
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
 }
 
 export const ButtonIcon = ({
-  icon,
   children,
-  iconPosition = "left",
   className,
+  startIcon,
+  endIcon,
   ...props
 }: ButtonIconProps) => {
   return (
     <Button {...props} className={className}>
-      <span
-        className={`flex items-center gap-2 ${
-          iconPosition === "right" ? "flex-row-reverse" : ""
-        }`}
-      >
-        {icon}
+      <span className="flex items-center gap-2">
+        {startIcon}
         <span>{children}</span>
+        {endIcon}
       </span>
     </Button>
   );
