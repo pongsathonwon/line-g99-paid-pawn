@@ -12,14 +12,17 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@iconify/react": "^6.0.2",
     "@line/liff": "^2.27.2",
     "@tailwindcss/vite": "^4.1.15",
     "@tanstack/react-query": "^5.90.5",
     "axios": "^1.12.2",
+    "lucide-react": "^0.548.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.65.0",
     "react-router-dom": "^7.9.4",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.15",
     "zod": "^4.1.12"
   },
