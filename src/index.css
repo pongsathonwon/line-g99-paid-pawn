@@ -3,10 +3,10 @@
 /* Your custom theme */
 @theme {
   /* Colors */
-  --color-brand-red: #b40000;
+  --color-brand-red: #d40000;
   --color-brand-red-400: #b33f3f;
-  --color-brand-red-500: #b02022;
-  --color-brand-red-600: #b40000;
+  --color-brand-red-500: #b20202;
+  --color-brand-red-600: #d40000;
 
   --color-gold: #d9a028;
   --color-gold-100: #f9e79f;
@@ -35,8 +35,7 @@
   --shadow-base: 0px 2px 8px rgba(0, 0, 0, 0.1);
 
   /* Button color */
-  --color-button-primary: #d40000;
-  --color-button-secondary: #b20202;
-  --color-button-outline: #d9a028;
-
+  --color-button-primary: var(--color-brand-red);
+  --color-button-secondary: var(--color-brand-red-500);
+  --color-button-outline: var(--color-gold);
 }

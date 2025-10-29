@@ -25,9 +25,9 @@ export const Button = ({
 
   const variantStyle = {
     primary:
-      "bg-button-primary text-white hover:bg-[--color-button-secondary] focus:ring-[--color-button-outline]",
+      "bg-button-primary text-white hover:bg-button-secondary focus:ring-button-outline",
     secondary:
-      "bg-button-secondary text-white hover:bg-[--color-button-primary] focus:ring-[--color-button-outline]",
+      "bg-button-secondary text-white hover:bg-button-primary focus:ring-button-outline",
     outline:
       "border border-button-outline text-button-outline hover:bg-button-outline/10 focus:ring-button-outline",
   };
