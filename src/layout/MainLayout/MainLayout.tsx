@@ -1,20 +1,18 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import ProfileBadge from "@/component/ui/ProfileBadge";
+import BottomNav from "@/component/ui/BottomNav";
 
 function MainLayout() {
   return (
-    <div className="flex flex-col h-screen">
-      <header className="sticky top-0">
-        <div>
-          <h1>curvy curvy shomthing</h1>
-        </div>
-        header
-      </header>
-      <section className="flex-1">
+    <>
+      <ProfileBadge displayName="display name here" />
+      <section className="overflow-hidden px-4 py-4 sm:px-8">
         <Outlet />
       </section>
-      <nav className="sticky bottom-0">bottm navigation</nav>
-    </div>
+
+      <BottomNav />
+    </>
   );
 }
 
