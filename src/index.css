@@ -34,8 +34,13 @@
   /* Shadows */
   --shadow-base: 0px 2px 8px rgba(0, 0, 0, 0.1);
 
-  /* Button color */
+  /* Button Color */
   --color-button-primary: var(--color-brand-red);
   --color-button-secondary: var(--color-brand-red-500);
   --color-button-outline: var(--color-gold);
+
+  /* border Color */
+  --color-gray-100: #ededed;
+  --color-gray-400: #bfbcbc;
+  --color-red-800: #b20202;
 }
