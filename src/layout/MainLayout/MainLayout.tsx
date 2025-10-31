@@ -10,7 +10,6 @@ function MainLayout() {
       <section className="overflow-hidden px-4 py-4 sm:px-8">
         <Outlet />
       </section>
-
       <BottomNav />
     </>
   );
