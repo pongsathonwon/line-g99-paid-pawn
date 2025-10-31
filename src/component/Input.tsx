@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes, forwardRef } from "react";
+import React from "react";
 import type {
   FormComponentProps,
   InputSize,
@@ -7,7 +7,7 @@ import type {
 
 // Props ของ Input Component และ ประเภทของ Input variants
 interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
+  extends React.InputHTMLAttributes<HTMLInputElement>,
     FormComponentProps {
   inputSize?: InputSize;
   variant?: InputVariant;
@@ -26,19 +26,52 @@ interface InputProps
  *   isRequired
  * />
  */
-const Input = forwardRef<HTMLInputElement, InputProps>(
+
+
+/*
+   ที่ทำมาถือว่าโอเค 
+   1. จัดการ props ส่วนมากโอเค แต่ component rigid 
+        แล้วแต่ use case ถ้าคิดว่าใช้ไม่มากทำแบบนี้ไม่ผิด
+        ถ้าจะให้หลากหลาย แนะนำให้อ่านเรื่อง compound /compose component
+        ตัวอย่างของนิว ถ้าต้องการ ให้ classname ทั้ง label, input, text
+        <Input className="..." containerClassName="..." ref={inputRef} helperText="..." />
+        อ่านยาก
+
+      การทำ compose component แบบที่ผมทำใน FormControl ก็อาจจะ over-engineer เกินไป แต่ควรเรียนไว้
+
+   2. default HTMLInputElement มีค่า required, disable ,readOnly อยู่แล้วไม่ต้องทำ isDisabled, isRequired
+
+   3. ควร control spacing ไปในทางเดียวกัน +/- spacing จะขึ้นกับขนาดด้วย เช่น large medium small > margin ก็อาจจะไม่เท่ากัน 
+      <div className="...">
+        <label className="... mb-1.5">
+        <input className="... //ไม่ได้กำหนด mb" />
+        {errMessage && <p className="... mt-1.5">{errMessage}</p>}
+      </div>
+
+      +/- วิธีที่ consistency กว่า แล้วแต่ use case ปกติควรมี spacing ใต้ component แต่ถ้าไม่อยากให้มี ใช้ flex + gap อาจจะดีกว่า
+      <div className="...">
+        <label className="... mb-1.5">
+        <input className="... mb-1.5" />
+        {errMessage && <p className="... mb-1.5">{errMessage}</p>}
+      </div>
+
+*/
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       label,
-      errorMessage,
+      errorMessage, // can pass as validation function
       helperText,
       variant = "default",
       inputSize = "medium",
-      isRequired = false,
-      isDisabled = false,
+      isRequired = false, // has default props of required
+      isDisabled = false, // has default props of disable
       className = "",
       containerClassName = "",
       ...restProps
+      //required
+      //readOnly
+      //disabled
     },
     ref
   ) => {
