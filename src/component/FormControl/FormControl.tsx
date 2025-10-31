@@ -19,4 +19,28 @@ function FormControl({children, id, ...props}: React.PropsWithChildren<Partial<T
   </FormControlContext.Provider>
 }
 
+type TFormLabelProps = Omit<React.LabelHTMLAttributes<HTMLLabelElement>, 'htmlFor'>
+
+const FormLabel = ({children, className,...props} : TFormLabelProps) => {
+  const {id} = useFormControlContext()
+  return <label {...props} htmlFor={`label-${id}`} >{children}</label>
+}
+type TFormInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'id'>
+
+const BaseFormInput = ({className, ...props} : TFormInputProps, ref : React.ForwardedRef<HTMLInputElement>) => {
+  const {id} = useFormControlContext()
+  return <input {...props} id={id} ref={ref} />
+}
+
+const FormInput = React.forwardRef<HTMLInputElement, TFormInputProps>(BaseFormInput)
+
+const FormErrorText = ({children}: React.PropsWithChildren) => {
+  const {} = useFormControlContext()
+  return <span>{children}</span>
+}
+
+FormControl.Label = FormLabel;
+FormControl.Input = FormInput;
+FormControl.Error = FormErrorText;
+
 export default FormControl;
