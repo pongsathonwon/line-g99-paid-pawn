@@ -11,6 +11,8 @@ import HistoryPage from "../pages/HistoryPage";
 import NotificationPage from "../pages/NotificationPage";
 import NotfoundPage from "../pages/NotfoundPage";
 import MainLayout from "../layout/MainLayout/MainLayout";
+import TermPage from "@/pages/TermPage";
+import PaymentErrorPage from "@/pages/PaymentErrorPage";
 
 export const APP_ROUTES = createBrowserRouter([
   {
@@ -55,17 +57,17 @@ export const APP_ROUTES = createBrowserRouter([
           },
           {
             path: ":id/fail",
-            element: <PaymentSuccessPage />,
+            element: <PaymentErrorPage />,
           },
           {
             path: ":id/pending",
-            element: <PaymentSuccessPage />,
+            element: <div>laoding</div>,
           },
         ],
       },
       {
         path: "term",
-        element: <div></div>,
+        element: <TermPage />,
       },
       {
         path: "history",
