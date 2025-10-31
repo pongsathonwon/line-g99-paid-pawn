@@ -1,6 +1,7 @@
 import { ButtonIcon, Input } from "@/component";
 import { QrCode, Phone } from "lucide-react";
 import { Icon } from "@iconify/react";
+import FormControl from "@/component/FormControl/FormControl";
 
 export default function HomePage() {
   return (
@@ -68,6 +69,16 @@ export default function HomePage() {
           inputSize="large"
         />
       </div>
+
+      <FormControl>
+        <FormControl.Label>ฟหกดเาสว</FormControl.Label>
+        <FormControl.Input disabled />
+        <FormControl.Error>error message</FormControl.Error>
+      </FormControl>
+      <FormControl color="gold">
+        <FormControl.Label>ฟหกดเาสว</FormControl.Label>
+        <FormControl.Input />
+      </FormControl>
 
       {/* ปุ่มขอบสีทอง */}
       <div className="mt-6">
