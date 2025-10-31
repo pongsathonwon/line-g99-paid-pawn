@@ -3,35 +3,36 @@ import type { TColor } from "./formControl.type"
 
 // migrate to clxs and twMerge later on
 
-export const createFormSpacing = (size : InputSize ) => {
-  switch(size){
-    case "small": return "px-3 py-1.5"
-    case "medium": return "px-4 py-2"
-    case "large": return "px-3 py-1.5"
-    default : return "px-4 py-2"
-  }
-}
+const FORM_SPACING: Record<InputSize, string> = {
+  small: "px-3 py-1.5",
+  medium: "px-4 py-2",
+  large: "px-5 py-3",
+};
 
-export const createFormFontSize = (size : InputSize) => {
-  switch(size){
-    case "small": return "text-sm"
-    case "medium": return "text-base"
-    case "large": return "text-lg"
-    default : return "text-base"
-  }
-}
+const FORM_FONT_SIZE: Record<InputSize, string> = {
+  small: "text-sm",
+  medium: "text-base",
+  large: "text-lg",
+};
 
-export const createFormTextColor = (color : TColor ) => {
-  switch(color){
-    case "base": return "text-gray-700"
-    case "gold": return "text-gold-700"
-    default : return "text-gray-700"
-  }
-}
-export const createFormBorderColor = (color : TColor ) => {
-  switch(color){
-    case "base": return "border-gray-700"
-    case "gold": return "border-gold-700"
-    default : return "border-gray-700"
-  }
-}
+const FORM_TEXT_COLOR: Record<TColor, string> = {
+  base: "text-gray-700",
+  gold: "text-gold-700",
+};
+
+const FORM_BORDER_COLOR: Record<TColor, string> = {
+  base: "border-gray-700",
+  gold: "border-gold-700",
+};
+
+export const getFormSpacing = (size: InputSize): string =>
+  FORM_SPACING[size] ?? FORM_SPACING.medium;
+
+export const getFormFontSize = (size: InputSize): string =>
+  FORM_FONT_SIZE[size] ?? FORM_FONT_SIZE.medium;
+
+export const getFormTextColor = (color: TColor): string =>
+  FORM_TEXT_COLOR[color] ?? FORM_TEXT_COLOR.base;
+
+export const getFormBorderColor = (color: TColor): string =>
+  FORM_BORDER_COLOR[color] ?? FORM_BORDER_COLOR.base;
