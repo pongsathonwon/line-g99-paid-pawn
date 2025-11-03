@@ -1,5 +1,6 @@
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
+import { NavLink } from "react-router-dom";
 
 function PaymentDetailPage() {
   return (
@@ -39,7 +40,9 @@ function PaymentDetailPage() {
           <li>nhgyguik</li>
         </DisplayCard.OrderList>
         <DisplayCard.Divider />
-        <Button fullWidth>ชำระดอกเบี้ย</Button>
+        <NavLink to="./qr">
+          <Button fullWidth>ชำระดอกเบี้ย</Button>
+        </NavLink>
       </DisplayCard>
     </div>
   );
