@@ -2,6 +2,11 @@
 
 /* Your custom theme */
 @theme {
+  --header-height: 10rem;
+  --bottom-nav-height: 4rem;
+  --padding-content-top: calc(var(--header-height) + 1rem);
+  --padding-content-bottom: calc(var(--bottom-nav-height) + 1rem);
+
   /* Colors */
   --color-brand-red: #d40000;
   --color-brand-red-400: #b33f3f;

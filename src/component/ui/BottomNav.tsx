@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 function BottomNav() {
   return (
-    <nav className=" bg-white shadow-base sticky bottom-0 py-3.5 px-4 sm:px-8 w-full">
+    <nav className=" bg-white shadow-base fixed bottom-0 left-0 w-full py-3 px-4 sm:px-8">
       <ul className="flex justify-between items-center h-full">
         <li className="aspect-square w-10">
           <NavLink

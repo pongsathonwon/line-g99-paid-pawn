@@ -10,7 +10,7 @@ function ProfileBadge({
   pictureUrl = "https://fastly.picsum.photos/id/962/200/200.jpg?hmac=XehF7z9JYkgC-2ZfSP05h7eyumIq9wNKUDoCLklIhr4",
 }: TProfileBadgeProps) {
   return (
-    <header className="bg-white flex px-4 py-4 sm:px-8 bg-[url(/layout/header_curve_small.png)] sm:bg-[url(/layout/header_curve.png)] bg-no-repeat bg-cover">
+    <header className="bg-white flex px-4 py-4 h-[--header-height] fixed top-0 left-0 w-full sm:px-8 bg-[url(/layout/header_curve_small.png)] sm:bg-[url(/layout/header_curve.png)] bg-no-repeat bg-cover">
       <div className="flex flex-col h-32 sm:h-72 w-full justify-between">
         <div className="flex justify-between items-center">
           <div>left</div>
