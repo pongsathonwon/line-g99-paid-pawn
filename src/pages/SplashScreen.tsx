@@ -10,13 +10,15 @@ export default function HomePage() {
       <div className="flex flex-col gap-3">
         <ButtonIcon
           startIcon={<Icon icon="circum:save-down-1" width="24" height="24" />}
-          variant="primary"
+          color="primary"
+          styleType="solid"
         >
           บันทึก QR Code
         </ButtonIcon>
         <ButtonIcon
           endIcon={<Icon icon="circum:save-down-1" width="24" height="24" />}
-          variant="secondary"
+          color="secondary"
+          styleType="solid"
         >
           บันทึก QR Code
         </ButtonIcon>
@@ -27,13 +29,25 @@ export default function HomePage() {
         <ButtonIcon
           endIcon={<Phone size={18} />}
           startIcon={<QrCode size={18} />}
-          variant="primary"
+          color="secondary"
+          styleType="outline"
         >
           เข้าสู่ระบบเพื่อดูสัญญา
         </ButtonIcon>
-        <ButtonIcon endIcon={<QrCode size={18} />} variant="secondary">
+        <ButtonIcon endIcon={<QrCode size={18} />} color="secondary">
           เข้าสู่ระบบเพื่อดูสัญญา
         </ButtonIcon>
+      </div>
+      <ButtonIcon color="primary" styleType="solid" size="xs">
+        ชำระเลย
+      </ButtonIcon>
+      <ButtonIcon color="gold" styleType="solid" size="xs">
+        ชำระเลย
+      </ButtonIcon>
+      <ButtonIcon color="black" styleType="solid" size="xs">
+        ชำระเลย
+      </ButtonIcon>
+      <div className="flex flex-col gap-3">
         <Input
           label="input Test"
           placeholder="Input Text"
@@ -63,13 +77,13 @@ export default function HomePage() {
           inputSize="large"
         />
         <Input
+          label="123"
           placeholder="Input Text"
           variant="success"
           errorMessage=""
           inputSize="large"
         />
       </div>
-
       <FormControl>
         <FormControl.Label>ฟหกดเาสว</FormControl.Label>
         <FormControl.Input disabled />
@@ -82,7 +96,11 @@ export default function HomePage() {
 
       {/* ปุ่มขอบสีทอง */}
       <div className="mt-6">
-        <ButtonIcon endIcon={<Phone size={18} />} variant="outline">
+        <ButtonIcon
+          endIcon={<Phone size={18} />}
+          color="gold"
+          styleType="outline"
+        >
           ติดต่อเจ้าหน้าที่
         </ButtonIcon>
       </div>
