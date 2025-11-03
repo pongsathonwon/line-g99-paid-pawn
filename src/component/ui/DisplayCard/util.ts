@@ -3,6 +3,11 @@ export type TFontWeight = "bold" | "normal";
 export type TFontSize = "header" | "subheader" | "normal" | "small";
 export type TLineStyle = "solid" | "dash";
 
+export type TDisplayCardProps = {
+    color?: TColor;
+    withBorder?: boolean
+}
+
 export type TCradDividerProps = {
     color?: Exclude<TColor, "black">;
     line?: TLineStyle;
@@ -71,3 +76,16 @@ export const convertFontSize = (fontSize: TFontSize) => {
             return "text-sm";
     }
 };
+
+export const getBorderStyle = (color: TColor) => {
+    switch (color) {
+        case "red":
+            return "border-l-8 border-brand-red pl-4";
+        case "mute":
+            return "border-l-8  border-gray pl-4";
+        case "gold":
+            return "border-l-8  border-gold-600 pl-4";
+        case "black":
+            return "border-l-8  border-black pl-4";
+    }
+}

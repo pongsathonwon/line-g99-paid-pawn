@@ -5,13 +5,24 @@ import {
   convertFontWeight,
   convertLineStyle,
   convertTextColor,
+  getBorderStyle,
   type TCradDividerProps,
   type TDisplayCardContentProps,
+  type TDisplayCardProps,
   type THighlightLineProps,
 } from "./util";
 
-function DisplayCard({ children }: React.PropsWithChildren) {
-  return <div className="px-6 py-4 rounded-[20px] shadow-base">{children}</div>;
+function DisplayCard({
+  withBorder,
+  color = "mute",
+  children,
+}: React.PropsWithChildren & TDisplayCardProps) {
+  const border = withBorder ? getBorderStyle(color) : "";
+  return (
+    <div className={`px-6 py-4 rounded-[20px] shadow-base ${border}`}>
+      {children}
+    </div>
+  );
 }
 
 function Header({ children }: PropsWithChildren) {
@@ -43,6 +54,7 @@ function DisplayCardContent({
 }: React.PropsWithChildren & TDisplayCardContentProps) {
   const txtColor = convertTextColor(color);
   const txtWeight = convertFontWeight(fontWeight);
+
   return (
     <div className={`flex justify-between ${txtWeight} ${txtColor}`}>
       {children}
