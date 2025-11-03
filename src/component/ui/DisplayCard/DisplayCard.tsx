@@ -37,13 +37,16 @@ function DisplayCardHighlight({
   fontSize = "normal",
   color = "black",
   fontWeight = "bold",
+  className = "",
   children,
 }: React.PropsWithChildren & THighlightLineProps) {
   const txtSize = convertFontSize(fontSize);
   const txtColor = convertTextColor(color);
   const txtWeight = convertFontWeight(fontWeight);
   return (
-    <div className={`${txtSize} ${txtColor} ${txtWeight}`}>{children}</div>
+    <div className={`${txtSize} ${txtColor} ${txtWeight} ${className}`}>
+      {children}
+    </div>
   );
 }
 

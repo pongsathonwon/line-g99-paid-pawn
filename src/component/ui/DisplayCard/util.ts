@@ -22,6 +22,7 @@ export type THighlightLineProps = {
     fontSize?: TFontSize;
     color?: TColor;
     fontWeight?: TFontWeight;
+    className?: string
 };
 
 export const convertBorderColor = (color: Exclude<TColor, "black">) => {
