@@ -2,7 +2,7 @@ import { ButtonIcon, Input } from "@/component";
 import { QrCode, Phone } from "lucide-react";
 import { Icon } from "@iconify/react";
 import FormControl from "@/component/FormControl/FormControl";
-
+import PaymentCard from "@/component/Ui/PayCard";
 export default function HomePage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 gap-6">
@@ -70,29 +70,44 @@ export default function HomePage() {
           errorMessage=""
           inputSize="large"
         />
-        <Input
-          placeholder="Input Text"
-          variant="error"
-          errorMessage="Error Text"
-          inputSize="large"
+        <FormControl>
+          <FormControl.Label>ฟหกดเาสว</FormControl.Label>
+          <FormControl.Input disabled />
+          <FormControl.Error>error message</FormControl.Error>
+        </FormControl>
+        <FormControl color="gold">
+          <FormControl.Label>ฟหกดเาสว</FormControl.Label>
+          <FormControl.Input />
+        </FormControl>
+
+        <PaymentCard
+          contractNumber="C-001"
+          principal={5000}
+          dueDate="2025-11-10"
+          status="pending"
         />
-        <Input
-          label="123"
-          placeholder="Input Text"
-          variant="success"
-          errorMessage=""
-          inputSize="large"
+
+        <PaymentCard
+          contractNumber="C-002"
+          principal={12000}
+          dueDate="2025-11-15"
+          status="upcoming"
+        />
+
+        <PaymentCard
+          contractNumber="C-002"
+          principal={12000}
+          dueDate="2025-11-03"
+          status="upcoming"
+        />
+
+        <PaymentCard
+          contractNumber="C-003"
+          principal={8000}
+          dueDate="2025-12-01"
+          status="notDue"
         />
       </div>
-      <FormControl>
-        <FormControl.Label>ฟหกดเาสว</FormControl.Label>
-        <FormControl.Input disabled />
-        <FormControl.Error>error message</FormControl.Error>
-      </FormControl>
-      <FormControl color="gold">
-        <FormControl.Label>ฟหกดเาสว</FormControl.Label>
-        <FormControl.Input />
-      </FormControl>
 
       {/* ปุ่มขอบสีทอง */}
       <div className="mt-6">
