@@ -8,7 +8,7 @@ type TUseQueryPawnByIdProps = {
 
 function useQueryPawnById({ custCode }: TUseQueryPawnByIdProps) {
   const q = useQuery({
-    queryKey: ["pawn-cust", custCode],
+    queryKey: ["pawn", "cust", custCode],
     queryFn: async ({ queryKey }) => await getManyPawnByCust({ custCode }),
     initialData: [],
   });
