@@ -6,7 +6,7 @@ function TermPage() {
     <div>
       <DisplayCard>
         <DisplayCard.Header>รายละเอียดและเงือนไข</DisplayCard.Header>
-        <DisplayCard.Highlight color="mute" className="mb-4">
+        <DisplayCard.Highlight color="base" className="mb-4">
           ข้อตกลงการใช้งาน
         </DisplayCard.Highlight>
         <DisplayCard.OrderList>

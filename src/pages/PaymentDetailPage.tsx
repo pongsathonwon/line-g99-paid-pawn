@@ -33,7 +33,7 @@ function PaymentDetailPage() {
           <span>ยอดชำระ</span>
           <span>4950 บาท</span>
         </DisplayCard.Summary>
-        <DisplayCard.Divider color="mute" />
+        <DisplayCard.Divider color="base" />
         <DisplayCard.OrderList>
           <li>dadasdasd</li>
           <li>dasdkpjo</li>

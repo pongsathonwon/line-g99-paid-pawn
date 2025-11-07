@@ -1,79 +1,118 @@
-import React, { type PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
+import { cn } from "@/utils";
 import {
-  convertBorderColor,
-  convertFontSize,
-  convertFontWeight,
-  convertLineStyle,
-  convertTextColor,
-  getBorderStyle,
-  type TCradDividerProps,
-  type TDisplayCardContentProps,
-  type TDisplayCardProps,
-  type THighlightLineProps,
-} from "./util";
+  displayCardVariants,
+  headerVariants,
+  subheaderVariants,
+  highlightVariants,
+  contentVariants,
+  dividerVariants,
+  type DisplayCardVariants,
+  type HeaderVariants,
+  type SubheaderVariants,
+  type HighlightVariants,
+  type ContentVariants,
+  type DividerVariants,
+} from "./displayCard.variants";
+
+// Main DisplayCard Component
+type DisplayCardProps = PropsWithChildren &
+  DisplayCardVariants & {
+    className?: string;
+  };
 
 function DisplayCard({
-  withBorder,
-  color = "mute",
+  withBorder = false,
+  color = "base",
+  className,
   children,
-}: React.PropsWithChildren & TDisplayCardProps) {
-  const border = withBorder ? getBorderStyle(color) : "";
+}: DisplayCardProps) {
   return (
-    <div className={`px-6 py-4 rounded-[20px] shadow-base ${border}`}>
+    <div className={cn(displayCardVariants({ withBorder, color }), className)}>
       {children}
     </div>
   );
 }
 
-function Header({ children }: PropsWithChildren) {
-  return <h3 className="text-2xl font-bold text-center mb-6">{children}</h3>;
+// Header Component
+type HeaderProps = PropsWithChildren &
+  HeaderVariants & {
+    className?: string;
+  };
+
+function Header({ color = "base", className, children }: HeaderProps) {
+  return (
+    <h3 className={cn(headerVariants({ color }), className)}>{children}</h3>
+  );
 }
 
-function Subheader({ children }: React.PropsWithChildren) {
-  return <h4 className="mb-3.5 font-bold">{children}</h4>;
+// Subheader Component
+type SubheaderProps = PropsWithChildren &
+  SubheaderVariants & {
+    className?: string;
+  };
+
+function Subheader({ color = "base", className, children }: SubheaderProps) {
+  return (
+    <h4 className={cn(subheaderVariants({ color }), className)}>{children}</h4>
+  );
 }
+
+// Highlight Component - Base component with full customization
+type HighlightProps = PropsWithChildren &
+  HighlightVariants & {
+    className?: string;
+  };
 
 function DisplayCardHighlight({
   fontSize = "normal",
   color = "black",
   fontWeight = "bold",
-  className = "",
+  className,
   children,
-}: React.PropsWithChildren & THighlightLineProps) {
-  const txtSize = convertFontSize(fontSize);
-  const txtColor = convertTextColor(color);
-  const txtWeight = convertFontWeight(fontWeight);
+}: HighlightProps) {
   return (
-    <div className={`${txtSize} ${txtColor} ${txtWeight} ${className}`}>
+    <div
+      className={cn(
+        highlightVariants({ fontSize, color, fontWeight }),
+        className
+      )}
+    >
       {children}
     </div>
   );
 }
+
+// Content Component - Base component for content lines (flex layout with gray text by default)
+type ContentProps = PropsWithChildren &
+  ContentVariants & {
+    className?: string;
+  };
 
 function DisplayCardContent({
-  color = "mute",
+  color = "base",
   fontWeight = "normal",
+  className,
   children,
-}: React.PropsWithChildren & TDisplayCardContentProps) {
-  const txtColor = convertTextColor(color);
-  const txtWeight = convertFontWeight(fontWeight);
-
+}: ContentProps) {
   return (
-    <div className={`flex justify-between ${txtWeight} ${txtColor}`}>
+    <div className={cn(contentVariants({ color, fontWeight }), className)}>
       {children}
     </div>
   );
 }
 
-function ContentMuteLine({ children }: React.PropsWithChildren) {
+// ContentMuteLine - Applies gray text with normal weight to DisplayCardContent
+function ContentMuteLine({ children }: PropsWithChildren) {
   return (
-    <DisplayCardContent color="mute" fontWeight="normal">
+    <DisplayCardContent color="base" fontWeight="normal">
       {children}
     </DisplayCardContent>
   );
 }
 
-function SummaryLine({ children }: React.PropsWithChildren) {
+// SummaryLine - Applies red text with bold weight to DisplayCardContent
+function SummaryLine({ children }: PropsWithChildren) {
   return (
     <DisplayCardContent color="red" fontWeight="bold">
       {children}
@@ -81,14 +120,21 @@ function SummaryLine({ children }: React.PropsWithChildren) {
   );
 }
 
-function Divider({ color = "mute", line = "solid" }: TCradDividerProps) {
-  const classname = `my-4 ${convertLineStyle(line)} ${convertBorderColor(
-    color
-  )}`;
-  return <div className={classname}></div>;
+// Divider Component
+type DividerProps = DividerVariants & {
+  className?: string;
+};
+
+function Divider({
+  color = "base",
+  line = "solid",
+  className,
+}: DividerProps) {
+  return <div className={cn(dividerVariants({ color, line }), className)} />;
 }
 
-function DisplayCardList({ children }: React.PropsWithChildren) {
+// OrderList Component
+function DisplayCardList({ children }: PropsWithChildren) {
   return (
     <ol className="text-xs list-decimal ps-4 text-gray flex flex-col">
       {children}
