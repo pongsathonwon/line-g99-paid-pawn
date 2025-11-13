@@ -61,7 +61,7 @@ const QrCodeCard = React.forwardRef<HTMLDivElement, TQrCodeCardProps>(
               color: "#4B5563",
             }}
           >
-            หรัสลูกค้า: {paymentData.ref2}
+            รหัสลูกค้า: {paymentData.ref2}
           </p>
           <p
             style={{

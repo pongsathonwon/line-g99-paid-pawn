@@ -10,7 +10,18 @@ export const useAuthContext = () => {
   return ctx;
 };
 
-type TAuthContext = {
+export const useCustCode = () => {
+  const { error, auth } = useAuthContext();
+  if (error) return null;
+  return auth?.custCode ?? null;
+};
+
+export type TAuth = {
+  token: string;
+  custCode: string;
+};
+
+export type TAuthContext = {
   error: TMaybe<string>;
-  token: TMaybe<string>;
+  auth: TMaybe<TAuth>;
 };

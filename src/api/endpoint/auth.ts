@@ -3,7 +3,7 @@ import { axiosClient } from "../axios"
 const login = async (req: TAuthLoginReq) => {
     // const { data } = await axiosClient.post<TAuthLoginRes>('/login', req);
     // return data
-    return Promise.resolve({ token: 'test token' })
+    return Promise.resolve({ token: 'test token', custCode: '' })
 }
 
 

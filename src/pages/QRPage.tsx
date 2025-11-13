@@ -11,7 +11,7 @@ function QRPage() {
   const paymentData: TPaymentData = {
     ref1: "9999999",
     ref2: "9999999",
-    amount: "0",
+    amount: "9000.00",
   };
 
   return (

@@ -22,8 +22,8 @@ type TQrCodeProps = {
 function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
   const config: TQrCodeConfig = {
     prefix: "|",
-    taxId: "1234567890123", // TODO: Replace with actual merchant Tax ID from API
-    suffix: "00",
+    taxId: "0105555097424",
+    suffix: "01",
   };
 
   const qrRef = React.useRef<HTMLCanvasElement>(null);
@@ -36,11 +36,13 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
       config.taxId +
       config.suffix +
       "\r" +
-      paymentData.ref1 +
+      paymentData.ref1.padStart(18, "0") +
       "\r" +
-      paymentData.ref2 +
+      paymentData.ref2.padStart(18, "0") +
       "\r" +
-      paymentData.amount;
+      paymentData.amount.replaceAll(".", "").padStart(10, "0");
+
+    console.log(data.replaceAll("\r", "").length);
 
     QRCode.toCanvas(qrRef.current, data, {
       errorCorrectionLevel: "H",

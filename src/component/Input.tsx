@@ -27,7 +27,6 @@ interface InputProps
  * />
  */
 
-
 /*
    ที่ทำมาถือว่าโอเค 
    1. จัดการ props ส่วนมากโอเค แต่ component rigid 
@@ -68,6 +67,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       isDisabled = false, // has default props of disable
       className = "",
       containerClassName = "",
+      id,
       ...restProps
       //required
       //readOnly
@@ -115,9 +115,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ${sizeClasses[inputSize]}
       ${variantClasses[actualVariant]}
       ${className}
-    `
-      .trim()
-      .replace(/\s+/g, " ");
+    `;
+    // .trim()
+    // .replace(/\s+/g, " ");
 
     return (
       <div className={`w-full ${containerClassName}`}>
@@ -138,9 +138,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-required={isRequired}
           aria-describedby={
             errorMessage
-              ? `${restProps.id}-error`
+              ? `${id}-error`
               : helperText
-              ? `${restProps.id}-helper`
+              ? `${id}-helper`
               : undefined
           }
           {...restProps}
@@ -149,7 +149,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {/* Error Message */}
         {errorMessage && (
           <p
-            id={`${restProps.id}-error`}
+            id={`${id}-error`}
             className="mt-1.5 text-sm text-red-600"
             role="alert"
           >
@@ -159,10 +159,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {/* Helper Text */}
         {helperText && !errorMessage && (
-          <p
-            id={`${restProps.id}-helper`}
-            className="mt-1.5 text-sm text-gray-500"
-          >
+          <p id={`${id}-helper`} className="mt-1.5 text-sm text-gray-500">
             {helperText}
           </p>
         )}
