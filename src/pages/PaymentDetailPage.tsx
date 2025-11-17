@@ -1,36 +1,14 @@
-import { getPawnInterest, type TGetPawnInterestRes } from "@/api/endpoint/pawn";
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
-import { useCustCode } from "@/context/AuthContext/AuthContext";
-import type { TMaybe } from "@/types/base.type";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
+import { NavLink } from "react-router-dom";
 
 function PaymentDetailPage() {
-  const { id: pawnNumb } = useParams();
-  const custCode = useCustCode();
-  const [interest, setInterest] = useState<TMaybe<TGetPawnInterestRes>>(null);
-
-  const interestMutation = useMutation({
-    mutationFn: getPawnInterest,
-    mutationKey: ["pawn", "pawnNumb"],
-    onSuccess: (res) => {
-      console.log(res);
-      setInterest(res);
-    },
-    onError: console.error,
-  });
-
-  useEffect(() => {
-    console.log(pawnNumb);
-    if (!pawnNumb || !custCode) return;
-    interestMutation.mutate({ pawnNumb, custCode });
-  }, [pawnNumb, custCode]);
+  const { interest, isSuccess } = usePawnInterest();
 
   return (
     <div>
-      {!interestMutation.isSuccess || !interest ? (
+      {!isSuccess || !interest ? (
         <div>loading ....</div>
       ) : (
         <DisplayCard>
@@ -47,6 +25,10 @@ function PaymentDetailPage() {
           <DisplayCard.Mute>
             <span>มูลค่าจำนำ</span>
             <span className="font-bold">{interest.pawnPrice} บาท</span>
+          </DisplayCard.Mute>
+          <DisplayCard.Mute>
+            <span>ดอกเบี้ย</span>
+            <span>{interest.interestRate} %</span>
           </DisplayCard.Mute>
           <DisplayCard.Divider color="gold" line="dash" />
           <DisplayCard.Mute>

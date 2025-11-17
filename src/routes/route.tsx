@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import SplashScreen from "../pages/SplashScreen";
 import RegisterPage from "../pages/RegisterPage";
 import RegisterResultPage from "../pages/RegisterResultPage";
@@ -13,6 +13,7 @@ import NotfoundPage from "../pages/NotfoundPage";
 import MainLayout from "../layout/MainLayout/MainLayout";
 import TermPage from "@/pages/TermPage";
 import PaymentErrorPage from "@/pages/PaymentErrorPage";
+import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 
 export const APP_ROUTES = createBrowserRouter([
   {
@@ -45,11 +46,21 @@ export const APP_ROUTES = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <PaymentDetailPage />,
-          },
-          {
-            path: ":id/qr",
-            element: <QRPage />,
+            element: (
+              <PawnInterestLoader>
+                <Outlet />
+              </PawnInterestLoader>
+            ),
+            children: [
+              {
+                path: "",
+                element: <PaymentDetailPage />,
+              },
+              {
+                path: "qr",
+                element: <QRPage />,
+              },
+            ],
           },
           {
             path: ":id/success",
@@ -61,7 +72,7 @@ export const APP_ROUTES = createBrowserRouter([
           },
           {
             path: ":id/pending",
-            element: <div>laoding</div>,
+            element: <div>loading</div>,
           },
         ],
       },
