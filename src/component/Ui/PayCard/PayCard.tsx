@@ -1,11 +1,14 @@
 import React from "react";
 import { Button } from "@/component/Button";
+import { NavLink } from "react-router-dom";
 
 interface PaymentCardProps {
   contractNumber: string;
   principal: number;
   dueDate: string;
+  paymentLink: string;
   status?: "pending" | "upcoming" | "notDue";
+  backgroundImage?: string;
 }
 
 export const PayCard: React.FC<PaymentCardProps> = ({
@@ -13,6 +16,8 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   principal,
   dueDate,
   status = "notDue",
+  paymentLink,
+  backgroundImage = "/paycard-background.png",
 }) => {
   const today = new Date();
   const due = new Date(dueDate);
@@ -53,6 +58,9 @@ export const PayCard: React.FC<PaymentCardProps> = ({
     <div
       className="flex justify-between items-center bg-white rounded-2xl shadow-sm 
       w-[347px] h-[89px] px-4 py-3 font-Roboto"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+      }}
     >
       {/* รูป */}
       <img
@@ -62,7 +70,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
       />
 
       {/* ข้อมูลสัญญา */}
-      <div className="flex-1 ml-3 text-[#6B4E00] text-[12px] leading-[120%]">
+      <div className="flex-1 ml-3 text-[#845A01] text-[12px] leading-[120%]">
         <div className="flex justify-between font-normal">
           <span>เลขที่สัญญา</span>
           <span className="font-semibold">{contractNumber}</span>
@@ -84,23 +92,24 @@ export const PayCard: React.FC<PaymentCardProps> = ({
       {/* ด้านขวา */}
       <div className="flex flex-col items-center gap-1 ml-4 text-center w-[90px]">
         <span
-          className={`font-bold text-[10px] leading-[120%] ${statusColors[computedStatus]}`}
+          className={`font-bold text-[10px] ml-4 leading-[120%] ${statusColors[computedStatus]}`}
         >
           {statusText[computedStatus]}
         </span>
-
-        <Button
-          color={
-            buttonStyles[computedStatus].color as "primary" | "gold" | "black"
-          }
-          styleType={
-            buttonStyles[computedStatus].styleType as "solid" | "outline"
-          }
-          size="xs"
-          className="min-w-[65px] h-6 text-[10px] rounded-md"
-        >
-          ชำระเลย
-        </Button>
+        <NavLink to={paymentLink} className="ml-2">
+          <Button
+            color={
+              buttonStyles[computedStatus].color as "primary" | "gold" | "black"
+            }
+            styleType={
+              buttonStyles[computedStatus].styleType as "solid" | "outline"
+            }
+            size="xs"
+            className="min-w-[45px] h-5 ml-4 text-[10px] rounded-md"
+          >
+            ชำระเลย
+          </Button>
+        </NavLink>
       </div>
     </div>
   );
