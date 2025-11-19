@@ -4,7 +4,12 @@ import { Icon } from "@iconify/react";
 import FormControl from "@/component/FormControl/FormControl";
 import PaymentCard from "@/component/ui/PayCard/PayCard";
 import PawnCard from "@/component/ui/PawnCard";
+import { useLineContext } from "@/context/LineContext/LineContext";
+import { Navigate } from "react-router-dom";
 export default function HomePage() {
+  // const { lineCtx } = useLineContext();
+  // console.log(lineCtx);
+  // if (lineCtx?.isLogin) return <Navigate to={"/home"} />;
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 gap-6">
       {/* ปุ่มกลุ่มแรก */}

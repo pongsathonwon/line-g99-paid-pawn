@@ -39,9 +39,9 @@ function LineContextProvider({ children }: PropsWithChildren) {
       await init();
       if (!liff.isLoggedIn()) {
         liff.login();
-        const profile = await liff.getProfile();
-        setLineCtx({ isLogin: true, profile });
       }
+      const profile = await liff.getProfile();
+      setLineCtx({ isLogin: true, profile });
     } catch (err) {
       console.log(err);
     }
@@ -49,7 +49,7 @@ function LineContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     // uncomment for line integration
-    // login();
+    //login();
   }, []);
   return (
     <LineContext.Provider value={{ lineCtx }}>{children}</LineContext.Provider>
