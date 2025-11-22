@@ -17,7 +17,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   dueDate,
   status = "notDue",
   paymentLink,
-  backgroundImage = "/paycard-background.png",
+  backgroundImage = "/bg_paycard.png",
 }) => {
   const today = new Date();
   const due = new Date(dueDate);
@@ -57,9 +57,11 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   return (
     <div
       className="flex justify-between items-center bg-white rounded-2xl shadow-sm 
-      w-[347px] h-[89px] px-4 py-3 font-Roboto"
+      w-full h-24 px-4 py-3 font-Roboto"
       style={{
         backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "80%",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* รูป */}

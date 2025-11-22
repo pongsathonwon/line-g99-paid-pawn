@@ -2,7 +2,7 @@ import React from "react";
 import { useAuthContext } from "@/context/AuthContext/AuthContext";
 import useQueryPawnById from "@/hook/query/useQueryPawn";
 import { NavLink } from "react-router-dom";
-import PayCard from "@/component/Ui/PayCard/PayCard";
+import PayCard from "@/component/ui/PayCard/PayCard";
 
 function HomePage() {
   const { token } = useAuthContext();
