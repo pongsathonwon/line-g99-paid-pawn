@@ -57,10 +57,10 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   return (
     <div
       className="flex justify-between items-center bg-white rounded-2xl shadow-sm 
-      w-full h-24 px-4 py-3 font-Roboto"
+       h-24 w-full px-4 py-3"
       style={{
         backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "80%",
+        backgroundSize: "auto 105%",
         backgroundRepeat: "no-repeat",
       }}
     >

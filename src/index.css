@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 @import "tailwindcss";
 
 /* Your custom theme */
@@ -48,4 +49,8 @@
   --color-gray-100: #ededed;
   --color-gray-400: #bfbcbc;
   --color-red-800: #b20202;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
 }
