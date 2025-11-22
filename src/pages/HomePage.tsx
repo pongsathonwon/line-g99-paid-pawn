@@ -17,8 +17,10 @@ function HomePage() {
   }
   return (
     <div className="flex flex-col items-center w-full">
-      <h3 className="font-semibold text-2xl text-center mb-6">รายการขายฝาก</h3>
-      <div className="flex flex-col gap-4 items-center w-full">
+      <h3 className="font-semibold text-2xl text-center mb-6 lg:text-3xl">
+        รายการขายฝาก
+      </h3>
+      <div className="flex flex-col gap-4 items-center w-full md:gap-8">
         {data.map(({ pawnNumb, pawnPrice, nextPaidDate }) => (
           <PayCard
             key={pawnNumb}
