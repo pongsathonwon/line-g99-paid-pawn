@@ -3,10 +3,12 @@ import { useAuthContext } from "@/context/AuthContext/AuthContext";
 import useQueryPawnById from "@/hook/query/useQueryPawn";
 import { NavLink } from "react-router-dom";
 
+const ccREF = ["1200441", "626972", "606085", "625220"];
+
 function HomePage() {
-  const { token } = useAuthContext();
+  //const { token } = useAuthContext();
   const { data, isError, error, isLoading } = useQueryPawnById({
-    custCode: "1200441",
+    custCode: ccREF[1],
   });
   if (isLoading) {
     return <div>loading ...</div>;
