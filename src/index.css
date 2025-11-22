@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 @import "tailwindcss";
 
 /* Your custom theme */
@@ -6,6 +7,10 @@
   --bottom-nav-height: 4rem;
   --padding-content-top: calc(var(--header-height) + 1rem);
   --padding-content-bottom: calc(var(--bottom-nav-height) + 1rem);
+  --header-height-lg: 10rem;
+  --bottom-nav-height-lg: 5rem;
+  --padding-content-top-lg: calc(var(--header-height-lg) + 1rem);
+  --padding-content-bottom-lg: calc(var(--bottom-nav-height-lg) + 1rem);
 
   /* Colors */
   --color-brand-red: #d40000;
@@ -48,4 +53,20 @@
   --color-gray-100: #ededed;
   --color-gray-400: #bfbcbc;
   --color-red-800: #b20202;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.lucide {
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 1024px) {
+  .lucide {
+    width: 48px;
+    height: 48px;
+  }
 }

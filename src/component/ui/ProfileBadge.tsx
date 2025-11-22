@@ -42,7 +42,7 @@ function ProfileBadge({
           />
         </svg>
       </div>
-      <div className="container mx-auto mt-auto h-full px-4 sm:px-8">
+      <div className="container mx-auto mt-auto h-full px-4 sm:px-8 lg:px-16">
         <div className="flex flex-col h-full justify-between">
           <div className="flex justify-between items-center">
             <div>left</div>
