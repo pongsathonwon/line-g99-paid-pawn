@@ -14,6 +14,7 @@ import MainLayout from "../layout/MainLayout/MainLayout";
 import TermPage from "@/pages/TermPage";
 import PaymentErrorPage from "@/pages/PaymentErrorPage";
 import PawnInterestLoader from "@/loaders/PawnInterestLoader";
+import PaymentPendingPage from "@/pages/PaymentPendingPage";
 
 export const APP_ROUTES = createBrowserRouter([
   {
@@ -72,7 +73,7 @@ export const APP_ROUTES = createBrowserRouter([
           },
           {
             path: ":id/pending",
-            element: <div>loading</div>,
+            element: <PaymentPendingPage />,
           },
         ],
       },
