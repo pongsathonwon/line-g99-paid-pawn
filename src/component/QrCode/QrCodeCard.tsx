@@ -38,7 +38,6 @@ const QrCodeCard = React.forwardRef<HTMLDivElement, TQrCodeCardProps>(
         <div style={{ display: "flex", justifyContent: "center" }}>
           <QrCode paymentData={paymentData} width={qrWidth} />
         </div>
-
         <div
           style={{
             textAlign: "center",

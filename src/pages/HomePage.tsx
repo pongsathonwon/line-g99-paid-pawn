@@ -9,7 +9,7 @@ const ccREF = ["1200441", "626972", "606085", "625220"];
 function HomePage() {
   //const { token } = useAuthContext();
   const { data, isError, error, isLoading } = useQueryPawnById({
-    custCode: ccREF[1],
+    custCode: ccREF[0],
   });
   if (isLoading) {
     return <div>loading ...</div>;
