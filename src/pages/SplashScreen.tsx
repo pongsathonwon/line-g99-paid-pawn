@@ -1,11 +1,20 @@
-import { Navigate } from "react-router-dom";
-import { useLineContext } from "@/context/LineContext/LineContext";
-import React from "react";
+import { Navigate, useSearchParams } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext/AuthContext";
 
-// const { lineCtx } = useLineContext();
-// console.log(lineCtx);
-// if (lineCtx?.isLogin) return <Navigate to={"/home"} />;
 export default function SplashScreen() {
+  const [searchParams] = useSearchParams();
+  const {
+    loginStatus: { isPending },
+    auth,
+  } = useAuthContext();
+
+  if (auth !== null) {
+    const redirectPath = searchParams.get("redirect");
+    return <Navigate to={redirectPath ?? "/home"} replace />;
+  }
+
+  if (!isPending) return <Navigate to="/register" replace />;
+
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center fixed inset-0"

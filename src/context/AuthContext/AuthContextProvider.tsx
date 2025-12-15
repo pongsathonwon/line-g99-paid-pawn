@@ -30,7 +30,6 @@ const MOCK_FAIL_LOGIN = { error: "mock fail login", auth: null };
 function AuthContextProvider({ children }: React.PropsWithChildren) {
   const { lineCtx } = useLineContext();
   const uid = lineCtx?.profile?.userId ?? "";
-  // migrate this to reducer
   const [auth, setAuth] = React.useState<TMaybe<TUserInfo>>(null);
   const [error, setError] = React.useState<TMaybe<string>>(null);
   const loginMutation = useMutation({
@@ -41,18 +40,14 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
       setError(null);
     },
     onError: (err) => {
-      // implement global error handler
       setError(err.message);
       setAuth(null);
     },
   });
   useEffect(() => {
-    // check if uid exist
-    // try load token here
-    // call login api
     loginMutation.mutateAsync({ lineUid: uid });
   }, [uid]);
-  // register jwt token interceptor
+
   useEffect(() => {
     const interceptor = axiosClient.interceptors.request.use((config) => {
       const token = getAT();
@@ -63,9 +58,18 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
     });
     return () => axiosClient.interceptors.request.eject(interceptor);
   }, []);
-  const ctx = error !== null ? { error, token: null } : { error: null, auth };
+
   return (
-    <AuthContext.Provider value={MOCK_SUCCESS_LOGIN}>
+    <AuthContext.Provider
+      value={{
+        error,
+        auth,
+        //...MOCK_SUCCESS_LOGIN,
+        loginStatus: {
+          isPending: loginMutation.isPending,
+        },
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

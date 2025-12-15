@@ -43,6 +43,7 @@ function LineContextProvider({ children }: PropsWithChildren) {
       const profile = await liff.getProfile();
       setLineCtx({ isLogin: true, profile });
     } catch (err) {
+      // migrate to toast service
       console.log(err);
     }
   };
