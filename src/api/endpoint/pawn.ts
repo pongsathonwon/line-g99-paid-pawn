@@ -1,6 +1,7 @@
 import { axiosClient } from "../axios"
 
 export const getManyPawnByCust = async ({ custCode }: TGetManyPawnReq) => {
+    if (!custCode) return []
     const { data } = await axiosClient.get<TGetManyPawmRes[]>(`pawn/${custCode}`)
     return data
 }
@@ -11,7 +12,7 @@ export const getPawnInterest = async (req: TGetPawnInterestReq) => {
 }
 
 
-export type TGetManyPawnReq = { custCode: string }
+export type TGetManyPawnReq = { custCode?: string }
 
 export type TGetManyPawmRes = {
     pawnNumb: string

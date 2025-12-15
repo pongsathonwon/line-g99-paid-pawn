@@ -1,14 +1,14 @@
-import React from "react";
-import { useAuthContext } from "@/context/AuthContext/AuthContext";
+import { useCustInfo } from "@/context/AuthContext/AuthContext";
 import useQueryPawnById from "@/hook/query/useQueryPawn";
 import { NavLink } from "react-router-dom";
 import PayCard from "@/component/ui/PayCard/PayCard";
 const ccREF = ["1200441", "626972", "606085", "625220"];
 
 function HomePage() {
-  //const { token } = useAuthContext();
+  const custInfo = useCustInfo();
+  const custCode = custInfo?.custNo;
   const { data, isError, error, isLoading } = useQueryPawnById({
-    custCode: ccREF[0],
+    custCode,
   });
   if (isLoading) {
     return <div>loading ...</div>;
@@ -22,7 +22,7 @@ function HomePage() {
         รายการขายฝาก
       </h3>
       <div className="flex flex-col gap-4 items-center w-full md:gap-8">
-        {data.map(({ pawnNumb, pawnPrice, nextPaidDate }) => (
+        {data?.map(({ pawnNumb, pawnPrice, nextPaidDate }) => (
           <NavLink to={pawnNumb} className="w-full flex justify-center">
             <PayCard
               key={pawnNumb}

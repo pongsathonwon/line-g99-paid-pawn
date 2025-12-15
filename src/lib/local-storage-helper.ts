@@ -28,6 +28,11 @@ const MINUTE_FACTOR = 1000 * 60
 const HOUR_FACTOR = 60 * MINUTE_FACTOR
 
 const JWT_KEY = "G99_PAWN_TOKEN"
-export const saveToken = (token: string) => baseSetToLocal({ key: JWT_KEY, duration: HOUR_FACTOR })(token)
+export const saveToken = baseSetToLocal({ key: JWT_KEY, duration: HOUR_FACTOR })
 export const getToken = baseGetLocal(JWT_KEY)(LocalTokenSchema.safeParse)
 export const deleteToken = baseRemoveLocal(JWT_KEY)
+
+const ACCESS_KEY = "G99_PAWN_AT"
+export const saveAT = baseSetToLocal({ key: ACCESS_KEY, duration: HOUR_FACTOR })
+export const getAT = baseGetLocal(ACCESS_KEY)(LocalTokenSchema.safeParse)
+export const deleteAt = baseRemoveLocal(ACCESS_KEY)
