@@ -6,10 +6,9 @@ export type TUserType = 'thai' | 'foreign';
 
 export type TRegistrationStep = 'search' | 'otp' | 'success' | 'pending';
 
-// Search User Request/Response
 export type TSearchUserReq = {
-  cardId?: string;
-  mobileNumber?: string;
+  custId?: string;
+  //mobileNumber?: string;
   custCode?: string;
 };
 

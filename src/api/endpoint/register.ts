@@ -1,5 +1,5 @@
 import { axiosClient } from "../axios";
-import {
+import type {
   TSearchUserReq,
   TSearchUserRes,
   TOtpRequestReq,
@@ -18,53 +18,8 @@ import {
  * Mock endpoint: GET /api/user/search
  */
 export const searchUser = async (req: TSearchUserReq): Promise<TSearchUserRes> => {
-  // TODO: Replace with actual API call
-  // const { data } = await axiosClient.get<TSearchUserRes>('/api/user/search', { params: req });
-
-  // Mock response for development
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Simulate user found
-      if (req.cardId === '1234567890123' || req.mobileNumber === '0812345678' || req.custCode === 'CUST001') {
-        resolve({
-          custNo: 'CUST001',
-          fullname: 'สมชาย ใจดี',
-          idCard: '1234567890123',
-          birthDate: '1990-01-15',
-          mobileNo: '0812345678',
-          branchCode: '30',
-          custType: 'G',
-          custStat: 1,
-          nationCode: '1', // Thai
-          gender: 'm',
-          currentPoint: 100,
-          totalBuy: 50000,
-        });
-      } else if (req.cardId === 'P1234567' || req.mobileNumber === '0898765432') {
-        // Foreign user example
-        resolve({
-          custNo: 'CUST002',
-          fullname: 'John Smith',
-          idCard: 'P1234567',
-          birthDate: '1985-06-20',
-          mobileNo: '0898765432',
-          branchCode: '30',
-          custType: 'F',
-          custStat: 1,
-          nationCode: '2', // Foreign
-          gender: 'm',
-          currentPoint: 50,
-          totalBuy: 25000,
-        });
-      } else {
-        // User not found
-        reject({
-          status: 404,
-          message: 'User not found',
-        });
-      }
-    }, 1000); // Simulate network delay
-  });
+  const { data } = await axiosClient.get<TSearchUserRes>('/cust', { params: req });
+  return data
 };
 
 /**
