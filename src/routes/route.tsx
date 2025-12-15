@@ -1,6 +1,8 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import SplashScreen from "../pages/SplashScreen";
+import RegistrationLandingPage from "../pages/RegistrationLandingPage";
 import RegisterPage from "../pages/RegisterPage";
+import ForeignRegisterPage from "../pages/ForeignRegisterPage";
 import RegisterResultPage from "../pages/RegisterResultPage";
 import Protected from "../layout/MainLayout/Protected";
 import HomePage from "../pages/HomePage";
@@ -23,8 +25,16 @@ export const APP_ROUTES = createBrowserRouter([
     errorElement: <NotfoundPage />,
   },
   {
+    path: "registration",
+    element: <RegistrationLandingPage />,
+  },
+  {
     path: "register",
     element: <RegisterPage />,
+  },
+  {
+    path: "foreign-register",
+    element: <ForeignRegisterPage />,
   },
   {
     path: "register/result",
