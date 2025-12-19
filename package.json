@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@hookform/resolvers": "^5.2.2",
     "@iconify/react": "^6.0.2",
     "@line/liff": "^2.27.2",
     "@tailwindcss/vite": "^4.1.15",
