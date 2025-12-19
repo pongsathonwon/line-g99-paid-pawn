@@ -5,12 +5,11 @@ export function SuccessStep() {
   const navigate = useNavigate();
 
   const handleContinue = () => {
-    navigate('/home');
+    navigate("/home");
   };
 
   return (
     <div className="space-y-6 text-center">
-      {/* Success Icon */}
       <div className="flex justify-center">
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
           <svg
@@ -29,32 +28,18 @@ export function SuccessStep() {
         </div>
       </div>
 
-      {/* Success Message */}
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Registration Successful!
-        </h2>
-        <p className="text-gray-600">
-          Your account has been successfully linked to LINE.
-        </p>
+        <h2 className="text-2xl font-bold text-gray-900">ลงทะเบียนสำเร็จ</h2>
       </div>
 
-      {/* Additional Info */}
       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
         <p className="text-sm text-green-800">
           You can now access all features and services. Welcome!
         </p>
       </div>
 
-      {/* Action Button */}
-      <Button
-        type="button"
-        onClick={handleContinue}
-        color="primary"
-        size="lg"
-        fullWidth
-      >
-        Continue to Home
+      <Button type="button" onClick={handleContinue} color="primary" fullWidth>
+        กลับสู่เมนูหลัก
       </Button>
     </div>
   );

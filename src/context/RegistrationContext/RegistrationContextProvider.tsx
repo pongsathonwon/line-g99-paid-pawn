@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { useState, type ReactNode } from "react";
 import { RegistrationContext } from "./RegistrationContext";
 import type {
   TRegistrationFormData,
@@ -12,9 +12,9 @@ type TRegistrationContextProviderProps = {
 };
 
 const initialFormData: TRegistrationFormData = {
-  searchMethod: 'cardId',
-  searchValue: '',
-  userType: 'thai',
+  searchMethod: "idCard",
+  searchValue: "",
+  userType: "thai",
   isConsent: false,
 };
 
@@ -22,7 +22,7 @@ export function RegistrationContextProvider({
   children,
   userType,
 }: TRegistrationContextProviderProps) {
-  const [currentStep, setCurrentStep] = useState<TRegistrationStep>('search');
+  const [currentStep, setCurrentStep] = useState<TRegistrationStep>("search");
   const [formData, setFormDataState] = useState<TRegistrationFormData>({
     ...initialFormData,
     userType,
@@ -33,7 +33,7 @@ export function RegistrationContextProvider({
   };
 
   const resetForm = () => {
-    setCurrentStep('search');
+    setCurrentStep("search");
     setFormDataState({ ...initialFormData, userType });
   };
 

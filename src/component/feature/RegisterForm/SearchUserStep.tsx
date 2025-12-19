@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { REGISTER_API } from "@/api/endpoint/register";
 import { useRegistrationContext } from "@/context/RegistrationContext";
-import { FormControl } from "@/component/FormControl/FormControl";
 import { Button } from "@/component/Button";
 import type { TSearchUserMethod } from "@/types/register";
+import FormControl from "@/component/FormControl/FormControl";
+import SearchThaiCustomer from "../RegisterSubform/SearchCustomer";
 
 type TSearchFormData = {
   searchMethod: TSearchUserMethod;
@@ -15,8 +16,16 @@ type TSearchFormData = {
 export function SearchUserStep() {
   const { setFormData, setCurrentStep, formData } = useRegistrationContext();
   const [searchMethod, setSearchMethod] = useState<TSearchUserMethod>(
-    formData.searchMethod || 'cardId'
+    formData.searchMethod || "cardId"
   );
+
+  const handleChangeSearchCriteria = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
+    const validValue = value as TSearchUserMethod;
+    if (!validValue) return;
+    setSearchMethod(validValue);
+  };
 
   const {
     control,
@@ -24,40 +33,31 @@ export function SearchUserStep() {
     formState: { errors, isValid },
     setError,
   } = useForm<TSearchFormData>({
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      searchMethod: formData.searchMethod || 'cardId',
-      searchValue: formData.searchValue || '',
+      searchMethod: formData.searchMethod || "cardId",
+      searchValue: formData.searchValue || "",
     },
   });
 
   const searchMutation = useMutation({
-    mutationFn: (data: TSearchFormData) => {
-      const req: any = {};
-
-      if (data.searchMethod === 'cardId') {
-        req.cardId = data.searchValue;
-      } else if (data.searchMethod === 'mobileNumber') {
-        req.mobileNumber = data.searchValue;
-      } else if (data.searchMethod === 'custCode') {
-        req.custCode = data.searchValue;
-      }
-
-      return REGISTER_API.searchUser(req);
+    mutationFn: ({ searchMethod, searchValue }: TSearchFormData) => {
+      return REGISTER_API.searchUser({ [searchMethod]: searchValue });
     },
     onSuccess: (userData) => {
       // Save user data and move to OTP step
       setFormData({
         userData,
         searchMethod,
-        searchValue: '',
+        searchValue: "",
       });
-      setCurrentStep('otp');
+      setCurrentStep("otp");
     },
     onError: (error: any) => {
-      setError('searchValue', {
-        type: 'manual',
-        message: error.message || 'User not found. Please check your information.',
+      setError("searchValue", {
+        type: "manual",
+        message:
+          error.message || "User not found. Please check your information.",
       });
     },
   });
@@ -68,46 +68,46 @@ export function SearchUserStep() {
 
   const getPlaceholder = () => {
     switch (searchMethod) {
-      case 'cardId':
-        return '1234567890123';
-      case 'mobileNumber':
-        return '0812345678';
-      case 'custCode':
-        return 'CUST001';
+      case "idCard":
+        return "1234567890123";
+      case "mobileNumber":
+        return "0812345678";
+      case "custCode":
+        return "CUST001";
       default:
-        return '';
+        return "";
     }
   };
 
   const getLabel = () => {
     switch (searchMethod) {
-      case 'cardId':
-        return 'ID Card / Passport Number';
-      case 'mobileNumber':
-        return 'Mobile Number';
-      case 'custCode':
-        return 'Customer Code';
+      case "idCard":
+        return "ID Card / Passport Number";
+      case "mobileNumber":
+        return "Mobile Number";
+      case "custCode":
+        return "Customer Code";
       default:
-        return '';
+        return "";
     }
   };
 
   const getValidationPattern = () => {
     switch (searchMethod) {
-      case 'cardId':
+      case "idCard":
         return {
           value: /^[A-Z0-9]{7,13}$/i,
-          message: 'Please enter a valid ID card or passport number',
+          message: "Please enter a valid ID card or passport number",
         };
-      case 'mobileNumber':
+      case "mobileNumber":
         return {
           value: /^0\d{9}$/,
-          message: 'Please enter a valid 10-digit mobile number',
+          message: "Please enter a valid 10-digit mobile number",
         };
-      case 'custCode':
+      case "custCode":
         return {
           value: /^[A-Z0-9]+$/i,
-          message: 'Please enter a valid customer code',
+          message: "Please enter a valid customer code",
         };
       default:
         return undefined;
@@ -117,27 +117,23 @@ export function SearchUserStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Search Your Profile</h2>
-        <p className="mt-2 text-sm text-gray-600">
+        <h2 className="text-2xl font-bold text-gray-900">ค้นหาสมาชิก</h2>
+        {/* <p className="mt-2 text-sm text-gray-600">
           Search for your existing profile using one of the following methods
-        </p>
+        </p> */}
       </div>
-
+      <SearchThaiCustomer searchMethod="idCard" />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Search Method Selection */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700">
-            Search By
-          </label>
-
           <div className="space-y-2">
             <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
               <input
                 type="radio"
                 name="searchMethod"
                 value="cardId"
-                checked={searchMethod === 'cardId'}
-                onChange={(e) => setSearchMethod(e.target.value as TSearchUserMethod)}
+                checked={searchMethod === "idCard"}
+                onChange={handleChangeSearchCriteria}
                 className="w-4 h-4 text-brand-red focus:ring-brand-red"
               />
               <span className="ml-3 text-sm font-medium text-gray-900">
@@ -150,8 +146,8 @@ export function SearchUserStep() {
                 type="radio"
                 name="searchMethod"
                 value="mobileNumber"
-                checked={searchMethod === 'mobileNumber'}
-                onChange={(e) => setSearchMethod(e.target.value as TSearchUserMethod)}
+                checked={searchMethod === "mobileNumber"}
+                onChange={handleChangeSearchCriteria}
                 className="w-4 h-4 text-brand-red focus:ring-brand-red"
               />
               <span className="ml-3 text-sm font-medium text-gray-900">
@@ -164,8 +160,8 @@ export function SearchUserStep() {
                 type="radio"
                 name="searchMethod"
                 value="custCode"
-                checked={searchMethod === 'custCode'}
-                onChange={(e) => setSearchMethod(e.target.value as TSearchUserMethod)}
+                checked={searchMethod === "custCode"}
+                onChange={handleChangeSearchCriteria}
                 className="w-4 h-4 text-brand-red focus:ring-brand-red"
               />
               <span className="ml-3 text-sm font-medium text-gray-900">
@@ -182,7 +178,7 @@ export function SearchUserStep() {
             name="searchValue"
             control={control}
             rules={{
-              required: 'This field is required',
+              required: "This field is required",
               pattern: getValidationPattern(),
             }}
             render={({ field }) => (
@@ -208,17 +204,16 @@ export function SearchUserStep() {
             fullWidth
             disabled={!isValid || searchMutation.isPending}
           >
-            {searchMutation.isPending ? 'Searching...' : 'Search Profile'}
+            {searchMutation.isPending ? "กำลังค้นหา..." : "ค้นหา"}
           </Button>
         </div>
 
-        {/* Help Text */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm text-blue-800">
-            <strong>Note:</strong> If you cannot find your profile, please contact our staff
-            for assistance.
+            <strong>Note:</strong> If you cannot find your profile, please
+            contact our staff for assistance.
           </p>
-        </div>
+        </div> */}
       </form>
     </div>
   );
