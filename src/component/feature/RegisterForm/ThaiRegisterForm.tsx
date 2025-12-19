@@ -1,6 +1,6 @@
 import OTPVerification from "../RegisterSubform/OTPVerification";
 import SearchCustomer from "../RegisterSubform/SearchCustomer";
-import { SuccessStep } from "./SuccessStep";
+import { SuccessStep } from "../RegisterSubform/SuccessStep";
 
 function ThaiRegisterForm() {
   return (
