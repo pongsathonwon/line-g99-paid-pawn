@@ -66,8 +66,9 @@ export const formControlInputVariants = cva(
 );
 
 // Error text variant - no margin, parent controls spacing
+// min-h-[1.25rem] reserves space to prevent layout shift
 export const formControlErrorVariants = cva(
-  "text-sm text-red-600 flex items-start gap-1"
+  "text-sm text-red-600 flex items-start gap-1 min-h-[1.25rem]"
 );
 
 // Helper text variant (optional, for hints/descriptions)
