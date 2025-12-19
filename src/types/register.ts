@@ -1,6 +1,8 @@
 // Registration Form Types
 
-export type TSearchUserMethod = 'cardId' | 'mobileNumber' | 'custCode';
+export type TSearchUserMethod = 'idCard' | 'mobileNumber' | 'custCode';
+
+export type TQueryParameter = ""
 
 export type TUserType = 'thai' | 'foreign';
 

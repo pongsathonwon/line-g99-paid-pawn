@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { axiosClient } from "../axios";
 import type {
   TSearchUserReq,
@@ -12,14 +13,21 @@ import type {
 } from "@/types/register";
 
 // Mock implementations - replace with actual endpoints when backend is ready
-
-/**
- * Search for existing user by cardId, mobileNumber, or custCode
- * Mock endpoint: GET /api/user/search
- */
 export const searchUser = async (req: TSearchUserReq): Promise<TSearchUserRes> => {
-  const { data } = await axiosClient.get<TSearchUserRes>('/cust', { params: req });
-  return data
+  try {
+    const { data } = await axiosClient.get<TSearchUserRes>('/cust', { params: req });
+    return data
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      const apiErrorMessage = e.response?.data.message;
+      if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
+      throw new Error(apiErrorMessage)
+    }
+    if (e instanceof Error) {
+      throw e
+    }
+    throw new Error(String(e))
+  }
 };
 
 /**
