@@ -1,8 +1,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import SplashScreen from "../pages/SplashScreen";
-import RegistrationLandingPage from "../pages/RegistrationLandingPage";
-import RegisterPage from "../pages/RegisterPage";
-import ForeignRegisterPage from "../pages/ForeignRegisterPage";
+import RegisterPage from "../pages/register/RegisterPage";
+import ForeignRegisterPage from "../pages/register/ForeignRegisterPage";
 import RegisterResultPage from "../pages/RegisterResultPage";
 import Protected from "../layout/MainLayout/Protected";
 import HomePage from "../pages/HomePage";
@@ -17,6 +16,8 @@ import TermPage from "@/pages/TermPage";
 import PaymentErrorPage from "@/pages/PaymentErrorPage";
 import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 import PaymentPendingPage from "@/pages/PaymentPendingPage";
+import ForeignCounterRegisterPage from "@/pages/register/ForeignCounterRegisterPage";
+import ThaiRegisterPage from "@/pages/register/ThaiRegisterPage";
 
 export const APP_ROUTES = createBrowserRouter([
   {
@@ -25,20 +26,24 @@ export const APP_ROUTES = createBrowserRouter([
     errorElement: <NotfoundPage />,
   },
   {
-    path: "registration",
-    element: <RegistrationLandingPage />,
+    path: "register/result",
+    element: <RegisterResultPage />,
   },
   {
     path: "register",
     element: <RegisterPage />,
   },
   {
+    path: "thai-register",
+    element: <ThaiRegisterPage />,
+  },
+  {
     path: "foreign-register",
     element: <ForeignRegisterPage />,
   },
   {
-    path: "register/result",
-    element: <RegisterResultPage />,
+    path: "foreign-counter-register",
+    element: <ForeignCounterRegisterPage />,
   },
   {
     element: (
