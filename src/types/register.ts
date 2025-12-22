@@ -10,8 +10,8 @@ export type TRegistrationStep = 'search' | 'otp' | 'success' | 'pending';
 
 export type TSearchUserReq = {
   custId?: string;
-  //mobileNumber?: string;
   custCode?: string;
+  nationCode?: string // 1 ไทย 2 ต่างชาติ
 };
 
 export type TSearchUserRes = {
@@ -100,6 +100,20 @@ export type TRegistrationFormData = {
   // Final
   userType: TUserType;
   isConsent: boolean;
+};
+
+// Foreign Register Status Request/Response
+export type TForeignRegisterStatusReq = {
+  lineUid: string;
+};
+
+export type TForeignRegisterStatusRes = {
+  approvalStatus: 'pending' | 'approved' | 'rejected';
+  custNo?: string;
+  fullname?: string;
+  submittedAt?: string;
+  reviewedAt?: string;
+  rejectionReason?: string;
 };
 
 // Registration Context Type

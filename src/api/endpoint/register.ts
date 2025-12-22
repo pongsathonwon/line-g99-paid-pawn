@@ -10,6 +10,8 @@ import type {
   TRegisterReq,
   TForeignRegisterReq,
   TRegisterRes,
+  TForeignRegisterStatusReq,
+  TForeignRegisterStatusRes,
 } from "@/types/register";
 
 // Mock implementations - replace with actual endpoints when backend is ready
@@ -124,6 +126,51 @@ export const registerForeignUser = async (req: TForeignRegisterReq): Promise<TRe
   });
 };
 
+/**
+ * Check foreign user registration approval status
+ * Mock endpoint: GET /api/foreign-register/status
+ */
+export const foreignRegisterStatus = async (
+  req: TForeignRegisterStatusReq
+): Promise<TForeignRegisterStatusRes> => {
+  // TODO: Replace with actual API call
+  // const { data } = await axiosClient.get<TForeignRegisterStatusRes>('/api/foreign-register/status', { params: req });
+
+  // Mock response for development
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Mock: Simulate different approval statuses based on lineUid
+      const mockStatuses: TForeignRegisterStatusRes[] = [
+        {
+          approvalStatus: 'pending',
+          custNo: 'CUST001',
+          fullname: 'John Doe',
+          submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+        },
+        {
+          approvalStatus: 'approved',
+          custNo: 'CUST002',
+          fullname: 'Jane Smith',
+          submittedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
+          reviewedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
+        },
+        {
+          approvalStatus: 'rejected',
+          custNo: 'CUST003',
+          fullname: 'Bob Johnson',
+          submittedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
+          reviewedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(), // 4 days ago
+          rejectionReason: 'Invalid passport documentation',
+        },
+      ];
+
+      // Return random status for demo, or use lineUid hash to be consistent
+      const index = req.lineUid.length % mockStatuses.length;
+      resolve(mockStatuses[index]);
+    }, 800);
+  });
+};
+
 // Export all API functions
 export const REGISTER_API = {
   searchUser,
@@ -131,4 +178,5 @@ export const REGISTER_API = {
   verifyOtp,
   registerUser,
   registerForeignUser,
+  foreignRegisterStatus,
 };
