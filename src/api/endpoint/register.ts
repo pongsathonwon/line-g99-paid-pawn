@@ -12,6 +12,7 @@ import type {
   TRegisterRes,
   TForeignRegisterStatusReq,
   TForeignRegisterStatusRes,
+  TWrappedRes,
 } from "@/types/register";
 
 // Mock implementations - replace with actual endpoints when backend is ready
@@ -34,22 +35,31 @@ export const searchUser = async (req: TSearchUserReq): Promise<TSearchUserRes> =
 
 /**
  * Request OTP code to be sent to mobile number
- * Mock endpoint: POST /api/otp/request
+ * Endpoint: POST https://api.simatic.golden99.co.th/api/sb/v1/tbs/otp_request
  */
 export const requestOtp = async (req: TOtpRequestReq): Promise<TOtpRequestRes> => {
-  // TODO: Replace with actual API call
-  // const { data } = await axiosClient.post<TOtpRequestRes>('/api/otp/request', req);
-
-  // Mock response for development
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        status: 'success',
-        token: 'mock_otp_token_' + Date.now(),
-        refno: 'REF' + Math.random().toString(36).substring(7).toUpperCase(),
-      });
-    }, 500);
-  });
+  try {
+    const { data } = await axiosClient.post<TWrappedRes<TOtpRequestRes>>(
+      '/api/sb/v1/tbs/otp_request',
+      req,
+      {
+        baseURL: 'https://api.simatic.golden99.co.th',
+      }
+    );
+    const res = data.body
+    if (!res) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${data.resultCode}]`)
+    return res
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      const apiErrorMessage = e.response?.data.message;
+      if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
+      throw new Error(apiErrorMessage);
+    }
+    if (e instanceof Error) {
+      throw e;
+    }
+    throw new Error(String(e));
+  }
 };
 
 /**
@@ -59,25 +69,30 @@ export const requestOtp = async (req: TOtpRequestReq): Promise<TOtpRequestRes> =
 export const verifyOtp = async (req: TOtpVerifyReq): Promise<TOtpVerifyRes> => {
   // TODO: Replace with actual API call
   // const { data } = await axiosClient.post<TOtpVerifyRes>('/api/otp/verify', req);
+  try {
 
-  // Mock response for development
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Mock: Accept '123456' as valid OTP
-      if (req.pin === '123456') {
-        resolve({
-          status: 'success',
-        });
-      } else {
-        reject({
-          status: 400,
-          message: 'Invalid OTP code',
-          code: 'otp_invalid',
-        });
+    const { data } = await axiosClient.post<TWrappedRes<TOtpVerifyRes>>(
+      '/api/sb/v1/tbs/otp_verify',
+      req,
+      {
+        baseURL: 'https://api.simatic.golden99.co.th',
       }
-    }, 500);
-  });
-};
+    );
+    const res = data.body
+    if (!res) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${data.resultCode}]`)
+    return res
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      const apiErrorMessage = e.response?.data.message;
+      if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
+      throw new Error(apiErrorMessage);
+    }
+    if (e instanceof Error) {
+      throw e;
+    }
+    throw new Error(String(e));
+  }
+}
 
 /**
  * Register Thai user (domestic)
