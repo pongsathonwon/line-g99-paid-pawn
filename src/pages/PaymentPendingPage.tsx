@@ -1,5 +1,3 @@
-import React from "react";
-
 const PaymentPendingPage = () => {
   return (
     <div className="w-full h-screen flex justify-center items-center p-6 fixed inset-0">

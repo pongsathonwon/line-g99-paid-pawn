@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { REGISTER_API } from "@/api/endpoint/register";
 import { useRegistrationContext } from "@/context/RegistrationContext";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "@/context/AuthContext/AuthContext";
 import { Button } from "@/component/Button";
 import {
   handlePasteOtp,
@@ -17,7 +17,7 @@ import {
 export function OTPVerificationStep() {
   const { formData, setFormData, setCurrentStep } = useRegistrationContext();
   const { auth } = useAuthContext();
-  const [otpError, setOtpError] = useState<string>('');
+  const [otpError, setOtpError] = useState<string>("");
   const [canSubmit, setCanSubmit] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
   const otpInputsRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export function OTPVerificationStep() {
   const requestOtpMutation = useMutation({
     mutationFn: () => {
       if (!formData.userData?.mobileNo) {
-        throw new Error('Mobile number not found');
+        throw new Error("Mobile number not found");
       }
       return REGISTER_API.requestOtp({ msisdn: formData.userData.mobileNo });
     },
@@ -38,7 +38,7 @@ export function OTPVerificationStep() {
       setResendTimer(60); // Start 60 second countdown
     },
     onError: (error: any) => {
-      setOtpError(error.message || 'Failed to send OTP. Please try again.');
+      setOtpError(error.message || "Failed to send OTP. Please try again.");
     },
   });
 
@@ -46,7 +46,7 @@ export function OTPVerificationStep() {
   const verifyOtpMutation = useMutation({
     mutationFn: (pin: string) => {
       if (!formData.otpToken) {
-        throw new Error('OTP token not found');
+        throw new Error("OTP token not found");
       }
       return REGISTER_API.verifyOtp({
         token: formData.otpToken,
@@ -59,7 +59,7 @@ export function OTPVerificationStep() {
       registerMutation.mutate();
     },
     onError: (error: any) => {
-      setOtpError(error.message || 'Invalid OTP code. Please try again.');
+      setOtpError(error.message || "Invalid OTP code. Please try again.");
       clearOtpInputs();
       setCanSubmit(false);
     },
@@ -69,7 +69,7 @@ export function OTPVerificationStep() {
   const registerMutation = useMutation({
     mutationFn: async () => {
       if (!formData.userData || !auth?.lineUid) {
-        throw new Error('User data or LINE UID not found');
+        throw new Error("User data or LINE UID not found");
       }
 
       const registerData = {
@@ -88,7 +88,7 @@ export function OTPVerificationStep() {
         isVerified: true,
       };
 
-      if (formData.userType === 'foreign') {
+      if (formData.userType === "foreign") {
         return REGISTER_API.registerForeignUser(registerData);
       } else {
         return REGISTER_API.registerUser(registerData);
@@ -96,14 +96,14 @@ export function OTPVerificationStep() {
     },
     onSuccess: (data) => {
       // Move to success or pending step based on approval status
-      if (data.approvalStatus === 'pending') {
-        setCurrentStep('pending');
+      if (data.approvalStatus === "pending") {
+        setCurrentStep("pending");
       } else {
-        setCurrentStep('success');
+        setCurrentStep("success");
       }
     },
     onError: (error: any) => {
-      setOtpError(error.message || 'Registration failed. Please try again.');
+      setOtpError(error.message || "Registration failed. Please try again.");
     },
   });
 
@@ -128,7 +128,7 @@ export function OTPVerificationStep() {
     const complete = isOtpComplete();
     setCanSubmit(complete);
     if (complete) {
-      setOtpError('');
+      setOtpError("");
     }
   };
 
@@ -143,21 +143,25 @@ export function OTPVerificationStep() {
   const handleResendOtp = () => {
     clearOtpInputs();
     setCanSubmit(false);
-    setOtpError('');
+    setOtpError("");
     requestOtpMutation.mutate();
   };
 
   const handleBack = () => {
-    setCurrentStep('search');
+    setCurrentStep("search");
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Verify Mobile Number</h2>
+        <h2 className="text-2xl font-bold text-gray-900">
+          Verify Mobile Number
+        </h2>
         <p className="mt-2 text-sm text-gray-600">
-          Enter the 6-digit code sent to{' '}
-          <strong>{formatMobileNumber(formData.userData?.mobileNo || '')}</strong>
+          Enter the 6-digit code sent to{" "}
+          <strong>
+            {formatMobileNumber(formData.userData?.mobileNo || "")}
+          </strong>
         </p>
         {formData.otpRefNo && (
           <p className="mt-1 text-xs text-gray-500">
@@ -169,10 +173,7 @@ export function OTPVerificationStep() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* OTP Input Fields */}
         <div className="space-y-4">
-          <div
-            ref={otpInputsRef}
-            className="flex justify-center gap-3"
-          >
+          <div ref={otpInputsRef} className="flex justify-center gap-3">
             {[...Array(6)].map((_, index) => (
               <input
                 key={index}
@@ -183,7 +184,9 @@ export function OTPVerificationStep() {
                 onPaste={handlePasteOtp}
                 onInput={(e) => handleInputOtp(e, checkOtpComplete)}
                 onKeyUp={handleKeyupOtp}
-                disabled={verifyOtpMutation.isPending || registerMutation.isPending}
+                disabled={
+                  verifyOtpMutation.isPending || registerMutation.isPending
+                }
               />
             ))}
           </div>
@@ -207,7 +210,7 @@ export function OTPVerificationStep() {
               disabled={requestOtpMutation.isPending}
               className="text-sm text-brand-red hover:underline font-medium disabled:text-gray-400 disabled:no-underline"
             >
-              {requestOtpMutation.isPending ? 'Sending...' : 'Resend OTP'}
+              {requestOtpMutation.isPending ? "Sending..." : "Resend OTP"}
             </button>
           )}
         </div>
@@ -218,7 +221,7 @@ export function OTPVerificationStep() {
             type="button"
             onClick={handleBack}
             color="secondary"
-            style="outline"
+            styleType="outline"
             size="lg"
             disabled={verifyOtpMutation.isPending || registerMutation.isPending}
           >
@@ -236,15 +239,15 @@ export function OTPVerificationStep() {
             }
           >
             {verifyOtpMutation.isPending
-              ? 'Verifying...'
+              ? "Verifying..."
               : registerMutation.isPending
-              ? 'Registering...'
-              : 'Verify & Register'}
+              ? "Registering..."
+              : "Verify & Register"}
           </Button>
         </div>
 
         {/* Loading Indicator */}
-        {(requestOtpMutation.isPending) && (
+        {requestOtpMutation.isPending && (
           <div className="text-center text-sm text-gray-600">
             Sending OTP code...
           </div>

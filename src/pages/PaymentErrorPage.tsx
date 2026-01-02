@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, ButtonIcon } from "@/component";
+import { ButtonIcon } from "@/component";
 import { Icon } from "@iconify/react";
 import { Phone } from "lucide-react";
 
