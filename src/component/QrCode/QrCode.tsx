@@ -40,7 +40,7 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
       "\r" +
       paymentData.ref2.padStart(18, "0") +
       "\r" +
-      paymentData.amount.replaceAll(".", "");
+      paymentData.amount.replaceAll(".", "").padStart(10, "0");
 
     QRCode.toCanvas(qrRef.current, data, {
       errorCorrectionLevel: "H",

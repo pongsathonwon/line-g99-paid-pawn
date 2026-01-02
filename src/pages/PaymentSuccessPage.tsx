@@ -1,9 +1,10 @@
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 function PaymentSuccessPage() {
+  // const { id: pawnNumb } = useParams();
   const { interest } = usePawnInterest();
 
   const pawnNumb = interest?.pawnNumb ?? "-";
@@ -14,11 +15,7 @@ function PaymentSuccessPage() {
       <h2 className="text-2xl font-bold text-black mb-1">ยินดีด้วย</h2>
       <p className="text-xl text-black font-semibold mb-4">คุณทำรายการสำเร็จ</p>
 
-      <img
-        src="/SuccessIcon.png"
-        alt="success"
-        className="w-[120px] h-[120px] mb-6"
-      />
+      <img src="/SuccessIcon.png" alt="success" className="size-[120px] mb-6" />
       <DisplayCard className="w-full max-w-[360px] mx-auto">
         <DisplayCard.Header>สรุปรายการชำระ</DisplayCard.Header>
 

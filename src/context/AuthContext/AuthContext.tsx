@@ -1,5 +1,11 @@
 import React from "react";
 import type { TMaybe } from "../../types/base.type";
+import type {
+  TAuthLoginReq,
+  TAuthLoginRes,
+  TUserInfo,
+} from "@/api/endpoint/auth";
+import type { UseMutationResult } from "@tanstack/react-query";
 
 export const AuthContext = React.createContext<TMaybe<TAuthContext>>(null);
 
@@ -10,18 +16,16 @@ export const useAuthContext = () => {
   return ctx;
 };
 
-export const useCustCode = () => {
+export const useCustInfo = () => {
   const { error, auth } = useAuthContext();
   if (error) return null;
-  return auth?.custCode ?? null;
-};
-
-export type TAuth = {
-  token: string;
-  custCode: string;
+  return auth;
 };
 
 export type TAuthContext = {
   error: TMaybe<string>;
-  auth: TMaybe<TAuth>;
+  auth: TMaybe<TUserInfo>;
+  loginStatus: {
+    isPending: boolean;
+  };
 };

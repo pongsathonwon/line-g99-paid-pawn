@@ -10,17 +10,15 @@ import AppContainer from "./layout/AppContainer";
 import PawnInterestContextProvider from "./context/PawnInterestContext/PawnInterestContextProvider";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryProvider>
-      <LineContextProvider>
-        <AuthContextProvider>
-          <PawnInterestContextProvider>
-            <AppContainer>
-              <RouterProvider router={APP_ROUTES} />
-            </AppContainer>
-          </PawnInterestContextProvider>
-        </AuthContextProvider>
-      </LineContextProvider>
-    </QueryProvider>
-  </StrictMode>
+  <QueryProvider>
+    <LineContextProvider>
+      <AuthContextProvider>
+        <PawnInterestContextProvider>
+          <AppContainer>
+            <RouterProvider router={APP_ROUTES} />
+          </AppContainer>
+        </PawnInterestContextProvider>
+      </AuthContextProvider>
+    </LineContextProvider>
+  </QueryProvider>
 );

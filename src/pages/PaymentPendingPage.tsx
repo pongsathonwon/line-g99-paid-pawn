@@ -11,7 +11,6 @@ const PaymentPendingPage = () => {
           />
         </div>
 
-        {/* Text */}
         <div className="flex flex-col items-center gap-1 text-center">
           <p className="text-gray-700 text-lg font-medium">กำลังตรวจสอบ</p>
           <p className="text-gray-500 text-sm">การชำระเงินจากธนาคาร</p>

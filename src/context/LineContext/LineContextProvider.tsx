@@ -12,7 +12,7 @@ const MOCK_SUCCESS: TLineLogin = {
   isLogin: true,
   profile: {
     displayName: "test",
-    userId: "test-userid",
+    userId: "U0bf26f4085b0a41af588f6cb1774409e",
   },
 };
 
@@ -22,7 +22,7 @@ const MOCK_FAIL: TLineLogout = {
 };
 
 function LineContextProvider({ children }: PropsWithChildren) {
-  const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(null);
+  const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(MOCK_SUCCESS);
   const init = async () => {
     try {
       await liff.init({
@@ -43,13 +43,14 @@ function LineContextProvider({ children }: PropsWithChildren) {
       const profile = await liff.getProfile();
       setLineCtx({ isLogin: true, profile });
     } catch (err) {
+      // migrate to toast service
       console.log(err);
     }
   };
 
   useEffect(() => {
     // uncomment for line integration
-    //login();
+    // login();
   }, []);
   return (
     <LineContext.Provider value={{ lineCtx }}>{children}</LineContext.Provider>
