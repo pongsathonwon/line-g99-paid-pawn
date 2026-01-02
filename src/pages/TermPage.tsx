@@ -1,5 +1,4 @@
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
-import React from "react";
 
 function TermPage() {
   return (
