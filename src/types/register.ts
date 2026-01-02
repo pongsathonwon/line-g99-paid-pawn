@@ -41,13 +41,20 @@ export type TOtpRequestRes = {
   refno: string; // Reference number for user
 };
 
+export type TWrappedRes<T> = {
+  resultCode: number
+  resultDescription: string
+  body?: T
+}
+
 export type TOtpVerifyReq = {
   token: string; // From OTP request
   pin: string; // 6-digit code
 };
 
 export type TOtpVerifyRes = {
-  status: 'success';
+  status: string;
+  message: string
 };
 
 // Register Request/Response
