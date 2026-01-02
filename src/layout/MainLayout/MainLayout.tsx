@@ -1,4 +1,3 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import ProfileBadge from "@/component/ui/ProfileBadge";
 import BottomNav from "@/component/ui/BottomNav";

@@ -1,7 +1,7 @@
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function PaymentSuccessPage() {
   // const { id: pawnNumb } = useParams();

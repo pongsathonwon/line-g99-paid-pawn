@@ -1,4 +1,3 @@
-import React from "react";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 
 function NotificationPage() {
