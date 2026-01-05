@@ -103,7 +103,7 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
   // const { data } = await axiosClient.post<TRegisterRes>('/api/register', req);
   try {
     const { data } = await axiosClient.post<TWrappedRes<TRegisterRes>>(
-      '/api/sb/v1/tbs/otp_verify',
+      '/api/sb/v1/customer/update',
       req,
       {
         baseURL: 'https://api.simatic.golden99.co.th',
@@ -113,6 +113,7 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
     if (!res) throw new Error(`ลงทะเบียนไม่สำเร็จ : [${data.resultCode}]`)
     return res
   } catch (e) {
+    console.error(e)
     if (e instanceof AxiosError) {
       const apiErrorMessage = e.response?.data.message;
       if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
