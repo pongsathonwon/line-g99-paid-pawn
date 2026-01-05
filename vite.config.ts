@@ -18,7 +18,27 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React core
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          // Large UI libraries
+          'ui-vendor': ['@headlessui/react', 'lucide-react', '@iconify/react'],
+          // Form and validation
+          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          // Data fetching and state management
+          'query-vendor': ['@tanstack/react-query', 'axios'],
+          // Utility libraries
+          'util-vendor': ['class-variance-authority', 'clsx', 'tailwind-merge'],
+          // Heavy libraries (QR, screenshot, LIFF)
+          'heavy-vendor': ['qrcode', 'html2canvas', '@line/liff'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
+  },
   test: {
     globals: true,
     environment: "jsdom",

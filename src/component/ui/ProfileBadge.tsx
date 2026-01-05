@@ -1,14 +1,11 @@
-import React, { type PropsWithChildren } from "react";
+import { useLineContext } from "@/context/LineContext/LineContext";
 
-type TProfileBadgeProps = {
-  displayName: string;
-  pictureUrl?: string;
-} & PropsWithChildren;
-
-function ProfileBadge({
-  displayName,
-  pictureUrl = "https://fastly.picsum.photos/id/962/200/200.jpg?hmac=XehF7z9JYkgC-2ZfSP05h7eyumIq9wNKUDoCLklIhr4",
-}: TProfileBadgeProps) {
+function ProfileBadge() {
+  const { lineCtx } = useLineContext();
+  const displayName = lineCtx?.profile?.displayName ?? "ไม่พบชื่อในระบบ";
+  const pictureUrl =
+    lineCtx?.profile?.pictureUrl ??
+    "https://fastly.picsum.photos/id/962/200/200.jpg?hmac=XehF7z9JYkgC-2ZfSP05h7eyumIq9wNKUDoCLklIhr4";
   return (
     <header className="fixed top-0 left-0 w-full h-(--header-height) overflow-hidden bg-white">
       <div className="relative -z-10">

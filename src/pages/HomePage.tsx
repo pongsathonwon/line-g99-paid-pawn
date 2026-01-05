@@ -16,6 +16,18 @@ function HomePage() {
   if (isError) {
     return <div>{error.message}</div>;
   }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex flex-col items-center w-full">
+        <h3 className="font-semibold text-2xl text-center mb-6 lg:text-3xl">
+          รายการขายฝาก
+        </h3>
+        <div className="text-center text-gray-500">ไม่มีรายการขายฝาก</div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center w-full">
       <h3 className="font-semibold text-2xl text-center mb-6 lg:text-3xl">

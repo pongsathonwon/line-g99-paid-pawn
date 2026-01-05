@@ -5,27 +5,27 @@ import { useMutation } from "@tanstack/react-query";
 import { AUTH_API, type TUserInfo } from "../../api/endpoint/auth";
 import type { TMaybe } from "../../types/base.type";
 import { axiosClient } from "../../api/axios";
-import { getAT, getToken } from "../../lib/local-storage-helper";
+import { getAT } from "../../lib/local-storage-helper";
 
-const MOCK_SUCCESS_LOGIN = {
-  error: null,
-  auth: {
-    id: "445725",
-    custNo: "4302380",
-    fullname: "เปเล ซาน วิน",
-    idCard: "0074015073011",
-    lineUid: "U0bf26f4085b0a41af588f6cb1774409e",
-    mobileNo: "0949028344",
-    branchCode: "43",
-    custType: "G",
-    custStat: 1,
-    isConsent: true,
-    isVerified: true,
-    birthDate: "1987-05-06T17:00:00.000Z",
-    gender: "x",
-  },
-};
-const MOCK_FAIL_LOGIN = { error: "mock fail login", auth: null };
+// const MOCK_SUCCESS_LOGIN = {
+//   error: null,
+//   auth: {
+//     id: "445725",
+//     custNo: "4302380",
+//     fullname: "เปเล ซาน วิน",
+//     idCard: "0074015073011",
+//     lineUid: "U0bf26f4085b0a41af588f6cb1774409e",
+//     mobileNo: "0949028344",
+//     branchCode: "43",
+//     custType: "G",
+//     custStat: 1,
+//     isConsent: true,
+//     isVerified: true,
+//     birthDate: "1987-05-06T17:00:00.000Z",
+//     gender: "x",
+//   },
+// };
+// const MOCK_FAIL_LOGIN = { error: "mock fail login", auth: null };
 
 function AuthContextProvider({ children }: React.PropsWithChildren) {
   const { lineCtx } = useLineContext();
@@ -45,7 +45,9 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
     },
   });
   useEffect(() => {
-    loginMutation.mutateAsync({ lineUid: uid });
+    if (uid) {
+      loginMutation.mutateAsync({ lineUid: uid });
+    }
   }, [uid]);
 
   useEffect(() => {
@@ -64,9 +66,10 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
       value={{
         error,
         auth,
-        //...MOCK_SUCCESS_LOGIN,
         loginStatus: {
           isPending: loginMutation.isPending,
+          isSuccess: loginMutation.isSuccess,
+          isError: loginMutation.isError,
         },
       }}
     >
