@@ -1,23 +1,28 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import { lazy } from "react";
+
+// Eagerly load critical components
 import SplashScreen from "../pages/SplashScreen";
-import RegisterPage from "../pages/register/RegisterPage";
-import ForeignRegisterPage from "../pages/register/ForeignRegisterPage";
-import RegisterResultPage from "../pages/RegisterResultPage";
-import Protected from "../layout/MainLayout/Protected";
-import HomePage from "../pages/HomePage";
-import PaymentDetailPage from "../pages/PaymentDetailPage";
-import QRPage from "../pages/QRPage";
-import PaymentSuccessPage from "../pages/PaymentSuccessPage";
-import HistoryPage from "../pages/HistoryPage";
-import NotificationPage from "../pages/NotificationPage";
 import NotfoundPage from "../pages/NotfoundPage";
+import Protected from "../layout/MainLayout/Protected";
 import MainLayout from "../layout/MainLayout/MainLayout";
-import TermPage from "@/pages/TermPage";
-import PaymentErrorPage from "@/pages/PaymentErrorPage";
 import PawnInterestLoader from "@/loaders/PawnInterestLoader";
-import PaymentPendingPage from "@/pages/PaymentPendingPage";
-import ForeignCounterRegisterPage from "@/pages/register/ForeignCounterRegisterPage";
-import ThaiRegisterPage from "@/pages/register/ThaiRegisterPage";
+
+// Lazy load page components
+const RegisterPage = lazy(() => import("../pages/register/RegisterPage"));
+const ThaiRegisterPage = lazy(() => import("../pages/register/ThaiRegisterPage"));
+const ForeignRegisterPage = lazy(() => import("../pages/register/ForeignRegisterPage"));
+const ForeignCounterRegisterPage = lazy(() => import("@/pages/register/ForeignCounterRegisterPage"));
+const RegisterResultPage = lazy(() => import("../pages/RegisterResultPage"));
+const HomePage = lazy(() => import("../pages/HomePage"));
+const PaymentDetailPage = lazy(() => import("../pages/PaymentDetailPage"));
+const QRPage = lazy(() => import("../pages/QRPage"));
+const PaymentSuccessPage = lazy(() => import("../pages/PaymentSuccessPage"));
+const PaymentErrorPage = lazy(() => import("@/pages/PaymentErrorPage"));
+const PaymentPendingPage = lazy(() => import("@/pages/PaymentPendingPage"));
+const HistoryPage = lazy(() => import("../pages/HistoryPage"));
+const NotificationPage = lazy(() => import("../pages/NotificationPage"));
+const TermPage = lazy(() => import("@/pages/TermPage"));
 
 export const APP_ROUTES = createBrowserRouter([
   {

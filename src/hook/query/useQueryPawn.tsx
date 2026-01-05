@@ -1,6 +1,5 @@
 import { getManyPawnByCust } from "@/api/endpoint/pawn";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
 type TUseQueryPawnByIdProps = {
   custCode?: string;

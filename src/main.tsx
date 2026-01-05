@@ -7,17 +7,20 @@ import { QueryProvider } from "./context/QueryProvider";
 import AuthContextProvider from "./context/AuthContext/AuthContextProvider";
 import AppContainer from "./layout/AppContainer";
 import PawnInterestContextProvider from "./context/PawnInterestContext/PawnInterestContextProvider";
+import ToastContextProvider from "./context/ToastContext/ToastContextProvider";
 
 createRoot(document.getElementById("root")!).render(
-  <QueryProvider>
-    <LineContextProvider>
-      <AuthContextProvider>
-        <PawnInterestContextProvider>
-          <AppContainer>
-            <RouterProvider router={APP_ROUTES} />
-          </AppContainer>
-        </PawnInterestContextProvider>
-      </AuthContextProvider>
-    </LineContextProvider>
-  </QueryProvider>
+  <ToastContextProvider>
+    <QueryProvider>
+      <LineContextProvider>
+        <AuthContextProvider>
+          <PawnInterestContextProvider>
+            <AppContainer>
+              <RouterProvider router={APP_ROUTES} />
+            </AppContainer>
+          </PawnInterestContextProvider>
+        </AuthContextProvider>
+      </LineContextProvider>
+    </QueryProvider>
+  </ToastContextProvider>
 );

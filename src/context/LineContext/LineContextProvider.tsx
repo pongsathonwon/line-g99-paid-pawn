@@ -1,36 +1,32 @@
 import { useEffect, useState, type PropsWithChildren } from "react";
-import {
-  LineContext,
-  type TLineLogin,
-  type TLineLogout,
-  type TLineStatus,
-} from "./LineContext";
+import { LineContext, type TLineStatus } from "./LineContext";
 import { liff } from "@line/liff";
 import type { TMaybe } from "../../types/base.type";
+import { useToast } from "../ToastContext/ToastContext";
 
-const MOCK_SUCCESS: TLineLogin = {
-  isLogin: true,
-  profile: {
-    displayName: "test",
-    userId: "U0bf26f4085b0a41af588f6cb1774409e",
-  },
-};
+// const MOCK_SUCCESS: TLineLogin = {
+//   isLogin: true,
+//   profile: {
+//     displayName: "test",
+//     userId: "U0bf26f4085b0a41af588f6cb1774409e",
+//   },
+// };
 
-const MOCK_FAIL: TLineLogout = {
-  isLogin: false,
-  profile: null,
-};
+// const MOCK_FAIL: TLineLogout = {
+//   isLogin: false,
+//   profile: null,
+// };
 
 function LineContextProvider({ children }: PropsWithChildren) {
-  const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(MOCK_SUCCESS);
+  const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(null);
+  const toast = useToast();
   const init = async () => {
     try {
       await liff.init({
         liffId: import.meta.env.VITE_LIFF_ID,
-        // withLoginOnExternalBrowser: true,
       });
     } catch (err) {
-      console.error("error here");
+      toast.error("ไม่สามารถเชื่อมต่อกับ LINE ได้ กรุณาลองใหม่อีกครั้ง");
     }
   };
 
@@ -45,12 +41,12 @@ function LineContextProvider({ children }: PropsWithChildren) {
     } catch (err) {
       // migrate to toast service
       console.log(err);
+      toast.error("ไม่สามารถเชื่อมต่อกับ LINE ได้ กรุณาลองใหม่อีกครั้ง");
     }
   };
 
   useEffect(() => {
-    // uncomment for line integration
-    // login();
+    login();
   }, []);
   return (
     <LineContext.Provider value={{ lineCtx }}>{children}</LineContext.Provider>

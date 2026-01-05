@@ -1,5 +1,6 @@
 import type { TMaybe } from "@/types/base.type";
 import { useRef, useState, useCallback } from "react";
+import { useToast } from "@/context/ToastContext/ToastContext";
 
 export type UseScreenshotOptions = {
   backgroundColor?: string;
@@ -24,6 +25,7 @@ export function useScreenshot(
 
   const captureRef = useRef<HTMLDivElement>(null);
   const [isCapturing, setIsCapturing] = useState(false);
+  const { error: showError } = useToast();
 
   const captureScreenshot = useCallback(async () => {
     if (!captureRef.current) return;
@@ -55,11 +57,11 @@ export function useScreenshot(
       }, "image/png");
     } catch (error) {
       console.error("Screenshot failed:", error);
-      alert("Failed to capture screenshot. Please try again.");
+      showError("ไม่สามารถบันทึกภาพหน้าจอได้ กรุณาลองใหม่อีกครั้ง");
     } finally {
       setIsCapturing(false);
     }
-  }, [backgroundColor, scale, fileNamePrefix]);
+  }, [backgroundColor, scale, fileNamePrefix, showError]);
 
   return {
     captureRef,

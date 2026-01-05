@@ -1,4 +1,3 @@
-import React from "react";
 import { BellIcon, HistoryIcon, HomeIcon, ReceiptTextIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
