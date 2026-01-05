@@ -3,17 +3,18 @@ import { useAuthContext } from "@/context/AuthContext/AuthContext";
 
 export default function SplashScreen() {
   const [searchParams] = useSearchParams();
+
   const {
-    loginStatus: { isPending },
-    auth,
+    loginStatus: { isSuccess, isError },
   } = useAuthContext();
 
-  if (auth !== null) {
+  if (isSuccess) {
     const redirectPath = searchParams.get("redirect");
     return <Navigate to={redirectPath ?? "/home"} replace />;
   }
-
-  if (!isPending) return <Navigate to="/register" replace />;
+  if (isError) {
+    return <Navigate to="/register" replace />;
+  }
 
   return (
     <div

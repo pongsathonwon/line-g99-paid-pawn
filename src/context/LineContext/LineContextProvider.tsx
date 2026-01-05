@@ -4,19 +4,6 @@ import { liff } from "@line/liff";
 import type { TMaybe } from "../../types/base.type";
 import { useToast } from "../ToastContext/ToastContext";
 
-// const MOCK_SUCCESS: TLineLogin = {
-//   isLogin: true,
-//   profile: {
-//     displayName: "test",
-//     userId: "U0bf26f4085b0a41af588f6cb1774409e",
-//   },
-// };
-
-// const MOCK_FAIL: TLineLogout = {
-//   isLogin: false,
-//   profile: null,
-// };
-
 function LineContextProvider({ children }: PropsWithChildren) {
   const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(null);
   const toast = useToast();
