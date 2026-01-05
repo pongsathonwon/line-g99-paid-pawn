@@ -20,34 +20,38 @@ import { useToast } from "../ToastContext/ToastContext";
 function LineContextProvider({ children }: PropsWithChildren) {
   const [lineCtx, setLineCtx] = useState<TMaybe<TLineStatus>>(null);
   const toast = useToast();
-  const init = async () => {
-    try {
-      await liff.init({
-        liffId: import.meta.env.VITE_LIFF_ID,
-      });
-    } catch (err) {
-      toast.error("ไม่สามารถเชื่อมต่อกับ LINE ได้ กรุณาลองใหม่อีกครั้ง");
+
+  const lineLogin = async () => {
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
     }
+    const profile = await liff.getProfile();
+    setLineCtx({
+      isLogin: true,
+      profile: {
+        displayName: profile.displayName,
+        userId: profile.userId,
+        pictureUrl: profile.pictureUrl,
+      },
+    });
   };
 
-  const login = async () => {
-    try {
-      await init();
-      if (!liff.isLoggedIn()) {
-        liff.login();
-      }
-      const profile = await liff.getProfile();
-      setLineCtx({ isLogin: true, profile });
-    } catch (err) {
-      // migrate to toast service
-      console.log(err);
-      toast.error("ไม่สามารถเชื่อมต่อกับ LINE ได้ กรุณาลองใหม่อีกครั้ง");
-    }
+  const initialize = () => {
+    liff
+      .init({
+        liffId: import.meta.env.VITE_LIFF_ID,
+      })
+      .then(() => lineLogin())
+      .catch((err) => {
+        toast.error("LIFF Initialization Error");
+      });
   };
 
   useEffect(() => {
-    login();
+    initialize();
   }, []);
+
   return (
     <LineContext.Provider value={{ lineCtx }}>{children}</LineContext.Provider>
   );
