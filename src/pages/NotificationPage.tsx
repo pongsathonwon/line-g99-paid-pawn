@@ -3,7 +3,6 @@ import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 function NotificationPage() {
   return (
     <div>
-      NotificationPage
       <ul className="flex flex-col gap-4">
         {Array.from({ length: 3 }).map((_, i) => (
           <li key={i}>
