@@ -51,7 +51,7 @@ export function Toast({ toast }: ToastProps) {
       {/* Dismiss Button */}
       <button
         onClick={handleDismiss}
-        className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+        className="shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
         aria-label="ปิดการแจ้งเตือน"
       >
         <X className="w-5 h-5" />
