@@ -45,7 +45,9 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
     },
   });
   useEffect(() => {
-    loginMutation.mutateAsync({ lineUid: uid });
+    if (uid) {
+      loginMutation.mutateAsync({ lineUid: uid });
+    }
   }, [uid]);
 
   useEffect(() => {
@@ -66,6 +68,8 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
         auth,
         loginStatus: {
           isPending: loginMutation.isPending,
+          isSuccess: loginMutation.isSuccess,
+          isError: loginMutation.isError,
         },
       }}
     >

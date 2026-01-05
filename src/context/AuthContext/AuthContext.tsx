@@ -22,5 +22,7 @@ export type TAuthContext = {
   auth: TMaybe<TUserInfo>;
   loginStatus: {
     isPending: boolean;
+    isSuccess: boolean;
+    isError: boolean;
   };
 };
