@@ -1,37 +1,49 @@
 import { REGISTER_API } from "@/api/endpoint/register";
 import useTimer from "@/hook/useTimer";
 import { useMutation } from "@tanstack/react-query";
-import { useState, type PropsWithChildren } from "react";
+import React, { useState, type PropsWithChildren } from "react";
 import { OTPInput } from "@/component/OTPInput";
+import type { TMaybe } from "@/types/base.type";
+import { Button } from "@/component/Button";
+import type { TOtpRequestRes } from "@/types/register";
+import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
 
 type TOTPVerificationProps = PropsWithChildren<{
-  mobileNo?: string;
-  otpLength?: number;
-  onSuccess?: (pin: string) => void;
+  mobileNo: TMaybe<string>;
+  otpRes: TMaybe<TOtpRequestRes>;
+  otpLength: number;
+  onSuccess: (verifyRes: boolean) => void;
+  onSetOtp: (otpRes: TOtpRequestRes) => void;
 }>;
 
 function OTPVerification({
   children,
-  mobileNo = "0123456789",
-  otpLength = 6,
+  mobileNo,
+  otpLength,
+  otpRes,
+  onSetOtp,
   onSuccess,
 }: TOTPVerificationProps) {
+  const { next } = useMultistepForm();
   const [otpError, setOtpError] = useState<string>("");
-  const [otpToken, setOtpToken] = useState<string>("");
-  const [otpRefNo, setOtpRefNo] = useState<string>("");
   const [currentOtp, setCurrentOtp] = useState<string>("");
+  const otpToken = otpRes?.token ?? "";
+  const otpRefNo = otpRes?.refno;
   const { time: resendTimer, reset: resetTimer } = useTimer({
     initialValue: 60,
     unit: "seconds",
-    autoStart: false,
+    autoStart: true,
   });
 
   const requestOtpMutation = useMutation({
-    mutationFn: () => REGISTER_API.requestOtp({ msisdn: mobileNo }),
+    mutationFn: async () => {
+      if (mobileNo === null) throw new Error("เบอร์โทรศัพท์ไม่ถูกต้อง");
+      return await REGISTER_API.requestOtp({ msisdn: mobileNo });
+    },
+
     onSuccess: (data) => {
-      setOtpToken(data.token);
-      setOtpRefNo(data.refno);
-      resetTimer(60);
+      onSetOtp(data);
+      resetTimer(60 * 5);
       setOtpError("");
       setCurrentOtp("");
     },
@@ -47,8 +59,12 @@ function OTPVerification({
       }
       return REGISTER_API.verifyOtp({ token: otpToken, pin });
     },
-    onSuccess: () => {
-      onSuccess?.(currentOtp);
+    onSuccess: (res) => {
+      const isSuccess = res.status === "success";
+      if (isSuccess) {
+        onSuccess(isSuccess);
+        next();
+      }
     },
     onError: (error: any) => {
       setOtpError(error.message || "รหัส OTP ไม่ถูกต้อง กรุณาลองอีกครั้ง");
@@ -80,13 +96,23 @@ function OTPVerification({
     setOtpError("");
     requestOtpMutation.mutate();
   };
+  React.useEffect(() => {
+    if (mobileNo === null) return;
+    requestOtpMutation.mutate();
+  }, [mobileNo]);
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900">ยืนยันรหัส OTP</h2>
+
         <p className="mt-2 text-sm text-gray-600">
-          รหัส OTP 6 หลัก ส่งไปที่หมายเลข <strong>{mobileNo}</strong>
+          {mobileNo === null ? (
+            <>ไม่พบเบอร์โทรศัพท์</>
+          ) : (
+            <>
+              รหัส OTP 6 หลัก ส่งไปที่หมายเลข <strong>{mobileNo}</strong>
+            </>
+          )}
         </p>
         {otpRefNo && (
           <p className="mt-1 text-xs text-gray-500">
@@ -98,7 +124,7 @@ function OTPVerification({
       {/* OTP Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* OTP Input Fields */}
-        <div className="space-y-4">
+        <div className="space-y-1">
           <OTPInput
             length={otpLength}
             onComplete={handleOtpComplete}
@@ -109,9 +135,16 @@ function OTPVerification({
 
           {/* Error Message */}
           <div className="text-sm text-red-600 text-center min-h-5">
-            {otpError || " "}
+            {otpError || ""}
           </div>
         </div>
+        <Button
+          fullWidth
+          type="submit"
+          disabled={currentOtp.length !== otpLength}
+        >
+          ยืนยัน OTP
+        </Button>
 
         {/* Resend OTP */}
         <div className="text-center">

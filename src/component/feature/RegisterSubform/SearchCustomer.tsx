@@ -1,5 +1,5 @@
 import FormControl from "@/component/FormControl/FormControl";
-import { useMemo, useState, type PropsWithChildren } from "react";
+import { useMemo, type PropsWithChildren } from "react";
 import type { TSearchUserMethod, TSearchUserRes } from "@/types/register";
 import { Button } from "@/component/Button";
 import { searchLabelMapper, searchMethodMapper } from "./lib";
@@ -9,9 +9,13 @@ import { REGISTER_API } from "@/api/endpoint/register";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSearchCustomerSchema } from "./validation";
+import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
+import type { TMaybe } from "@/types/base.type";
 
 type TSearchCustomerProps = {
   searchMethod: TSearchUserMethod;
+  userForm: TMaybe<TSearchUserRes>;
+  onSetUser: (res: TSearchUserRes) => void;
 };
 
 type TSearchCustomerFormState = {
@@ -20,8 +24,11 @@ type TSearchCustomerFormState = {
 
 function SearchCustomer({
   searchMethod,
-  children,
+  userForm,
+  onSetUser,
 }: PropsWithChildren<TSearchCustomerProps>) {
+  const { next } = useMultistepForm();
+  const validUserForm = userForm !== null;
   const requestKey = useMemo(
     () => searchMethodMapper(searchMethod),
     [searchMethod]
@@ -34,7 +41,6 @@ function SearchCustomer({
     () => createSearchCustomerSchema(searchMethod),
     [searchMethod]
   );
-  const [userData, setUserData] = useState<TSearchUserRes | null>(null);
 
   const {
     control,
@@ -50,7 +56,7 @@ function SearchCustomer({
     mutationFn: (searchValue: string) =>
       REGISTER_API.searchUser({ [requestKey]: searchValue }),
     onSuccess: (data) => {
-      setUserData(data);
+      onSetUser(data);
     },
     onError: (error: any) => {
       setError("searchValue", {
@@ -63,6 +69,13 @@ function SearchCustomer({
 
   const onSubmit = ({ searchValue }: TSearchCustomerFormState) => {
     searchMutation.mutate(searchValue);
+  };
+
+  const onGoNext = () => {
+    if (!validUserForm) {
+      return;
+    }
+    next();
   };
 
   return (
@@ -89,20 +102,21 @@ function SearchCustomer({
           {searchMutation.isPending ? "กำลังค้นหา..." : "ค้นหา"}
         </Button>
       </form>
-      {userData && (
+      {userForm && (
         <DisplayCard>
           <DisplayCard.Header>ข้อมูลสมาชิก</DisplayCard.Header>
           <DisplayCard.Mute>
             <span>ชื่อ</span>
-            <span>{userData.fullname}</span>
+            <span>{userForm.fullname}</span>
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>เบอร์โทรศัพท์มือถือ</span>
-            <span>{userData.mobileNo}</span>
+            <span>{userForm.mobileNo}</span>
           </DisplayCard.Mute>
           <DisplayCard.Divider />
-          {children}
-          <Button fullWidth>ยืนยันตัวตน</Button>
+          <Button fullWidth onClick={onGoNext} disabled={!validUserForm}>
+            ยืนยันตัวตน
+          </Button>
         </DisplayCard>
       )}
     </section>

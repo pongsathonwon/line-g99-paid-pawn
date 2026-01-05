@@ -25,7 +25,7 @@ function OTPInput({
   className,
   inputClassName,
 }: OTPInputProps) {
-  const { control, setValue, setFocus, getValues, watch } = useForm<TOTPForm>({
+  const { control, setValue, setFocus, getValues } = useForm<TOTPForm>({
     defaultValues: {
       otpNumbers: Array.from({ length }).map(() => ({ number: "" })),
     },
@@ -34,8 +34,8 @@ function OTPInput({
   const { fields } = useFieldArray({ name: "otpNumbers", control });
 
   // Watch all fields to check if OTP is complete
-  const otpValues = watch("otpNumbers");
-  const currentOtp = otpValues.map((f) => f.number).join("");
+  // const otpValues = watch("otpNumbers");
+  // const currentOtp = otpValues.map((f) => f.number).join("");
 
   // Check if OTP is complete and trigger callback
   const checkComplete = () => {
@@ -101,12 +101,12 @@ function OTPInput({
   };
 
   // Clear all inputs (exposed via ref if needed)
-  const clear = () => {
-    fields.forEach((_, index) => {
-      setValue(`otpNumbers.${index}.number`, "");
-    });
-    setFocus("otpNumbers.0.number");
-  };
+  // const clear = () => {
+  //   fields.forEach((_, index) => {
+  //     setValue(`otpNumbers.${index}.number`, "");
+  //   });
+  //   setFocus("otpNumbers.0.number");
+  // };
 
   return (
     <div className={cn("flex justify-center gap-3", className)}>
