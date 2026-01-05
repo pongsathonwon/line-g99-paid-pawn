@@ -12,6 +12,7 @@ export const getPawnInterest = async (req: TGetPawnInterestReq) => {
 }
 
 export const getHistPaid = async ({ custCode }: TGetHistPaidReq) => {
+    if (!custCode) return []
     const { data } = await axiosClient.get<TGetHistPaidRes[]>(`pawn/hist-paid/${custCode}`)
     return data
 }
