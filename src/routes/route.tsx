@@ -5,6 +5,7 @@ import { lazy } from "react";
 import SplashScreen from "../pages/SplashScreen";
 import NotfoundPage from "../pages/NotfoundPage";
 import Protected from "../layout/MainLayout/Protected";
+import PreventReRegister from "../layout/RegisterLayout/PreventReRegister";
 import MainLayout from "../layout/MainLayout/MainLayout";
 import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 
@@ -31,24 +32,29 @@ export const APP_ROUTES = createBrowserRouter([
     errorElement: <NotfoundPage />,
   },
   {
-    path: "register/result",
-    element: <RegisterResultPage />,
-  },
-  {
-    path: "register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "thai-register",
-    element: <ThaiRegisterPage />,
-  },
-  {
-    path: "foreign-register",
-    element: <ForeignRegisterPage />,
-  },
-  {
-    path: "foreign-counter-register",
-    element: <ForeignCounterRegisterPage />,
+    element: <PreventReRegister><Outlet /></PreventReRegister>,
+    children: [
+      {
+        path: "register/result",
+        element: <RegisterResultPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+      {
+        path: "thai-register",
+        element: <ThaiRegisterPage />,
+      },
+      {
+        path: "foreign-register",
+        element: <ForeignRegisterPage />,
+      },
+      {
+        path: "foreign-counter-register",
+        element: <ForeignCounterRegisterPage />,
+      },
+    ],
   },
   {
     element: (
