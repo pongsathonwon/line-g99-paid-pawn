@@ -22,6 +22,7 @@ function LineContextProvider({ children }: PropsWithChildren) {
         pictureUrl: profile.pictureUrl,
       },
     });
+    toast.success("LINE Login Successful");
   };
 
   const initialize = () => {
