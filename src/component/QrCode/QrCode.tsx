@@ -26,21 +26,34 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
     suffix: "01",
   };
 
+  const createBarcodeFilled = (pay: TPaymentData, conf: TQrCodeConfig) =>
+    conf.prefix +
+    conf.taxId +
+    conf.suffix +
+    "\r" +
+    paymentData.ref1.padStart(18, "0") +
+    "\r" +
+    paymentData.ref2.padStart(18, "0") +
+    "\r" +
+    paymentData.amount.replaceAll(".", "").padStart(10, "0");
+
+  const createBarcodeClean = (pay: TPaymentData, conf: TQrCodeConfig) =>
+    conf.prefix +
+    conf.taxId +
+    conf.suffix +
+    "\r" +
+    paymentData.ref1 +
+    "\r" +
+    paymentData.ref2 +
+    "\r" +
+    paymentData.amount.replaceAll(".", "");
+
   const qrRef = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(() => {
     if (!qrRef.current) return;
 
-    const data =
-      config.prefix +
-      config.taxId +
-      config.suffix +
-      "\r" +
-      paymentData.ref1.padStart(18, "0") +
-      "\r" +
-      paymentData.ref2.padStart(18, "0") +
-      "\r" +
-      paymentData.amount.replaceAll(".", "").padStart(10, "0");
+    const data = createBarcodeClean(paymentData, config);
 
     QRCode.toCanvas(qrRef.current, data, {
       errorCorrectionLevel: "H",
