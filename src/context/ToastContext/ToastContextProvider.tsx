@@ -3,7 +3,6 @@ import {
   useCallback,
   useEffect,
   type PropsWithChildren,
-  use,
 } from "react";
 import { ToastContext } from "./ToastContext";
 import type { TToast, TToastInput } from "@/types/toast.type";
