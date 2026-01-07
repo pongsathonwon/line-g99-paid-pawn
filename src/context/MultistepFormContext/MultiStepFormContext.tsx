@@ -5,6 +5,7 @@ type TMultiStepFormContext = {
   next: () => void;
   back: () => void;
   activePage: number;
+  totalPage: number;
 };
 
 export const MultiStepFormContext =
