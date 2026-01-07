@@ -28,7 +28,9 @@ export default function SplashScreen() {
           className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-md max-w-full h-auto object-contain"
         />
       </div>
-      <div className="text-gold">{import.meta.env.VITE_APP_VERSION}</div>
+      <div className="text-gold">
+        version {import.meta.env.VITE_APP_VERSION}
+      </div>
     </div>
   );
 }
