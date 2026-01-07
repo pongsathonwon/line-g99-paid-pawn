@@ -34,7 +34,9 @@ export function MultiStepFormContextProvider({
     });
   };
   return (
-    <MultiStepFormContext.Provider value={{ activePage, next, back }}>
+    <MultiStepFormContext.Provider
+      value={{ activePage, totalPage, next, back }}
+    >
       {children}
     </MultiStepFormContext.Provider>
   );

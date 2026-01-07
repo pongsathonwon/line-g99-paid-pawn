@@ -6,6 +6,7 @@ import TermStep from "../RegisterSubform/TermStep";
 import { useState } from "react";
 import type { TMaybe } from "@/types/base.type";
 import type { TOtpRequestRes, TSearchUserRes } from "@/types/register";
+import StepIndicator from "./StepIndicator";
 
 function ThaiRegisterForm() {
   const { activePage } = useMultistepForm();
@@ -28,7 +29,8 @@ function ThaiRegisterForm() {
     setIsConsent(consent);
   };
   return (
-    <>
+    <div className="flex flex-col gap-6 w-full">
+      <StepIndicator />
       {activePage === 1 && (
         <SearchCustomer
           userForm={user}
@@ -54,8 +56,8 @@ function ThaiRegisterForm() {
         />
       )}
       {activePage === 4 && <SuccessStep />}
-    </>
+    </div>
   );
 }
-
+ 
 export default ThaiRegisterForm;
