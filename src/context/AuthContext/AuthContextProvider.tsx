@@ -44,6 +44,12 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
       setAuth(null);
     },
   });
+
+  const relogin = async () => {
+    if (uid) {
+      await loginMutation.mutateAsync({ lineUid: uid });
+    }
+  };
   useEffect(() => {
     if (uid) {
       loginMutation.mutateAsync({ lineUid: uid });
@@ -66,6 +72,7 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
       value={{
         error,
         auth,
+        relogin,
         loginStatus: {
           isPending: loginMutation.isPending,
           isSuccess: loginMutation.isSuccess,

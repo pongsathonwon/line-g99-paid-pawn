@@ -1,16 +1,12 @@
 import React from "react";
 import QRCode from "qrcode";
+import type { TQrCodeConfig } from "./lib.type";
+import { createBarcodeClean } from "./lib";
 
 export type TPaymentData = {
   ref1: string;
   ref2: string;
   amount: string;
-};
-
-type TQrCodeConfig = {
-  prefix: string;
-  taxId: string;
-  suffix: string;
 };
 
 type TQrCodeProps = {
@@ -31,16 +27,7 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
   React.useEffect(() => {
     if (!qrRef.current) return;
 
-    const data =
-      config.prefix +
-      config.taxId +
-      config.suffix +
-      "\r" +
-      paymentData.ref1.padStart(18, "0") +
-      "\r" +
-      paymentData.ref2.padStart(18, "0") +
-      "\r" +
-      paymentData.amount.replaceAll(".", "").padStart(10, "0");
+    const data = createBarcodeClean(paymentData, config);
 
     QRCode.toCanvas(qrRef.current, data, {
       errorCorrectionLevel: "H",

@@ -20,6 +20,7 @@ export const useCustInfo = () => {
 export type TAuthContext = {
   error: TMaybe<string>;
   auth: TMaybe<TUserInfo>;
+  relogin: () => Promise<void>;
   loginStatus: {
     isPending: boolean;
     isSuccess: boolean;

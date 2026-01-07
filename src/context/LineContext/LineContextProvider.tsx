@@ -13,26 +13,34 @@ function LineContextProvider({ children }: PropsWithChildren) {
       liff.login();
       return;
     }
-    const profile = await liff.getProfile();
-    setLineCtx({
-      isLogin: true,
-      profile: {
-        displayName: profile.displayName,
-        userId: profile.userId,
-        pictureUrl: profile.pictureUrl,
-      },
-    });
-    toast.success("LINE Login Successful");
+    try {
+      const profile = await liff.getProfile();
+      setLineCtx({
+        isLogin: true,
+        profile: {
+          displayName: profile.displayName,
+          userId: profile.userId,
+          pictureUrl: profile.pictureUrl,
+        },
+      });
+      toast.success("LINE Login Successful");
+    } catch (error: any) {
+      toast.error("LINE Profile Fetch Error: " + error.message);
+    }
   };
 
   const initialize = () => {
+    if (!import.meta.env.VITE_LIFF_ID) {
+      toast.error("LIFF ID is not set in environment variables.");
+      return;
+    }
     liff
       .init({
         liffId: import.meta.env.VITE_LIFF_ID,
       })
       .then(() => lineLogin())
       .catch((err) => {
-        toast.error("LIFF Initialization Error");
+        toast.error("LIFF Initialization Error: ", err.message);
       });
   };
 
