@@ -1,16 +1,12 @@
 import React from "react";
 import QRCode from "qrcode";
+import type { TQrCodeConfig } from "./lib.type";
+import { createBarcodeClean } from "./lib";
 
 export type TPaymentData = {
   ref1: string;
   ref2: string;
   amount: string;
-};
-
-type TQrCodeConfig = {
-  prefix: string;
-  taxId: string;
-  suffix: string;
 };
 
 type TQrCodeProps = {
@@ -25,28 +21,6 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
     taxId: "0105555097424",
     suffix: "01",
   };
-
-  const createBarcodeFilled = (pay: TPaymentData, conf: TQrCodeConfig) =>
-    conf.prefix +
-    conf.taxId +
-    conf.suffix +
-    "\r" +
-    paymentData.ref1.padStart(18, "0") +
-    "\r" +
-    paymentData.ref2.padStart(18, "0") +
-    "\r" +
-    paymentData.amount.replaceAll(".", "").padStart(10, "0");
-
-  const createBarcodeClean = (pay: TPaymentData, conf: TQrCodeConfig) =>
-    conf.prefix +
-    conf.taxId +
-    conf.suffix +
-    "\r" +
-    paymentData.ref1 +
-    "\r" +
-    paymentData.ref2 +
-    "\r" +
-    paymentData.amount.replaceAll(".", "");
 
   const qrRef = React.useRef<HTMLCanvasElement>(null);
 
