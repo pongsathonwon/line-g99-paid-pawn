@@ -7,23 +7,29 @@ import type { TMaybe } from "@/types/base.type";
 import { Button } from "@/component/Button";
 import type { TOtpRequestRes } from "@/types/register";
 import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
+import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
+
+type RegisterLocale = "th" | "en";
 
 type TOTPVerificationProps = PropsWithChildren<{
   mobileNo: TMaybe<string>;
   otpRes: TMaybe<TOtpRequestRes>;
   otpLength: number;
+  locale: RegisterLocale;
   onSuccess: (verifyRes: boolean) => void;
   onSetOtp: (otpRes: TOtpRequestRes) => void;
 }>;
 
 function OTPVerification({
-  children,
   mobileNo,
   otpLength,
   otpRes,
   onSetOtp,
   onSuccess,
+  locale,
+  children,
 }: TOTPVerificationProps) {
+  const t = REGISTER_LOCALE_TEXT[locale].otp;
   const { next } = useMultistepForm();
   const [otpError, setOtpError] = useState<string>("");
   const [currentOtp, setCurrentOtp] = useState<string>("");
@@ -47,8 +53,8 @@ function OTPVerification({
       setOtpError("");
       setCurrentOtp("");
     },
-    onError: (error: any) => {
-      setOtpError(error.message || "ไม่สามารถส่ง OTP ได้ กรุณาลองอีกครั้ง");
+    onError: () => {
+      setOtpError(t.requestFail);
     },
   });
 
@@ -66,8 +72,8 @@ function OTPVerification({
         next();
       }
     },
-    onError: (error: any) => {
-      setOtpError(error.message || "รหัส OTP ไม่ถูกต้อง กรุณาลองอีกครั้ง");
+    onError: () => {
+      setOtpError(t.invalidOtp);
       setCurrentOtp("");
     },
   });
@@ -103,20 +109,13 @@ function OTPVerification({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">ยืนยันรหัส OTP</h2>
-
+        <h2 className="text-2xl font-bold text-gray-900">{t.title}</h2>
         <p className="mt-2 text-sm text-gray-600">
-          {mobileNo === null ? (
-            <>ไม่พบเบอร์โทรศัพท์</>
-          ) : (
-            <>
-              รหัส OTP 6 หลัก ส่งไปที่หมายเลข <strong>{mobileNo}</strong>
-            </>
-          )}
+          {mobileNo ? t.description(mobileNo) : t.noMobile}
         </p>
         {otpRefNo && (
           <p className="mt-1 text-xs text-gray-500">
-            หมายเลขอ้างอิง: <strong>{otpRefNo}</strong>
+            {t.refNo}: <strong>{otpRefNo}</strong>
           </p>
         )}
       </div>
@@ -143,15 +142,14 @@ function OTPVerification({
           type="submit"
           disabled={currentOtp.length !== otpLength}
         >
-          ยืนยัน OTP
+          {t.confirm}
         </Button>
 
         {/* Resend OTP */}
         <div className="text-center">
           {resendTimer > 0 ? (
             <p className="text-sm text-gray-600">
-              ส่ง OTP ใหม่ได้ใน <strong>{Math.floor(resendTimer)}</strong>{" "}
-              วินาที
+              {t.resendIn} <strong>{Math.floor(resendTimer)}</strong> s
             </p>
           ) : (
             <button
@@ -160,7 +158,7 @@ function OTPVerification({
               disabled={requestOtpMutation.isPending}
               className="text-sm text-brand-red hover:underline font-medium disabled:text-gray-400 disabled:no-underline"
             >
-              {requestOtpMutation.isPending ? "กำลังส่ง..." : "ส่ง OTP ใหม่"}
+              {requestOtpMutation.isPending ? t.resendSending : t.resend}
             </button>
           )}
         </div>
@@ -168,9 +166,7 @@ function OTPVerification({
         {children && <div className="flex gap-4">{children}</div>}
 
         {requestOtpMutation.isPending && (
-          <div className="text-center text-sm text-gray-600">
-            กำลังส่งรหัส OTP...
-          </div>
+          <div className="text-center text-sm text-gray-600">{t.sending}</div>
         )}
       </form>
     </div>

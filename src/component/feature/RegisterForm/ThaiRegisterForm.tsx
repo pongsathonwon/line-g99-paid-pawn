@@ -7,6 +7,7 @@ import { useState } from "react";
 import type { TMaybe } from "@/types/base.type";
 import type { TOtpRequestRes, TSearchUserRes } from "@/types/register";
 import StepIndicator from "./StepIndicator";
+import { THAI_REGISTER_STEPS } from "./register.steps";
 
 function ThaiRegisterForm() {
   const { activePage } = useMultistepForm();
@@ -30,16 +31,18 @@ function ThaiRegisterForm() {
   };
   return (
     <div className="flex flex-col gap-6 w-full">
-      <StepIndicator />
+      <StepIndicator steps={THAI_REGISTER_STEPS} />
       {activePage === 1 && (
         <SearchCustomer
           userForm={user}
           onSetUser={onSetUser}
           searchMethod="idCard"
+          locale="th"
         />
       )}
       {activePage === 2 && (
         <OTPVerification
+          locale="th"
           otpLength={6}
           mobileNo={mobileNo}
           otpRes={reqOtp}
@@ -49,6 +52,7 @@ function ThaiRegisterForm() {
       )}
       {activePage === 3 && user && (
         <TermStep
+          locale="th"
           isConsent={isConsent}
           onConsent={onSetConsent}
           userData={user}
@@ -59,5 +63,5 @@ function ThaiRegisterForm() {
     </div>
   );
 }
- 
+
 export default ThaiRegisterForm;
