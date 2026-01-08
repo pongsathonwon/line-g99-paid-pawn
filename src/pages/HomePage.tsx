@@ -35,7 +35,7 @@ function HomePage() {
       </h3>
       <ul className="flex flex-col gap-4 items-center w-full md:gap-8">
         {data?.map(({ pawnNumb, pawnPrice, nextPaidDate }) => (
-          <li key={pawnNumb}>
+          <li key={pawnNumb} className="w-full">
             <NavLink to={pawnNumb} className="flex justify-center">
               <PayCard
                 key={pawnNumb}
