@@ -1,13 +1,19 @@
 import React from "react";
-import { Button } from "@/component/Button";
+import {
+  Button,
+  type ButtonColor,
+  type ButtonStyleType,
+} from "@/component/Button";
 import { formatThaiDate } from "@/lib/date-time";
+import type { TPawnStatusEnum } from "@/hook/query/lib";
 
 interface PaymentCardProps {
   contractNumber: string;
   principal: number;
   dueDate: string;
+  dateDiff: number;
   paymentLink: string;
-  status?: "pending" | "upcoming" | "notDue";
+  pawnStatus?: TPawnStatusEnum;
   backgroundImage?: string;
 }
 
@@ -15,42 +21,32 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   contractNumber,
   principal,
   dueDate,
-  status = "notDue",
+  dateDiff,
+  pawnStatus = "normal",
   backgroundImage = "/bg_paycard.png",
 }) => {
-  const today = new Date();
-  const due = new Date(dueDate);
-  //* อาจจะมีวิธีดีกว่า นี้ในการคำนวณวันต่าง ๆ */
-  const diffDays = Math.ceil(
-    (due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  let computedStatus: "pending" | "upcoming" | "notDue" = status;
-
-  if (diffDays <= 0) {
-    computedStatus = "pending";
-  } else if (diffDays <= 7) {
-    computedStatus = "upcoming";
-  } else {
-    computedStatus = "notDue";
-  }
-
   const statusColors = {
-    pending: "text-brand-red-600",
-    upcoming: "text-gold",
-    notDue: "text-gray-600",
+    overdue: "text-brand-red-600",
+    normal: "text-gray-600",
+    "due-soon": "text-green-600",
+    due: "text-brand-red",
   };
 
-  const buttonStyles = {
-    pending: { color: "primary", styleType: "solid" },
-    upcoming: { color: "gold", styleType: "solid" },
-    notDue: { color: "black", styleType: "solid" },
+  const buttonStyles: Record<
+    TPawnStatusEnum,
+    { color: ButtonColor; styleType: ButtonStyleType }
+  > = {
+    overdue: { color: "black", styleType: "solid" },
+    normal: { color: "black", styleType: "solid" },
+    "due-soon": { color: "green", styleType: "solid" },
+    due: { color: "primary", styleType: "solid" },
   };
 
-  const statusText = {
-    pending: "รอการชำระ",
-    upcoming: `${diffDays} วันกำหนดชำระ`,
-    notDue: "ยังไม่ถึงกำหนด",
+  const statusText: Record<TPawnStatusEnum, (dateDiff: number) => string> = {
+    overdue: (diffDays) => "เลยกำหนด",
+    normal: (dateDiff) => "ยังไม่ถึงกำหนด",
+    "due-soon": (dateDiff) => `${dateDiff} วันก่อนกำหนด`,
+    due: (dateDiff) => "รอการชำระ",
   };
 
   return (
@@ -94,18 +90,14 @@ export const PayCard: React.FC<PaymentCardProps> = ({
       {/* ด้านขวา */}
       <div className="flex flex-col items-center gap-1 text-center w-1/5 lg:gap-2">
         <span
-          className={`font-bold text-[10px] leading-[120%] ${statusColors[computedStatus]} lg:text-base`}
+          className={`font-bold text-[10px] leading-[120%] ${statusColors[pawnStatus]} lg:text-base`}
         >
-          {statusText[computedStatus]}
+          {statusText[pawnStatus](dateDiff)}
         </span>
 
         <Button
-          color={
-            buttonStyles[computedStatus].color as "primary" | "gold" | "black"
-          }
-          styleType={
-            buttonStyles[computedStatus].styleType as "solid" | "outline"
-          }
+          color={buttonStyles[pawnStatus].color}
+          styleType={buttonStyles[pawnStatus].styleType}
           size="xs"
           className="text-[10px] rounded-md lg:text-base"
         >
