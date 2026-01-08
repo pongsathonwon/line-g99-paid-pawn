@@ -11,7 +11,7 @@ import { getAT } from "../../lib/local-storage-helper";
 //   error: null,
 //   auth: {
 //     id: "445725",
-//     custNo: "4302380",
+//     custNo: "000002",
 //     fullname: "เปเล ซาน วิน",
 //     idCard: "0074015073011",
 //     lineUid: "U0bf26f4085b0a41af588f6cb1774409e",

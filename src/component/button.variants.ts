@@ -18,6 +18,7 @@ export const buttonVariants = cva(
         secondary: "",
         gold: "",
         black: "",
+        green: "",
       },
       // Style type: solid or outline
       styleType: {
@@ -87,6 +88,20 @@ export const buttonVariants = cva(
         styleType: "outline",
         class:
           "border-gray text-black hover:bg-black/10 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2",
+      },
+      // Green solid
+      {
+        color: "green",
+        styleType: "solid",
+        class:
+          "bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
+      },
+      // Green outline
+      {
+        color: "green",
+        styleType: "outline",
+        class:
+          "border-green-600 text-green-600 hover:bg-green-600/10 focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
       },
     ],
     defaultVariants: {

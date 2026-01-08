@@ -1,14 +1,37 @@
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
+import { formatThaiDate } from "@/lib/date-time";
+import { parseApiError } from "@/zod/api-error";
+import { AxiosError } from "axios";
 import { NavLink } from "react-router-dom";
 
 function PaymentDetailPage() {
-  const { interest, isSuccess } = usePawnInterest();
+  const { interest, isSuccess, isError, error } = usePawnInterest();
+
+  const getErrorMessage = (error: Error | null): string => {
+    if (!error) return "";
+    if (error instanceof AxiosError) {
+      const body = parseApiError(error.response?.data);
+      return body?.message ?? "เกิดข้อผิดพลาดในการโหลดข้อมูล";
+    }
+
+    return error.message ?? "เกิดข้อผิดพลาดในการโหลดข้อมูล";
+  };
 
   return (
     <div>
-      {!isSuccess || !interest ? (
+      {isError ? (
+        <div className="flex flex-col items-center justify-center p-6 text-center">
+          <div className="text-red-600 font-semibold text-lg mb-2">
+            เกิดข้อผิดพลาด
+          </div>
+          <div className="text-gray-700 mb-4">{getErrorMessage(error)}</div>
+          <NavLink to="/home">
+            <Button>กลับหน้าหลัก</Button>
+          </NavLink>
+        </div>
+      ) : !isSuccess || !interest ? (
         <div>loading ....</div>
       ) : (
         <DisplayCard>
@@ -20,7 +43,7 @@ function PaymentDetailPage() {
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>วันครบกำหนด</span>
-            <span>{interest.dueDate}</span>
+            <span>{formatThaiDate(interest.dueDate)}</span>
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>มูลค่าจำนำ</span>
@@ -33,7 +56,7 @@ function PaymentDetailPage() {
           <DisplayCard.Divider color="gold" line="dash" />
           <DisplayCard.Mute>
             <span>ชำระภายใน</span>
-            <span>{interest.validBefore}</span>
+            <span>{formatThaiDate(interest.validBefore)}</span>
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>ดอกเบี้ย</span>

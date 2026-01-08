@@ -10,10 +10,6 @@ function PawnInterestContextProvider({ children }: PropsWithChildren) {
   const { data, mutate, mutateAsync, ...res } = useMutation({
     mutationFn: getPawnInterest,
     mutationKey: ["pawn", "pawnNumb"],
-    onSuccess: (res) => {
-      console.log(res);
-    },
-    onError: console.error,
   });
   const getInterest = (pawnNumb: string) => {
     if (!custCode) throw new Error("custCode is required");
