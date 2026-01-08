@@ -3,7 +3,7 @@ import { cn } from "@/utils";
 import { buttonVariants } from "./button.variants";
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg";
-export type ButtonColor = "primary" | "secondary" | "gold" | "black";
+export type ButtonColor = "primary" | "secondary" | "gold" | "black" | "green";
 export type ButtonStyleType = "solid" | "outline";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -25,7 +25,10 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={cn(buttonVariants({ size, color, styleType, fullWidth }), className)}
+      className={cn(
+        buttonVariants({ size, color, styleType, fullWidth }),
+        className
+      )}
       {...props}
     >
       {children}
