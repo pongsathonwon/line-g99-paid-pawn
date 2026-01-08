@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@/component/Button";
-import { NavLink } from "react-router-dom";
 
 interface PaymentCardProps {
   contractNumber: string;
@@ -16,7 +15,6 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   principal,
   dueDate,
   status = "notDue",
-  paymentLink,
   backgroundImage = "/bg_paycard.png",
 }) => {
   const today = new Date();
@@ -101,20 +99,19 @@ export const PayCard: React.FC<PaymentCardProps> = ({
         >
           {statusText[computedStatus]}
         </span>
-        <NavLink to={paymentLink}>
-          <Button
-            color={
-              buttonStyles[computedStatus].color as "primary" | "gold" | "black"
-            }
-            styleType={
-              buttonStyles[computedStatus].styleType as "solid" | "outline"
-            }
-            size="xs"
-            className="text-[10px] rounded-md lg:text-base"
-          >
-            ชำระเลย
-          </Button>
-        </NavLink>
+
+        <Button
+          color={
+            buttonStyles[computedStatus].color as "primary" | "gold" | "black"
+          }
+          styleType={
+            buttonStyles[computedStatus].styleType as "solid" | "outline"
+          }
+          size="xs"
+          className="text-[10px] rounded-md lg:text-base"
+        >
+          ชำระเลย
+        </Button>
       </div>
     </div>
   );
