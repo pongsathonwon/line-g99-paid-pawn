@@ -33,19 +33,33 @@ function HomePage() {
         รายการขายฝาก
       </h3>
       <ul className="flex flex-col gap-4 items-center w-full md:gap-8">
-        {data?.map(({ pawnNumb, pawnPrice, nextPaidDate }) => (
-          <li key={pawnNumb} className="w-full">
-            <NavLink to={pawnNumb} className="flex justify-center">
-              <PayCard
-                key={pawnNumb}
-                contractNumber={pawnNumb}
-                principal={pawnPrice}
-                dueDate={nextPaidDate}
-                paymentLink={pawnNumb}
-              />
-            </NavLink>
-          </li>
-        ))}
+        {data?.map(
+          ({ pawnNumb, pawnPrice, nextPaidDate, pawnStatus, dateDiff }) => (
+            <li key={pawnNumb} className="w-full">
+              {pawnStatus === "overdue" ? (
+                <PayCard
+                  dateDiff={dateDiff}
+                  contractNumber={pawnNumb}
+                  principal={pawnPrice}
+                  dueDate={nextPaidDate}
+                  paymentLink={pawnNumb}
+                  pawnStatus={pawnStatus}
+                />
+              ) : (
+                <NavLink to={pawnNumb} className="flex justify-center">
+                  <PayCard
+                    dateDiff={dateDiff}
+                    contractNumber={pawnNumb}
+                    principal={pawnPrice}
+                    dueDate={nextPaidDate}
+                    paymentLink={pawnNumb}
+                    pawnStatus={pawnStatus}
+                  />
+                </NavLink>
+              )}
+            </li>
+          )
+        )}
       </ul>
     </div>
   );
