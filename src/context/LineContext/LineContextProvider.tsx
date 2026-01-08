@@ -45,7 +45,7 @@ function LineContextProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => {
-    // initialize();
+    initialize();
   }, []);
 
   return (
