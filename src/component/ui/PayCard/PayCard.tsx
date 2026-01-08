@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@/component/Button";
+import { formatThaiDate } from "@/lib/date-time";
 
 interface PaymentCardProps {
   contractNumber: string;
@@ -86,9 +87,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
         </div>
         <div className="flex justify-between">
           <span>วันครบกำหนด</span>
-          <span className="font-semibold">
-            {new Date(dueDate).toLocaleDateString("th-TH")}
-          </span>
+          <span className="font-semibold">{formatThaiDate(dueDate)}</span>
         </div>
       </div>
 

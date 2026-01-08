@@ -1,5 +1,6 @@
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 import useHistPaid from "@/hook/query/useHistPaid";
+import { formatThaiDate } from "@/lib/date-time";
 
 function HistoryPage() {
   const { data: histPaidData, isLoading } = useHistPaid();
@@ -38,11 +39,11 @@ function HistoryPage() {
               </DisplayCard.Mute>
               <DisplayCard.Mute>
                 <span>วันครบกำหนด</span>
-                <span>{item.dueDate}</span>
+                <span>{formatThaiDate(item.dueDate)}</span>
               </DisplayCard.Mute>
               <DisplayCard.Mute>
                 <span>วันชำระ</span>
-                <span>{item.paidDate}</span>
+                <span>{formatThaiDate(item.paidDate)}</span>
               </DisplayCard.Mute>
               <DisplayCard.Summary>
                 <span>ยอดชำระ</span>

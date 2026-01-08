@@ -1,6 +1,7 @@
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
+import { formatThaiDate } from "@/lib/date-time";
 import { parseApiError } from "@/zod/api-error";
 import { AxiosError } from "axios";
 import { NavLink } from "react-router-dom";
@@ -42,7 +43,7 @@ function PaymentDetailPage() {
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>วันครบกำหนด</span>
-            <span>{interest.dueDate}</span>
+            <span>{formatThaiDate(interest.dueDate)}</span>
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>มูลค่าจำนำ</span>
@@ -55,7 +56,7 @@ function PaymentDetailPage() {
           <DisplayCard.Divider color="gold" line="dash" />
           <DisplayCard.Mute>
             <span>ชำระภายใน</span>
-            <span>{interest.validBefore}</span>
+            <span>{formatThaiDate(interest.validBefore)}</span>
           </DisplayCard.Mute>
           <DisplayCard.Mute>
             <span>ดอกเบี้ย</span>
