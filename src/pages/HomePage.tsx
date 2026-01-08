@@ -2,7 +2,6 @@ import { useCustInfo } from "@/context/AuthContext/AuthContext";
 import useQueryPawnById from "@/hook/query/useQueryPawn";
 import { NavLink } from "react-router-dom";
 import PayCard from "@/component/ui/PayCard/PayCard";
-//const ccREF = ["1200441", "626972", "606085", "625220"];
 
 function HomePage() {
   const custInfo = useCustInfo();
