@@ -7,24 +7,24 @@ import type { TMaybe } from "../../types/base.type";
 import { axiosClient } from "../../api/axios";
 import { getAT } from "../../lib/local-storage-helper";
 
-// const MOCK_SUCCESS_LOGIN = {
-//   error: null,
-//   auth: {
-//     id: "445725",
-//     custNo: "4302380",
-//     fullname: "เปเล ซาน วิน",
-//     idCard: "0074015073011",
-//     lineUid: "U0bf26f4085b0a41af588f6cb1774409e",
-//     mobileNo: "0949028344",
-//     branchCode: "43",
-//     custType: "G",
-//     custStat: 1,
-//     isConsent: true,
-//     isVerified: true,
-//     birthDate: "1987-05-06T17:00:00.000Z",
-//     gender: "x",
-//   },
-// };
+const MOCK_SUCCESS_LOGIN = {
+  error: null,
+  auth: {
+    id: "445725",
+    custNo: "000002",
+    fullname: "test",
+    idCard: "0074015073011",
+    lineUid: "U0bf26f4085b0a41af588f6cb1774409e",
+    mobileNo: "0949028344",
+    branchCode: "43",
+    custType: "G",
+    custStat: 1,
+    isConsent: true,
+    isVerified: true,
+    birthDate: "1987-05-06T17:00:00.000Z",
+    gender: "x",
+  },
+};
 // const MOCK_FAIL_LOGIN = { error: "mock fail login", auth: null };
 
 function AuthContextProvider({ children }: React.PropsWithChildren) {
@@ -71,7 +71,7 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
     <AuthContext.Provider
       value={{
         error,
-        auth,
+        auth: MOCK_SUCCESS_LOGIN.auth,
         relogin,
         loginStatus: {
           isPending: loginMutation.isPending,

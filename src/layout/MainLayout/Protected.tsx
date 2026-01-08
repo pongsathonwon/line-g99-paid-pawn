@@ -6,10 +6,10 @@ function Protected({ children }: PropsWithChildren) {
   const location = useLocation();
   const { auth } = useAuthContext();
 
-  if (auth === null) {
-    const redirectUrl = `${location.pathname}${location.search}`;
-    return <Navigate to={`/?redirect=${encodeURIComponent(redirectUrl)}`} replace />;
-  }
+  // if (auth === null) {
+  //   const redirectUrl = `${location.pathname}${location.search}`;
+  //   return <Navigate to={`/?redirect=${encodeURIComponent(redirectUrl)}`} replace />;
+  // }
 
   return <>{children}</>;
 }
