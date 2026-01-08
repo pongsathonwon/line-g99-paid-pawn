@@ -149,7 +149,8 @@ function OTPVerification({
         <div className="text-center">
           {resendTimer > 0 ? (
             <p className="text-sm text-gray-600">
-              {t.resendIn} <strong>{Math.floor(resendTimer)}</strong> s
+              {t.resendIn} <strong>{Math.floor(resendTimer)}</strong>{" "}
+              {t.timeUnit}{" "}
             </p>
           ) : (
             <button
