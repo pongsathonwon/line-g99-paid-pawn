@@ -12,7 +12,6 @@ function StepIndicator({ steps }: StepIndicatorProps) {
 
   return (
     <div className="w-full relative">
-      {/* เส้นเชื่อม - วางไว้ข้างหลัง */}
       <div className="absolute top-4 left-0 right-0 flex items-center px-4">
         <div className="flex-1 flex items-center">
           {steps.map((stepItem, index) => {
@@ -27,7 +26,7 @@ function StepIndicator({ steps }: StepIndicatorProps) {
                 key={`line-${stepItem.key}`}
                 className="flex-1 flex items-center"
               >
-                <div className="w-4" /> {/* space for circle */}
+                <div className="w-4" />
                 <div
                   className={clsx(
                     "flex-1 h-0.5 transition-colors duration-300",
@@ -37,14 +36,13 @@ function StepIndicator({ steps }: StepIndicatorProps) {
                     }
                   )}
                 />
-                <div className="w-4" /> {/* space for circle */}
+                <div className="w-4" />
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* วงกลมและข้อความ */}
       <div className="relative flex justify-between">
         {steps.map((stepItem, index) => {
           const step = index + 1;
@@ -69,7 +67,6 @@ function StepIndicator({ steps }: StepIndicatorProps) {
                 {step}
               </div>
 
-              {/* label */}
               <span
                 className={clsx(
                   "mt-2 text-[10px] text-center transition-colors duration-300 max-w-[80px]",
