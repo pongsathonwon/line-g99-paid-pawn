@@ -48,7 +48,7 @@ function RegisterPage() {
               <div className="grid grid-cols-2 md:grid-cols-4">
                 <strong>ยืนยันตัวตน</strong>
                 <span className="col-start-2 -col-end-1">
-                  กรณีไม่สามารถยืนยัน opt ได้ ลงทะเบียนผ่านหน้าร้าน
+                  กรณีไม่สามารถยืนยัน otp ได้ ลงทะเบียนผ่านหน้าร้าน
                 </span>
               </div>
             </li>
