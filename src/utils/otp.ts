@@ -51,7 +51,7 @@ export const handleInputOtp = (
   // If value is entered, move to next input
   if (value.length === 1) {
     const nextInput = input.nextElementSibling as HTMLInputElement;
-    if (nextInput && nextInput.classList.contains('otp-input')) {
+    if (nextInput?.classList.contains('otp-input')) {
       nextInput.focus();
     }
   }
@@ -71,7 +71,7 @@ export const handleKeyupOtp = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === 'Backspace' || e.key === 'Delete') {
     if (input.value === '') {
       const prevInput = input.previousElementSibling as HTMLInputElement;
-      if (prevInput && prevInput.classList.contains('otp-input')) {
+      if (prevInput?.classList.contains('otp-input')) {
         prevInput.focus();
         prevInput.value = '';
       }
