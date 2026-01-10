@@ -57,9 +57,9 @@ function StepIndicator({ steps }: StepIndicatorProps) {
                   "flex items-center justify-center rounded-full border transition-all duration-300",
                   "w-8 h-8 text-sm font-semibold relative z-10 bg-white",
                   {
-                    "!bg-brand-red text-white border-brand-red scale-130":
+                    "bg-brand-red! text-white border-brand-red scale-130":
                       isActive,
-                    "!bg-brand-red text-white border-brand-red": isDone,
+                    "bg-brand-red! text-white border-brand-red": isDone,
                     "text-gray-400 border-gray-300": !isActive && !isDone,
                   }
                 )}
@@ -69,7 +69,7 @@ function StepIndicator({ steps }: StepIndicatorProps) {
 
               <span
                 className={clsx(
-                  "mt-2 text-[10px] text-center transition-colors duration-300 max-w-[80px]",
+                  "mt-2 text-[10px] text-center transition-colors duration-300 max-w-20",
                   {
                     "text-brand-red font-semibold": isActive || isDone,
                     "text-gray-400": !isActive && !isDone,
