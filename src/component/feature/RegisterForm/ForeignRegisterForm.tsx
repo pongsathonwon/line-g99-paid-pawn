@@ -7,9 +7,9 @@ import { useState } from "react";
 import type { TMaybe } from "@/types/base.type";
 import type { TOtpRequestRes, TSearchUserRes } from "@/types/register";
 import StepIndicator from "./StepIndicator";
-import { THAI_REGISTER_STEPS } from "./register.steps";
+import { FOREIGN_REGISTER_STEPS } from "./register.steps";
 
-function ThaiRegisterForm() {
+function ForeignRegisterForm() {
   const { activePage } = useMultistepForm();
   const [user, setUser] = useState<TMaybe<TSearchUserRes>>(null);
   const mobileNo = user?.mobileNo ?? null;
@@ -31,18 +31,18 @@ function ThaiRegisterForm() {
   };
   return (
     <div className="flex flex-col gap-6 w-full">
-      <StepIndicator steps={THAI_REGISTER_STEPS} />
+      <StepIndicator steps={FOREIGN_REGISTER_STEPS} />
       {activePage === 1 && (
         <SearchCustomer
           userForm={user}
           onSetUser={onSetUser}
-          searchMethod="idCard"
-          locale="th"
+          searchMethod="custCode"
+          locale="en"
         />
       )}
       {activePage === 2 && (
         <OTPVerification
-          locale="th"
+          locale="en"
           otpLength={6}
           mobileNo={mobileNo}
           otpRes={reqOtp}
@@ -52,7 +52,7 @@ function ThaiRegisterForm() {
       )}
       {activePage === 3 && user && (
         <TermStep
-          locale="th"
+          locale="en"
           isConsent={isConsent}
           onConsent={onSetConsent}
           userData={user}
@@ -64,4 +64,4 @@ function ThaiRegisterForm() {
   );
 }
 
-export default ThaiRegisterForm;
+export default ForeignRegisterForm;
