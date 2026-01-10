@@ -1,1 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 @import "tailwindcss";
+
+/* Your custom theme */
+@theme {
+  --header-height: 10rem;
+  --bottom-nav-height: 4rem;
+  --padding-content-top: calc(var(--header-height) + 1rem);
+  --padding-content-bottom: calc(var(--bottom-nav-height) + 1rem);
+  --header-height-lg: 10rem;
+  --bottom-nav-height-lg: 5rem;
+  --padding-content-top-lg: calc(var(--header-height-lg) + 1rem);
+  --padding-content-bottom-lg: calc(var(--bottom-nav-height-lg) + 1rem);
+
+  /* Colors */
+  --color-brand-red: #d40000;
+  --color-brand-red-400: #b33f3f;
+  --color-brand-red-500: #b20202;
+  --color-brand-red-600: #d40000;
+
+  --color-gold: #d9a028;
+  --color-gold-100: #f9e79f;
+  --color-gold-200: #fce587;
+  --color-gold-300: #ffd142;
+  --color-gold-400: #ffd700;
+  --color-gold-500: #fac213;
+  --color-gold-600: #d9a028;
+  --color-gold-700: #b28422;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray: #777777;
+  --color-light-gray: #f5f5f5;
+
+  /* Font sizes */
+  --font-size-2xs: 0.625rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+
+  /* Shadows */
+  --shadow-base: 0px 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* Button Color */
+  --color-button-primary: var(--color-brand-red);
+  --color-button-secondary: var(--color-brand-red-500);
+  --color-button-outline: var(--color-gold);
+
+  /* border Color */
+  --color-gray-100: #ededed;
+  --color-gray-400: #bfbcbc;
+  --color-red-800: #b20202;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.lucide {
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 1024px) {
+  .lucide {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Toast animations */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in-from-right 0.3s ease-out;
+}
