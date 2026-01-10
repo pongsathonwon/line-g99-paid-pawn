@@ -2,7 +2,7 @@ import FormControl from "@/component/FormControl/FormControl";
 import { useMemo, type PropsWithChildren } from "react";
 import type { TSearchUserMethod, TSearchUserRes } from "@/types/register";
 import { Button } from "@/component/Button";
-import { searchLabelMapper, searchMethodMapper } from "./lib";
+import { searchMethodMapper } from "./lib";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
 import { useMutation } from "@tanstack/react-query";
 import { REGISTER_API } from "@/api/endpoint/register";
@@ -38,14 +38,14 @@ function SearchCustomer({
   );
   const searchLabel = useMemo(() => {
     return t.labels[searchMethod];
-  }, [t, searchMethod]);
+  }, [locale, searchMethod]);
   const validationSchema = useMemo(
     () =>
       createSearchCustomerSchema(searchMethod, {
         required: t.errors.requiredByField[searchMethod],
         pattern: t.errors.pattern[searchMethod],
       }),
-    [searchMethod, t]
+    [locale, searchMethod]
   );
 
   const {
