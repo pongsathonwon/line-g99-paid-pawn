@@ -39,12 +39,8 @@ function ProfileBadge() {
           />
         </svg>
       </div>
-      <div className="container mx-auto mt-auto h-full px-4 sm:px-8 lg:px-16">
+      <div className="container mx-auto mt-auto h-full p-4 sm:px-8 lg:px-16">
         <div className="flex flex-col h-full justify-between">
-          <div className="flex justify-between items-center">
-            <div>left</div>
-            <div>end</div>
-          </div>
           <div className="flex gap-1.5 backdrop-blur-xs p-1 bg-white/5 w-fit rounded-lg">
             <img
               className="rounded-full aspect-squre size-16 sm:size-24"
