@@ -42,7 +42,6 @@ function HomePage() {
                   contractNumber={pawnNumb}
                   principal={pawnPrice}
                   dueDate={nextPaidDate}
-                  paymentLink={pawnNumb}
                   pawnStatus={pawnStatus}
                 />
               ) : (
@@ -52,7 +51,6 @@ function HomePage() {
                     contractNumber={pawnNumb}
                     principal={pawnPrice}
                     dueDate={nextPaidDate}
-                    paymentLink={pawnNumb}
                     pawnStatus={pawnStatus}
                   />
                 </NavLink>
