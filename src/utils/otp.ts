@@ -120,7 +120,7 @@ export const clearOtpInputs = () => {
  * Format mobile number for display (0812345678 → 081-234-5678)
  */
 export const formatMobileNumber = (mobile: string): string => {
-  const cleaned = mobile.replace(/\D/g, '');
+  const cleaned = mobile.replaceAll(/\D/g, '');
 
   if (cleaned.length === 10) {
     return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
@@ -133,14 +133,14 @@ export const formatMobileNumber = (mobile: string): string => {
  * Remove formatting from mobile number (081-234-5678 → 0812345678)
  */
 export const unformatMobileNumber = (mobile: string): string => {
-  return mobile.replace(/\D/g, '');
+  return mobile.replaceAll(/\D/g, '');
 };
 
 /**
  * Validate Thai ID card format (13 digits)
  */
 export const isValidThaiIdCard = (idCard: string): boolean => {
-  const cleaned = idCard.replace(/\D/g, '');
+  const cleaned = idCard.replaceAll(/\D/g, '');
   return cleaned.length === 13 && /^\d{13}$/.test(cleaned);
 };
 
@@ -148,6 +148,6 @@ export const isValidThaiIdCard = (idCard: string): boolean => {
  * Validate mobile number format (10 digits starting with 0)
  */
 export const isValidMobileNumber = (mobile: string): boolean => {
-  const cleaned = mobile.replace(/\D/g, '');
+  const cleaned = mobile.replaceAll(/\D/g, '');
   return cleaned.length === 10 && /^0\d{9}$/.test(cleaned);
 };

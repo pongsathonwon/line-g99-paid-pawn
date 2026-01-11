@@ -126,8 +126,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ${variantClasses[actualVariant]}
       ${className}
     `;
-    // .trim()
-    // .replace(/\s+/g, " ");
 
     const inputId = useMemo(
       () => createInputId({ id, helperText, errorMessage }),
