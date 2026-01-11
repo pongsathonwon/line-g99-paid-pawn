@@ -48,7 +48,7 @@ export function useScreenshot(
 
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const timestamp = new Date().toISOString().replaceAll(/[:.]/g, "-");
         link.download = `${fileNamePrefix}-${timestamp}.png`;
         link.href = url;
         link.click();
