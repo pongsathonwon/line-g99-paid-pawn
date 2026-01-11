@@ -1,0 +1,6 @@
+projectKey=line-g99-paid-pawn
+serverUrl=http://localhost:9000
+serverVersion=26.1.0.118079
+dashboardUrl=http://localhost:9000/dashboard?id=line-g99-paid-pawn
+ceTaskId=beb63dae-5f8f-4586-879d-39c120aefe82
+ceTaskUrl=http://localhost:9000/api/ce/task?id=beb63dae-5f8f-4586-879d-39c120aefe82
