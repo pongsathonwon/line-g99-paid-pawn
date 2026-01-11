@@ -81,7 +81,7 @@ function useTimer({
   const pause = () => setIsRunning(false);
   const reset = (newTime?: number) => {
     const newMs =
-      newTime !== undefined ? toMilliseconds(newTime, unit) : initialMs;
+      newTime === undefined ? initialMs : toMilliseconds(newTime, unit);
     setTime(newMs);
     setIsRunning(autoStart);
   };
