@@ -153,7 +153,7 @@ function TermStep({
         <label
           htmlFor="consent-checkbox"
           className={`text-sm ${
-            !hasScrolledToBottom ? "text-gray-400" : "text-gray-700"
+            hasScrolledToBottom ? "text-gray-700" : "text-gray-400"
           }`}
         >
           {t.consentLabel}

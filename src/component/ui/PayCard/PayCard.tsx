@@ -12,7 +12,6 @@ interface PaymentCardProps {
   principal: number;
   dueDate: string;
   dateDiff: number;
-  paymentLink: string;
   pawnStatus?: TPawnStatusEnum;
   backgroundImage?: string;
 }

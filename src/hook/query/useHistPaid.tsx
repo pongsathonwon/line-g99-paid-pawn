@@ -8,7 +8,7 @@ function useHistPaid() {
   const q = useQuery({
     queryKey: ["hist-paid", custCode],
     queryFn: async ({ queryKey }) =>
-      await getHistPaid({ custCode: queryKey[1] as string }),
+      await getHistPaid({ custCode: queryKey[1] }),
     refetchOnWindowFocus: true,
   });
   return q;

@@ -13,7 +13,8 @@ type TSearchFormData = {
 };
 
 export function SearchUserStep() {
-  const { setFormData, setCurrentStep, formData } = useRegistrationContext();
+  const { handleSetFormData, setCurrentStep, formData } =
+    useRegistrationContext();
   const [searchMethod, setSearchMethod] = useState<TSearchUserMethod>(
     formData.searchMethod || "cardId"
   );
@@ -47,7 +48,7 @@ export function SearchUserStep() {
     },
     onSuccess: (userData) => {
       // Save user data and move to OTP step
-      setFormData({
+      handleSetFormData({
         userData,
         searchMethod,
         searchValue: "",

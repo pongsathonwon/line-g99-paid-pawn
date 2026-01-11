@@ -1,4 +1,4 @@
-import { BellIcon, HistoryIcon, HomeIcon, ReceiptTextIcon } from "lucide-react";
+import { HistoryIcon, HomeIcon, ReceiptTextIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 function BottomNav() {

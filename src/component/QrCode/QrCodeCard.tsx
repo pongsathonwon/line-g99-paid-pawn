@@ -69,7 +69,7 @@ const QrCodeCard = React.forwardRef<HTMLDivElement, TQrCodeCardProps>(
               color: "#111827",
             }}
           >
-            จำนวน: {parseFloat(paymentData.amount).toFixed(2)}
+            จำนวน: {Number.parseFloat(paymentData.amount).toFixed(2)}
           </p>
         </div>
       </div>

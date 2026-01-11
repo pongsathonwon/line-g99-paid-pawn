@@ -128,6 +128,6 @@ export type TRegistrationContext = {
   currentStep: TRegistrationStep;
   formData: TRegistrationFormData;
   setCurrentStep: (step: TRegistrationStep) => void;
-  setFormData: (data: Partial<TRegistrationFormData>) => void;
+  handleSetFormData: (data: Partial<TRegistrationFormData>) => void;
   resetForm: () => void;
 };
