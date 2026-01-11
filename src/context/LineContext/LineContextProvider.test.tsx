@@ -31,7 +31,6 @@ describe("test LineContextProvider", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Mock useToast hook
     vi.spyOn(ToastContext, "useToast").mockReturnValue(mockToast);
   });
 
