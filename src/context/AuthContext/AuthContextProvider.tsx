@@ -1,70 +1,27 @@
 import React, { useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import { useLineContext } from "../LineContext/LineContext";
-import { useMutation } from "@tanstack/react-query";
-import { AUTH_API, type TUserInfo } from "../../api/endpoint/auth";
-import type { TMaybe } from "../../types/base.type";
-import { axiosClient } from "../../api/axios";
-import { getAT } from "../../lib/local-storage-helper";
-
-// const MOCK_SUCCESS_LOGIN = {
-//   error: null,
-//   auth: {
-//     id: "445725",
-//     custNo: "000002",
-//     fullname: "เปเล ซาน วิน",
-//     idCard: "0074015073011",
-//     lineUid: "U0bf26f4085b0a41af588f6cb1774409e",
-//     mobileNo: "0949028344",
-//     branchCode: "43",
-//     custType: "G",
-//     custStat: 1,
-//     isConsent: true,
-//     isVerified: true,
-//     birthDate: "1987-05-06T17:00:00.000Z",
-//     gender: "x",
-//   },
-// };
-// const MOCK_FAIL_LOGIN = { error: "mock fail login", auth: null };
+import { registerAxiosTokenBearer } from "./auth-context-helper";
+import { useAuthLogin } from "@/hook/mutation/useAuthLogin";
 
 function AuthContextProvider({ children }: React.PropsWithChildren) {
   const { lineCtx } = useLineContext();
   const uid = lineCtx?.profile?.userId ?? "";
-  const [auth, setAuth] = React.useState<TMaybe<TUserInfo>>(null);
-  const [error, setError] = React.useState<TMaybe<string>>(null);
-  const loginMutation = useMutation({
-    mutationKey: ["g99-login"],
-    mutationFn: AUTH_API.login,
-    onSuccess: ({ userInfo }) => {
-      setAuth(userInfo);
-      setError(null);
-    },
-    onError: (err) => {
-      setError(err.message);
-      setAuth(null);
-    },
-  });
+
+  const { auth, error, login, isPending, isSuccess, isError } = useAuthLogin();
 
   const relogin = async () => {
-    if (uid) {
-      await loginMutation.mutateAsync({ lineUid: uid });
-    }
+    await login(uid);
   };
+
   useEffect(() => {
     if (uid) {
-      loginMutation.mutateAsync({ lineUid: uid });
+      login(uid);
     }
   }, [uid]);
 
   useEffect(() => {
-    const interceptor = axiosClient.interceptors.request.use((config) => {
-      const token = getAT();
-      config.headers.Authorization = token
-        ? `Bearer ${token}`
-        : config.headers.Authorization;
-      return config;
-    });
-    return () => axiosClient.interceptors.request.eject(interceptor);
+    return registerAxiosTokenBearer();
   }, []);
 
   return (
@@ -74,9 +31,9 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
         auth,
         relogin,
         loginStatus: {
-          isPending: loginMutation.isPending,
-          isSuccess: loginMutation.isSuccess,
-          isError: loginMutation.isError,
+          isPending,
+          isSuccess,
+          isError,
         },
       }}
     >
