@@ -28,7 +28,6 @@ const PaymentSuccessPage = lazy(() => import("../pages/PaymentSuccessPage"));
 const PaymentErrorPage = lazy(() => import("@/pages/PaymentErrorPage"));
 const PaymentPendingPage = lazy(() => import("@/pages/PaymentPendingPage"));
 const HistoryPage = lazy(() => import("../pages/HistoryPage"));
-const NotificationPage = lazy(() => import("../pages/NotificationPage"));
 const TermPage = lazy(() => import("@/pages/TermPage"));
 
 export const APP_ROUTES = createBrowserRouter([
