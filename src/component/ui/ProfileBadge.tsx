@@ -1,11 +1,9 @@
-import { useLineContext } from "@/context/LineContext/LineContext";
+type TProfileBadgeProps = {
+  readonly pictureUrl: string;
+  readonly displayName: string;
+};
 
-function ProfileBadge() {
-  const { lineCtx } = useLineContext();
-  const displayName = lineCtx?.profile?.displayName ?? "ไม่พบชื่อในระบบ";
-  const pictureUrl =
-    lineCtx?.profile?.pictureUrl ??
-    "https://fastly.picsum.photos/id/962/200/200.jpg?hmac=XehF7z9JYkgC-2ZfSP05h7eyumIq9wNKUDoCLklIhr4";
+function ProfileBadge({ pictureUrl, displayName }: TProfileBadgeProps) {
   return (
     <header className="fixed top-0 left-0 w-full h-(--header-height) overflow-hidden bg-white">
       <div className="relative -z-10">
