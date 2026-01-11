@@ -43,7 +43,7 @@ export const handleInputOtp = (
   const value = input.value;
 
   // Allow only numeric input
-  if (isNaN(Number(value)) || value.length > 1) {
+  if (Number.isNaN(Number(value)) || value.length > 1) {
     input.value = '';
     return;
   }
