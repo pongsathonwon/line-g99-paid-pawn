@@ -22,6 +22,8 @@ export function OTPVerificationStep() {
   const [resendTimer, setResendTimer] = useState(0);
   const otpInputsRef = useRef<HTMLDivElement>(null);
 
+  const renderArray = Array.from({ length: 6 });
+
   // Request OTP on mount
   const requestOtpMutation = useMutation({
     mutationFn: () => {
@@ -174,7 +176,7 @@ export function OTPVerificationStep() {
         {/* OTP Input Fields */}
         <div className="space-y-4">
           <div ref={otpInputsRef} className="flex justify-center gap-3">
-            {[...Array(6)].map((_, index) => (
+            {[...renderArray].map((_, index) => (
               <input
                 key={index}
                 type="text"
