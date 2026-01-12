@@ -18,17 +18,15 @@ describe("ProfileBadge", () => {
   });
 
   it("should display the profile image with correct src and alt", () => {
-    const image = screen.getByRole("img");
-    expect(image).toHaveAttribute("src", "test-url");
-    expect(image).toHaveAttribute("alt", "profile");
+    const image = screen.getAllByRole("img");
+    expect(image[0]).toHaveAttribute("alt", "logo with text");
+
+    expect(image[1]).toHaveAttribute("src", "test-url");
+    expect(image[1]).toHaveAttribute("alt", "profile");
   });
 
   it("should display the user's display name", () => {
     expect(screen.getByText("test-name")).toBeInTheDocument();
-  });
-
-  it("should display logo image", () => {
-    expect(screen.getAllByAltText("logo with text")).toBeInTheDocument();
   });
 
   it("should display welcome text in Thai", () => {
