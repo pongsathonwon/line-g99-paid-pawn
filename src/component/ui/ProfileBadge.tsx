@@ -39,6 +39,13 @@ function ProfileBadge({ pictureUrl, displayName }: TProfileBadgeProps) {
       </div>
       <div className="container mx-auto mt-auto h-full p-4 sm:px-8 lg:px-16">
         <div className="flex flex-col h-full justify-between">
+          <div>
+            <img
+              src="logo/logo-text-large.png"
+              className="max-h-10 mx-auto"
+              alt="logo with text"
+            />
+          </div>
           <div className="flex gap-1.5 backdrop-blur-xs p-1 bg-white/5 w-fit rounded-lg">
             <img
               className="rounded-full aspect-squre size-16 sm:size-24"

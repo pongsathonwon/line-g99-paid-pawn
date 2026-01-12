@@ -27,6 +27,10 @@ describe("ProfileBadge", () => {
     expect(screen.getByText("test-name")).toBeInTheDocument();
   });
 
+  it("should display logo image", () => {
+    expect(screen.getAllByAltText("logo with text")).toBeInTheDocument();
+  });
+
   it("should display welcome text in Thai", () => {
     expect(screen.getByText("ยินดีต้อนรับ")).toBeInTheDocument();
   });
