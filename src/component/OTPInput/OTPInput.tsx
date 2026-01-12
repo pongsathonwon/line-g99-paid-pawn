@@ -1,4 +1,4 @@
-import { type KeyboardEvent } from "react";
+import { type KeyboardEvent, useRef } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { cn } from "@/utils";
 
@@ -32,6 +32,9 @@ function OTPInput({
   });
 
   const { fields } = useFieldArray({ name: "otpNumbers", control });
+
+  // Track if paste is in progress to prevent onChange interference
+  const isPastingRef = useRef(false);
 
   // Watch all fields to check if OTP is complete
   // const otpValues = watch("otpNumbers");
@@ -82,9 +85,14 @@ function OTPInput({
   // Handle paste
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
+    isPastingRef.current = true;
+
     const pastedData = e.clipboardData.getData("text").slice(0, length);
 
-    if (!/^\d+$/.test(pastedData)) return;
+    if (!/^\d+$/.test(pastedData)) {
+      isPastingRef.current = false;
+      return;
+    }
 
     pastedData.split("").forEach((char, index) => {
       if (index < length) {
@@ -98,6 +106,11 @@ function OTPInput({
 
     // Check if complete
     setTimeout(checkComplete, 0);
+
+    // Reset paste flag after a brief delay to allow onChange events to be ignored
+    setTimeout(() => {
+      isPastingRef.current = false;
+    }, 100);
   };
 
   // Clear all inputs (exposed via ref if needed)
@@ -124,6 +137,11 @@ function OTPInput({
               maxLength={1}
               value={value}
               onChange={(e) => {
+                // Skip onChange if paste is in progress (paste handler manages everything)
+                if (isPastingRef.current) {
+                  return;
+                }
+
                 // Only allow numeric input
                 if (!/^\d*$/.test(e.target.value)) {
                   e.preventDefault();
