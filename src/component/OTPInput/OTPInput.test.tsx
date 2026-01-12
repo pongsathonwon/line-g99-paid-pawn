@@ -164,6 +164,7 @@ describe("OTPInput Component", () => {
         expect(inputs[3].value).toBe("4");
         expect(inputs[4].value).toBe("5");
         expect(inputs[5].value).toBe("6");
+        expect(inputs[5]).toHaveFocus();
       });
     });
 
