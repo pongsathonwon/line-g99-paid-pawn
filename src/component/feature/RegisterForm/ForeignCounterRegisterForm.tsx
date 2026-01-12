@@ -5,22 +5,17 @@ import { SuccessStep } from "../RegisterSubform/SuccessStep";
 import TermStep from "../RegisterSubform/TermStep";
 import { useState } from "react";
 import type { TMaybe } from "@/types/base.type";
-import type {
-  TOtpRequestRes,
-  TSearchUserMethod,
-  TSearchUserRes,
-} from "@/types/register";
+import type { TOtpRequestRes, TSearchUserRes } from "@/types/register";
 import StepIndicator from "./StepIndicator";
-import { THAI_REGISTER_STEPS } from "./register.steps";
+import { FOREIGN_COUNTER_REGISTER_STEPS } from "./register.steps";
 
-function ThaiRegisterForm() {
+function ForeignCounterRegisterForm() {
   const { activePage } = useMultistepForm();
   const [user, setUser] = useState<TMaybe<TSearchUserRes>>(null);
   const mobileNo = user?.mobileNo ?? null;
-  const onSetUser = (res: TSearchUserRes | null) => {
+  const onSetUser = (res: TSearchUserRes) => {
     setUser(res);
   };
-  const [searchMethod, setSearchMethod] = useState<TSearchUserMethod>("idCard");
   const [reqOtp, setReqOtp] = useState<TMaybe<TOtpRequestRes>>(null);
   const [isVerify, setIsVerify] = useState(false);
   const onSetOtp = (optRes: TOtpRequestRes) => {
@@ -34,41 +29,29 @@ function ThaiRegisterForm() {
   const onSetConsent = (consent: boolean) => {
     setIsConsent(consent);
   };
-
   return (
     <div className="flex flex-col gap-6 w-full">
-      <StepIndicator steps={THAI_REGISTER_STEPS} />
+      <StepIndicator steps={FOREIGN_COUNTER_REGISTER_STEPS} />
       {activePage === 1 && (
         <SearchCustomer
-          searchMethod={searchMethod}
           userForm={user}
           onSetUser={onSetUser}
-          locale="th"
-          onChangeSearchMethod={setSearchMethod}
+          searchMethod="custCode"
+          locale="en"
         />
       )}
-      {activePage === 2 && (
-        <OTPVerification
-          locale="th"
-          otpLength={6}
-          mobileNo={mobileNo}
-          otpRes={reqOtp}
-          onSetOtp={onSetOtp}
-          onSuccess={onVerifyOtp}
-        />
-      )}
-      {activePage === 3 && user && (
+      {activePage === 2 && user && (
         <TermStep
-          locale="th"
+          locale="en"
           isConsent={isConsent}
           onConsent={onSetConsent}
           userData={user}
           isVerified={isVerify}
         />
       )}
-      {activePage === 4 && <SuccessStep />}
+      {activePage === 3 && <SuccessStep />}
     </div>
   );
 }
 
-export default ThaiRegisterForm;
+export default ForeignCounterRegisterForm;

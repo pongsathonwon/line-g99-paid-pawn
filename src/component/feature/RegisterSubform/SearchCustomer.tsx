@@ -12,33 +12,63 @@ import { createSearchCustomerSchema } from "./validation";
 import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
 import type { TMaybe } from "@/types/base.type";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
+import clsx from "clsx";
 
 type TSearchCustomerProps = {
   searchMethod: TSearchUserMethod;
   userForm: TMaybe<TSearchUserRes>;
-  onSetUser: (res: TSearchUserRes) => void;
+  onSetUser: (res: TSearchUserRes | null) => void;
+  onChangeSearchMethod: (method: TSearchUserMethod) => void;
   locale: "th" | "en";
 };
+
 type TSearchCustomerFormState = {
   searchValue: string;
 };
+
+const SEARCH_METHOD_OPTIONS: {
+  value: TSearchUserMethod;
+  labelTh: string;
+  labelEn: string;
+}[] = [
+  {
+    value: "idCard",
+    labelTh: "บัตรประชาชน / Passport",
+    labelEn: "ID Card / Passport",
+  },
+  {
+    value: "mobileNo",
+    labelTh: "เบอร์โทรศัพท์",
+    labelEn: "Mobile Number",
+  },
+  {
+    value: "custCode",
+    labelTh: "รหัสลูกค้า",
+    labelEn: "Customer Code",
+  },
+];
 
 function SearchCustomer({
   searchMethod,
   userForm,
   onSetUser,
+  onChangeSearchMethod,
   locale,
 }: PropsWithChildren<TSearchCustomerProps>) {
   const t = REGISTER_LOCALE_TEXT[locale];
   const { next } = useMultistepForm();
   const validUserForm = userForm !== null;
+
   const requestKey = useMemo(
     () => searchMethodMapper(searchMethod),
     [searchMethod]
   );
-  const searchLabel = useMemo(() => {
-    return t.labels[searchMethod];
-  }, [locale, searchMethod]);
+
+  const searchLabel = useMemo(
+    () => t.labels[searchMethod],
+    [locale, searchMethod]
+  );
+
   const validationSchema = useMemo(
     () =>
       createSearchCustomerSchema(searchMethod, {
@@ -52,6 +82,7 @@ function SearchCustomer({
     control,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<TSearchCustomerFormState>({
     defaultValues: { searchValue: "" },
@@ -64,7 +95,7 @@ function SearchCustomer({
     onSuccess: (data) => {
       onSetUser(data);
     },
-    onError: (error: any) => {
+    onError: () => {
       setError("searchValue", {
         type: "manual",
         message: t.notFound,
@@ -77,36 +108,86 @@ function SearchCustomer({
   };
 
   const onGoNext = () => {
-    if (!validUserForm) {
-      return;
-    }
+    if (!validUserForm) return;
     next();
   };
 
   return (
     <section className="flex flex-col gap-6">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">{t.searchTitle}</h2>{" "}
+      {/* ===== Title ===== */}
+      <h2 className="text-2xl font-bold text-gray-900">{t.searchTitle}</h2>
+
+      {/* ===== Search Method ===== */}
+      <div className="space-y-3">
+        <p className="text-sm font-semibold text-gray-700">
+          {locale === "th" ? "ค้นหาด้วย" : "Search By"}
+        </p>
+
+        {SEARCH_METHOD_OPTIONS.map((opt) => {
+          const isActive = searchMethod === opt.value;
+
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onChangeSearchMethod(opt.value);
+                onSetUser(null);
+                reset({ searchValue: "" });
+              }}
+              className={clsx(
+                "w-full flex items-center gap-4 rounded-xl border px-4 py-3 text-left transition",
+                isActive
+                  ? "border-brand-red bg-brand-red/5"
+                  : "border-gray-300 bg-white hover:border-gray-400"
+              )}
+            >
+              <span
+                className={clsx(
+                  "flex h-4 w-4 items-center justify-center rounded-full border",
+                  isActive ? "border-brand-red" : "border-gray-400"
+                )}
+              >
+                {isActive && (
+                  <span className="h-2 w-2 rounded-full bg-brand-red" />
+                )}
+              </span>
+
+              <span
+                className={clsx(
+                  "text-sm font-medium",
+                  isActive ? "text-brand-red" : "text-gray-800"
+                )}
+              >
+                {locale === "th" ? opt.labelTh : opt.labelEn}
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+
+      {/* ===== Search Form ===== */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Controller
           name="searchValue"
           control={control}
-          rules={{ maxLength: 13, minLength: 13 }}
           render={({ field }) => (
             <FormControl>
               <FormControl.Label>{searchLabel}</FormControl.Label>
-              <FormControl.Input type="numberic" {...field} />
+              <FormControl.Input {...field} />
               <FormControl.Error>
                 {errors.searchValue?.message ?? " "}
               </FormControl.Error>
             </FormControl>
           )}
         />
+
         <Button fullWidth type="submit" disabled={searchMutation.isPending}>
           {searchMutation.isPending ? t.searching : t.searchButton}
         </Button>
       </form>
+
+      {/* ===== Result ===== */}
       {userForm && (
         <DisplayCard>
           <DisplayCard.Header>{t.memberInfo}</DisplayCard.Header>
