@@ -25,7 +25,7 @@ export function useScreenshot(
 
   const captureRef = useRef<HTMLDivElement>(null);
   const [isCapturing, setIsCapturing] = useState(false);
-  const { error: showError } = useToast();
+  const { error: showError, success: showSuccess } = useToast();
 
   const captureScreenshot = useCallback(async () => {
     if (!captureRef.current) return;
@@ -43,25 +43,57 @@ export function useScreenshot(
         allowTaint: true,
       });
 
-      canvas.toBlob((blob: Blob | null) => {
-        if (!blob) return;
+      // Convert canvas to blob
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, "image/png");
+      });
 
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        const timestamp = new Date().toISOString().replaceAll(/[:.]/g, "-");
-        link.download = `${fileNamePrefix}-${timestamp}.png`;
-        link.href = url;
-        link.click();
+      if (!blob) {
+        throw new Error("Failed to create image blob");
+      }
 
+      const timestamp = new Date().toISOString().replaceAll(/[:.]/g, "-");
+      const fileName = `${fileNamePrefix}-${timestamp}.png`;
+
+      // Try Web Share API first (works on iOS for saving to Photos)
+      if (navigator.share && navigator.canShare) {
+        const file = new File([blob], fileName, { type: "image/png" });
+        const shareData = { files: [file] };
+
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          showSuccess("บันทึกภาพสำเร็จ");
+          return;
+        }
+      }
+
+      // Fallback: Try to trigger download (works on desktop)
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = fileName;
+      link.href = url;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up the URL after a short delay
+      setTimeout(() => {
         URL.revokeObjectURL(url);
-      }, "image/png");
+      }, 100);
+
+      showSuccess("บันทึกภาพสำเร็จ");
     } catch (error) {
       console.error("Screenshot failed:", error);
+      if (error instanceof Error && error.name === "AbortError") {
+        // User cancelled the share dialog
+        return;
+      }
       showError("ไม่สามารถบันทึกภาพหน้าจอได้ กรุณาลองใหม่อีกครั้ง");
     } finally {
       setIsCapturing(false);
     }
-  }, [backgroundColor, scale, fileNamePrefix, showError]);
+  }, [backgroundColor, scale, fileNamePrefix, showError, showSuccess]);
 
   return {
     captureRef,
