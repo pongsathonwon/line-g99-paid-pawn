@@ -29,7 +29,7 @@ function ToastContextProvider({ children }: PropsWithChildren) {
 
   // Add toast to queue
   const addToast = useCallback((toastInput: TToastInput) => {
-    const id = crypto.randomUUID?.() || `toast-${Date.now()}-${Math.random()}`;
+    const id = crypto.randomUUID?.() || `toast-${Date.now()}`;
     const toast: TToast = {
       id,
       duration: 1000,
