@@ -34,6 +34,7 @@ function ForeignCounterRegisterForm() {
       <StepIndicator steps={FOREIGN_COUNTER_REGISTER_STEPS} />
       {/* {activePage === 1 && (
         <SearchCustomer
+        nationCode='2'
           userForm={user}
           onSetUser={onSetUser}
           searchMethod="custCode"

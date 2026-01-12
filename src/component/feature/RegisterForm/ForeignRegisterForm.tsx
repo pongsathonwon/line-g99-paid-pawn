@@ -51,6 +51,7 @@ function ForeignRegisterForm() {
 
       {activePage === 1 && (
         <SearchCustomer
+          nationCode="2"
           searchMethod="custCode"
           userForm={user}
           onSetUser={onSetUser}

@@ -15,6 +15,7 @@ import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.
 // import clsx from "clsx";
 
 type TSearchCustomerProps = {
+  readonly nationCode: "1" | "2";
   readonly searchMethod: TSearchUserMethod;
   readonly userForm: TMaybe<TSearchUserRes>;
   onSetUser: (res: TSearchUserRes | null) => void;
@@ -52,12 +53,13 @@ function SearchCustomer({
   searchMethod,
   userForm,
   onSetUser,
+  nationCode,
   // onChangeSearchMethod,
   locale,
 }: PropsWithChildren<TSearchCustomerProps>) {
   const t = REGISTER_LOCALE_TEXT[locale];
   const { next } = useMultistepForm();
-  const validUserForm = userForm !== null;
+  const validUserForm = userForm !== null && userForm.nationCode === nationCode;
 
   const requestKey = useMemo(
     () => searchMethodMapper(searchMethod),
@@ -91,7 +93,7 @@ function SearchCustomer({
 
   const searchMutation = useMutation({
     mutationFn: (searchValue: string) =>
-      REGISTER_API.searchUser({ [requestKey]: searchValue }),
+      REGISTER_API.searchUser({ [requestKey]: searchValue, nationCode }),
     onSuccess: (data) => {
       onSetUser(data);
     },

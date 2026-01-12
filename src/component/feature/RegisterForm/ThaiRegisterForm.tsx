@@ -36,6 +36,7 @@ function ThaiRegisterForm() {
       <StepIndicator steps={THAI_REGISTER_STEPS} />
       {activePage === 1 && (
         <SearchCustomer
+          nationCode="1"
           searchMethod="idCard"
           userForm={user}
           onSetUser={onSetUser}
