@@ -8,7 +8,7 @@ import type { TMaybe } from "@/types/base.type";
 import type {
   TOtpRequestRes,
   TSearchUserRes,
-  TSearchUserMethod,
+  // TSearchUserMethod,
 } from "@/types/register";
 import StepIndicator from "./StepIndicator";
 import { FOREIGN_REGISTER_STEPS } from "./register.steps";
@@ -16,8 +16,8 @@ import { FOREIGN_REGISTER_STEPS } from "./register.steps";
 function ForeignRegisterForm() {
   const { activePage } = useMultistepForm();
 
-  const [searchMethod, setSearchMethod] =
-    useState<TSearchUserMethod>("custCode");
+  // const [searchMethod, setSearchMethod] =
+  //   useState<TSearchUserMethod>("custCode");
 
   const [user, setUser] = useState<TMaybe<TSearchUserRes>>(null);
 
@@ -51,10 +51,10 @@ function ForeignRegisterForm() {
 
       {activePage === 1 && (
         <SearchCustomer
-          searchMethod={searchMethod}
+          searchMethod="custCode"
           userForm={user}
           onSetUser={onSetUser}
-          onChangeSearchMethod={setSearchMethod}
+          // onChangeSearchMethod={setSearchMethod}
           locale="en"
         />
       )}

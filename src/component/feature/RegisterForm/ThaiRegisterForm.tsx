@@ -5,11 +5,7 @@ import { SuccessStep } from "../RegisterSubform/SuccessStep";
 import TermStep from "../RegisterSubform/TermStep";
 import { useState } from "react";
 import type { TMaybe } from "@/types/base.type";
-import type {
-  TOtpRequestRes,
-  TSearchUserMethod,
-  TSearchUserRes,
-} from "@/types/register";
+import type { TOtpRequestRes, TSearchUserRes } from "@/types/register";
 import StepIndicator from "./StepIndicator";
 import { THAI_REGISTER_STEPS } from "./register.steps";
 
@@ -20,7 +16,7 @@ function ThaiRegisterForm() {
   const onSetUser = (res: TSearchUserRes | null) => {
     setUser(res);
   };
-  const [searchMethod, setSearchMethod] = useState<TSearchUserMethod>("idCard");
+
   const [reqOtp, setReqOtp] = useState<TMaybe<TOtpRequestRes>>(null);
   const [isVerify, setIsVerify] = useState(false);
   const onSetOtp = (optRes: TOtpRequestRes) => {
@@ -40,11 +36,11 @@ function ThaiRegisterForm() {
       <StepIndicator steps={THAI_REGISTER_STEPS} />
       {activePage === 1 && (
         <SearchCustomer
-          searchMethod={searchMethod}
+          searchMethod="idCard"
           userForm={user}
           onSetUser={onSetUser}
           locale="th"
-          onChangeSearchMethod={setSearchMethod}
+          // onChangeSearchMethod={setSearchMethod}
         />
       )}
       {activePage === 2 && (
