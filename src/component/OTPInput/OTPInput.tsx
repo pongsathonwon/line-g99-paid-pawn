@@ -124,6 +124,11 @@ function OTPInput({
               maxLength={1}
               value={value}
               onChange={(e) => {
+                // Only allow numeric input
+                if (!/^\d*$/.test(e.target.value)) {
+                  e.preventDefault();
+                  return;
+                }
                 onChange(e);
                 handleInputChange(index, e.target.value);
               }}
