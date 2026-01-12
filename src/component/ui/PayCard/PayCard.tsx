@@ -69,7 +69,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
       </div>
 
       {/* ข้อมูลสัญญา */}
-      <div className="flex-1 flex flex-col gap-0.5 text-[#845A01] text-[12px] leading-[120%] lg:gap-1 lg:text-lg">
+      <div className="flex-1 flex flex-col gap-0.5 text-[#845A01] text-sm leading-[120%] lg:gap-1 lg:text-lg">
         <div className="flex justify-between">
           <span>เลขที่สัญญา</span>
           <span className="font-semibold">{contractNumber}</span>
