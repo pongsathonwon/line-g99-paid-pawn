@@ -12,7 +12,7 @@ interface PaymentCardProps {
   principal: number;
   dueDate: string;
   dateDiff: number;
-  pawnStatus?: TPawnStatusEnum;
+  pawnStatus: TPawnStatusEnum;
   backgroundImage?: string;
 }
 
@@ -21,13 +21,13 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   principal,
   dueDate,
   dateDiff,
-  pawnStatus = "normal",
+  pawnStatus,
   backgroundImage = "/bg_paycard.png",
 }) => {
   const statusColors = {
-    overdue: "text-brand-red-600",
+    overdue: "text-brand-red",
     normal: "text-gray-600",
-    "due-soon": "text-green-600",
+    "due-soon": "text-gold",
     due: "text-brand-red",
   };
 
@@ -37,7 +37,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   > = {
     overdue: { color: "black", styleType: "solid" },
     normal: { color: "black", styleType: "solid" },
-    "due-soon": { color: "green", styleType: "solid" },
+    "due-soon": { color: "gold", styleType: "solid" },
     due: { color: "primary", styleType: "solid" },
   };
 
@@ -52,6 +52,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
     <div
       className="flex justify-between items-center gap-6 bg-white rounded-2xl shadow-sm 
        h-24 lg:h-36 w-full px-4 py-3"
+      data-testid="card-background"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "80% 120%",
@@ -89,6 +90,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
       {/* ด้านขวา */}
       <div className="flex flex-col items-center gap-1 text-center w-1/5 lg:gap-2">
         <span
+          data-testid="button-label"
           className={`font-bold text-[10px] leading-[120%] ${statusColors[pawnStatus]} lg:text-base`}
         >
           {statusText[pawnStatus](dateDiff)}
