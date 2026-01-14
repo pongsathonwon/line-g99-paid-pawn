@@ -20,6 +20,7 @@ type TSearchCustomerProps = {
   onSetUser: (res: TSearchUserRes | null) => void;
   onChangeSearchMethod: (method: TSearchUserMethod) => void;
   locale: "th" | "en";
+  mode?: "thai" | "foreign" | "foreign-counter";
 };
 
 type TSearchCustomerFormState = {
@@ -37,7 +38,7 @@ const SEARCH_METHOD_OPTIONS: {
     labelEn: "ID Card / Passport",
   },
   {
-    value: "mobileNo",
+    value: "mobileNumber",
     labelTh: "เบอร์โทรศัพท์",
     labelEn: "Mobile Number",
   },
@@ -54,11 +55,20 @@ function SearchCustomer({
   onSetUser,
   onChangeSearchMethod,
   locale,
+  mode,
 }: PropsWithChildren<TSearchCustomerProps>) {
   const t = REGISTER_LOCALE_TEXT[locale];
   const { next } = useMultistepForm();
   const validUserForm = userForm !== null;
+  const filteredSearchMethods = useMemo(() => {
+    if (mode === "foreign-counter") {
+      return SEARCH_METHOD_OPTIONS.filter(
+        (opt) => opt.value === "idCard" || opt.value === "custCode"
+      );
+    }
 
+    return SEARCH_METHOD_OPTIONS;
+  }, [mode]);
   const requestKey = useMemo(
     () => searchMethodMapper(searchMethod),
     [searchMethod]
@@ -114,16 +124,14 @@ function SearchCustomer({
 
   return (
     <section className="flex flex-col gap-6">
-      {/* ===== Title ===== */}
       <h2 className="text-2xl font-bold text-gray-900">{t.searchTitle}</h2>
 
-      {/* ===== Search Method ===== */}
       <div className="space-y-3">
         <p className="text-sm font-semibold text-gray-700">
           {locale === "th" ? "ค้นหาด้วย" : "Search By"}
         </p>
 
-        {SEARCH_METHOD_OPTIONS.map((opt) => {
+        {filteredSearchMethods.map((opt) => {
           const isActive = searchMethod === opt.value;
 
           return (
@@ -166,7 +174,6 @@ function SearchCustomer({
         })}
       </div>
 
-      {/* ===== Search Form ===== */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Controller
           name="searchValue"
@@ -187,7 +194,6 @@ function SearchCustomer({
         </Button>
       </form>
 
-      {/* ===== Result ===== */}
       {userForm && (
         <DisplayCard>
           <DisplayCard.Header>{t.memberInfo}</DisplayCard.Header>
