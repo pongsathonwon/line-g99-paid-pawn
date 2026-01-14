@@ -13,10 +13,19 @@ describe("test filter toast function", () => {
             message: 'toast-1'
         }
 
-        const MOCK_TOAST_RESPONSE: TToast = {
-            ...MOCK_TOAST_INPUT, duration: (MOCK_TOAST_INPUT.duration ?? 0) - step
+        expect(filterToast(step)(MOCK_TOAST_INPUT)).toStrictEqual([])
+    })
+
+    it("should return same result", () => {
+        const step = 50;
+        const MOCK_TOAST_INPUT: TToast = {
+            id: '1',
+            type: 'info',
+            duration: 500,
+            position: 'top-left',
+            message: 'toast-1'
         }
 
-        expect(filterToast(step)(MOCK_TOAST_INPUT)).toStrictEqual([MOCK_TOAST_RESPONSE])
+        expect(filterToast(step)(MOCK_TOAST_INPUT)).toStrictEqual([{ ...MOCK_TOAST_INPUT, duration: 450 }])
     })
 })

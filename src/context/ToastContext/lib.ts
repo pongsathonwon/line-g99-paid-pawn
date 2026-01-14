@@ -1,8 +1,9 @@
 import type { TToast } from "@/types/toast.type";
 
 export const filterToast = (stepDuration: number) => ({ duration, ...res }: TToast) => {
-    if (!duration || duration <= 0) {
+    const nextDuration = (duration ?? 0) - stepDuration
+    if (nextDuration <= 0) {
         return [];
     }
-    return [{ ...res, duration: duration - stepDuration }];
+    return [{ ...res, duration: nextDuration }];
 }
