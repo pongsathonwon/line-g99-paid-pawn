@@ -6,9 +6,11 @@ import PayCard from "@/component/ui/PayCard/PayCard";
 function HomePage() {
   const custInfo = useCustInfo();
   const custCode = custInfo?.custNo;
-  const { data, isError, error, isLoading } = useQueryPawnById({
-    custCode,
-  });
+  const { data, canBePaid, cannotBePaid, isError, error, isLoading } =
+    useQueryPawnById({
+      custCode,
+    });
+
   if (isLoading) {
     return <div>loading ...</div>;
   }
@@ -33,10 +35,10 @@ function HomePage() {
         รายการขายฝาก
       </h3>
       <ul className="flex flex-col gap-4 items-center w-full md:gap-8">
-        {data?.map(
+        {canBePaid?.map(
           ({ pawnNumb, pawnPrice, nextPaidDate, pawnStatus, dateDiff }) => (
             <li key={pawnNumb} className="w-full">
-              {pawnStatus === "overdue" ? (
+              <NavLink to={pawnNumb} className="flex justify-center">
                 <PayCard
                   dateDiff={dateDiff}
                   contractNumber={pawnNumb}
@@ -44,17 +46,20 @@ function HomePage() {
                   dueDate={nextPaidDate}
                   pawnStatus={pawnStatus}
                 />
-              ) : (
-                <NavLink to={pawnNumb} className="flex justify-center">
-                  <PayCard
-                    dateDiff={dateDiff}
-                    contractNumber={pawnNumb}
-                    principal={pawnPrice}
-                    dueDate={nextPaidDate}
-                    pawnStatus={pawnStatus}
-                  />
-                </NavLink>
-              )}
+              </NavLink>
+            </li>
+          )
+        )}
+        {cannotBePaid?.map(
+          ({ pawnNumb, pawnPrice, nextPaidDate, pawnStatus, dateDiff }) => (
+            <li key={pawnNumb} className="w-full">
+              <PayCard
+                dateDiff={dateDiff}
+                contractNumber={pawnNumb}
+                principal={pawnPrice}
+                dueDate={nextPaidDate}
+                pawnStatus={pawnStatus}
+              />
             </li>
           )
         )}
