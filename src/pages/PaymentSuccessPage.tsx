@@ -16,7 +16,7 @@ function PaymentSuccessPage() {
       <p className="text-xl text-black font-semibold mb-4">คุณทำรายการสำเร็จ</p>
 
       <img src="/SuccessIcon.png" alt="success" className="size-[120px] mb-6" />
-      <DisplayCard className="w-full max-w-[360px] mx-auto">
+      <DisplayCard className="w-full max-w-90 mx-auto">
         <DisplayCard.Header>สรุปรายการชำระ</DisplayCard.Header>
 
         <DisplayCard.Subheader className="text-left">
@@ -39,7 +39,7 @@ function PaymentSuccessPage() {
         </DisplayCard.Summary>
       </DisplayCard>
 
-      <NavLink to="/history" className="mt-10 w-full max-w-[260px]">
+      <NavLink to="/history" className="mt-10 w-full max-w-65">
         <Button fullWidth>ดูประวัติการทำรายการ</Button>
       </NavLink>
     </div>

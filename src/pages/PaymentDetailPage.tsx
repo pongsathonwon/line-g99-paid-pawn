@@ -6,6 +6,9 @@ import { parseApiError } from "@/zod/api-error";
 import { AxiosError } from "axios";
 import { NavLink } from "react-router-dom";
 
+const formatDiscount = (membDisc: number) =>
+  membDisc > 0 ? `- ${membDisc.toFixed(2)}` : "0.00";
+
 function PaymentDetailPage() {
   const { interest, isSuccess, isError, error } = usePawnInterest();
 
@@ -37,7 +40,7 @@ function PaymentDetailPage() {
   if (!isSuccess || !interest) {
     return (
       <div>
-        <div>loading ....</div>;
+        <div>loading ....</div>
       </div>
     );
   }
@@ -60,7 +63,7 @@ function PaymentDetailPage() {
           <span className="font-bold">{interest.pawnPrice} บาท</span>
         </DisplayCard.Mute>
         <DisplayCard.Mute>
-          <span>ดอกเบี้ย</span>
+          <span>อัตราดอกเบี้ย</span>
           <span>{interest.interestRate} %</span>
         </DisplayCard.Mute>
         <DisplayCard.Divider color="gold" line="dash" />
@@ -74,17 +77,32 @@ function PaymentDetailPage() {
         </DisplayCard.Mute>
         <DisplayCard.Mute>
           <span>ส่วนลดสมาชิก</span>
-          <span>{interest.membDisc.toFixed(2)} บาท</span>
+          <span>{formatDiscount(interest.membDisc)} บาท</span>
+        </DisplayCard.Mute>
+        <DisplayCard.Divider color="gold" line="dash" />
+        <DisplayCard.Mute>
+          <span>ดอกเบี้ยสุทธิ</span>
+          <span>{interest.netInterest} บาท</span>
+        </DisplayCard.Mute>
+        <DisplayCard.Mute>
+          <span>ค่าธรรมเนียม</span>
+          <span>{interest.fee} บาท</span>
         </DisplayCard.Mute>
         <DisplayCard.Summary>
           <span>ยอดชำระ</span>
-          <span>{interest.netInterest.toFixed(2)} บาท</span>
+          <span>{(interest.netInterest + interest.fee).toFixed(2)} บาท</span>
         </DisplayCard.Summary>
         <DisplayCard.Divider color="base" />
-
-        <NavLink to="./qr">
-          <Button fullWidth>ชำระดอกเบี้ย</Button>
-        </NavLink>
+        <div className="flex flex-col gap-4">
+          <NavLink to="./qr">
+            <Button fullWidth>ชำระดอกเบี้ย</Button>
+          </NavLink>
+          <NavLink to="..">
+            <Button fullWidth styleType="outline">
+              กลับ
+            </Button>
+          </NavLink>
+        </div>
       </DisplayCard>
     </div>
   );
