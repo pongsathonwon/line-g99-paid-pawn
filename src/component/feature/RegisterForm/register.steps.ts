@@ -18,6 +18,6 @@ export const FOREIGN_REGISTER_STEPS: RegisterStep[] = [
 ];
 export const FOREIGN_COUNTER_REGISTER_STEPS: RegisterStep[] = [
   { key: "search", label: "Search Customer" },
-  { key: "term", label: "Terms & Ag  0reement" },
+  { key: "term", label: "Terms & Agreement" },
   { key: "pending", label: "Pending" },
 ];
