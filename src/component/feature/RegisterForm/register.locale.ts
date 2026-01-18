@@ -57,7 +57,6 @@ export const REGISTER_LOCALE_TEXT = {
   },
 
   en: {
-    /* โครงสร้างเดียวกันทุก key */
     searchTitle: "Search Member",
     searchButton: "Search",
     searching: "Searching...",
@@ -76,7 +75,7 @@ export const REGISTER_LOCALE_TEXT = {
 
     errors: {
       requiredByField: {
-        idCard: "Please enter ID card number",
+        idCard: "Please enter ID card number or Passport",
         mobileNumber: "Please enter mobile number",
         custCode: "Please enter customer code",
       },

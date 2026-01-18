@@ -12,63 +12,71 @@ import { createSearchCustomerSchema } from "./validation";
 import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
 import type { TMaybe } from "@/types/base.type";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
-// import clsx from "clsx";
+import clsx from "clsx";
 
 type TSearchCustomerProps = {
-  readonly nationCode: "1" | "2";
-  readonly searchMethod: TSearchUserMethod;
-  readonly userForm: TMaybe<TSearchUserRes>;
+  searchMethod: TSearchUserMethod;
+  userForm: TMaybe<TSearchUserRes>;
   onSetUser: (res: TSearchUserRes | null) => void;
-  // onChangeSearchMethod: (method: TSearchUserMethod) => void;
-  readonly locale: "th" | "en";
+  onChangeSearchMethod: (method: TSearchUserMethod) => void;
+  locale: "th" | "en";
+  mode?: "thai" | "foreign" | "foreign-counter";
 };
 
 type TSearchCustomerFormState = {
   searchValue: string;
 };
 
-// const SEARCH_METHOD_OPTIONS: {
-//   value: TSearchUserMethod;
-//   labelTh: string;
-//   labelEn: string;
-// }[] = [
-//   {
-//     value: "idCard",
-//     labelTh: "บัตรประชาชน / Passport",
-//     labelEn: "ID Card / Passport",
-//   },
-//   {
-//     value: "mobileNumber",
-//     labelTh: "เบอร์โทรศัพท์",
-//     labelEn: "Mobile Number",
-//   },
-//   {
-//     value: "custCode",
-//     labelTh: "รหัสลูกค้า",
-//     labelEn: "Customer Code",
-//   },
-// ];
+const SEARCH_METHOD_OPTIONS: {
+  value: TSearchUserMethod;
+  labelTh: string;
+  labelEn: string;
+}[] = [
+  {
+    value: "idCard",
+    labelTh: "บัตรประชาชน / Passport",
+    labelEn: "ID Card / Passport",
+  },
+  {
+    value: "mobileNumber",
+    labelTh: "เบอร์โทรศัพท์",
+    labelEn: "Mobile Number",
+  },
+  {
+    value: "custCode",
+    labelTh: "รหัสลูกค้า",
+    labelEn: "Customer Code",
+  },
+];
 
 function SearchCustomer({
   searchMethod,
   userForm,
   onSetUser,
-  nationCode,
-  // onChangeSearchMethod,
+  onChangeSearchMethod,
   locale,
+  mode,
 }: PropsWithChildren<TSearchCustomerProps>) {
   const t = REGISTER_LOCALE_TEXT[locale];
   const { next } = useMultistepForm();
-  const validUserForm = userForm !== null && userForm.nationCode === nationCode;
+  const validUserForm = userForm !== null;
+  const filteredSearchMethods = useMemo(() => {
+    if (mode === "foreign-counter") {
+      return SEARCH_METHOD_OPTIONS.filter(
+        (opt) => opt.value === "idCard" || opt.value === "custCode",
+      );
+    }
 
+    return SEARCH_METHOD_OPTIONS;
+  }, [mode]);
   const requestKey = useMemo(
     () => searchMethodMapper(searchMethod),
-    [searchMethod]
+    [searchMethod],
   );
 
   const searchLabel = useMemo(
     () => t.labels[searchMethod],
-    [locale, searchMethod]
+    [locale, searchMethod],
   );
 
   const validationSchema = useMemo(
@@ -77,14 +85,14 @@ function SearchCustomer({
         required: t.errors.requiredByField[searchMethod],
         pattern: t.errors.pattern[searchMethod],
       }),
-    [locale, searchMethod]
+    [locale, searchMethod],
   );
 
   const {
     control,
     handleSubmit,
     setError,
-    // reset,
+    reset,
     formState: { errors },
   } = useForm<TSearchCustomerFormState>({
     defaultValues: { searchValue: "" },
@@ -116,7 +124,56 @@ function SearchCustomer({
 
   return (
     <section className="flex flex-col gap-6">
-      {/* ===== Search Form ===== */}
+      <h2 className="text-2xl font-bold text-gray-900">{t.searchTitle}</h2>
+
+      <div className="space-y-3">
+        <p className="text-sm font-semibold text-gray-700">
+          {locale === "th" ? "ค้นหาด้วย" : "Search By"}
+        </p>
+
+        {filteredSearchMethods.map((opt) => {
+          const isActive = searchMethod === opt.value;
+
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onChangeSearchMethod(opt.value);
+                onSetUser(null);
+                reset({ searchValue: "" });
+              }}
+              className={clsx(
+                "w-full flex items-center gap-4 rounded-xl border px-4 py-3 text-left transition",
+                isActive
+                  ? "border-brand-red bg-brand-red/5"
+                  : "border-gray-300 bg-white hover:border-gray-400",
+              )}
+            >
+              <span
+                className={clsx(
+                  "flex h-4 w-4 items-center justify-center rounded-full border",
+                  isActive ? "border-brand-red" : "border-gray-400",
+                )}
+              >
+                {isActive && (
+                  <span className="h-2 w-2 rounded-full bg-brand-red" />
+                )}
+              </span>
+
+              <span
+                className={clsx(
+                  "text-sm font-medium",
+                  isActive ? "text-brand-red" : "text-gray-800",
+                )}
+              >
+                {locale === "th" ? opt.labelTh : opt.labelEn}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Controller
           name="searchValue"
@@ -137,7 +194,6 @@ function SearchCustomer({
         </Button>
       </form>
 
-      {/* ===== Result ===== */}
       {userForm && (
         <DisplayCard>
           <DisplayCard.Header>{t.memberInfo}</DisplayCard.Header>
