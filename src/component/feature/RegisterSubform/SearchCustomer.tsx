@@ -21,6 +21,7 @@ type TSearchCustomerProps = {
   onChangeSearchMethod: (method: TSearchUserMethod) => void;
   locale: "th" | "en";
   mode?: "thai" | "foreign" | "foreign-counter";
+  nationCode: string;
 };
 
 type TSearchCustomerFormState = {
@@ -56,6 +57,7 @@ function SearchCustomer({
   onChangeSearchMethod,
   locale,
   mode,
+  nationCode,
 }: PropsWithChildren<TSearchCustomerProps>) {
   const t = REGISTER_LOCALE_TEXT[locale];
   const { next } = useMultistepForm();
