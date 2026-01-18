@@ -4,6 +4,14 @@ import { act, renderHook } from "@testing-library/react";
 import { useToast } from "./ToastContext";
 
 describe("test useToast hook", () => {
+  describe("test defaul use context hook", () => {
+    it("should throw error", () => {
+      expect(() => renderHook(() => useToast())).toThrow(
+        "useToast requires ToastContextProvider"
+      );
+    });
+  });
+
   describe("test add toast", () => {
     it("should add success toast with default duration", () => {
       const { result } = renderHook(() => useToast(), {
