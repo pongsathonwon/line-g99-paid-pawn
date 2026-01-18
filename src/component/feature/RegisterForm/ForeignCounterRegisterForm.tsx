@@ -34,6 +34,7 @@ function ForeignCounterRegisterForm() {
 
       {activePage === 1 && (
         <SearchCustomer
+          nationCode="2"
           userForm={user}
           onSetUser={onSetUser}
           searchMethod={searchMethod}
