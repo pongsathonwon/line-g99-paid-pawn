@@ -4,6 +4,7 @@ import type { TSearchUserMethod, TSearchUserRes } from "@/types/register";
 import { Button } from "@/component/Button";
 import { searchMethodMapper } from "./lib";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
+import RadioGroup, { type TRadioOption } from "@/component/ui/RadioGroup/RadioGroup";
 import { useMutation } from "@tanstack/react-query";
 import { REGISTER_API } from "@/api/endpoint/register";
 import { Controller, useForm } from "react-hook-form";
@@ -12,7 +13,6 @@ import { createSearchCustomerSchema } from "./validation";
 import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
 import type { TMaybe } from "@/types/base.type";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
-import clsx from "clsx";
 
 type TSearchCustomerProps = {
   searchMethod: TSearchUserMethod;
@@ -62,15 +62,25 @@ function SearchCustomer({
   const t = REGISTER_LOCALE_TEXT[locale];
   const { next } = useMultistepForm();
   const validUserForm = userForm !== null;
-  const filteredSearchMethods = useMemo(() => {
-    if (mode === "foreign-counter") {
-      return SEARCH_METHOD_OPTIONS.filter(
-        (opt) => opt.value === "idCard" || opt.value === "custCode",
-      );
-    }
+  const radioOptions = useMemo((): TRadioOption<TSearchUserMethod>[] => {
+    const filtered =
+      mode === "foreign-counter"
+        ? SEARCH_METHOD_OPTIONS.filter(
+            (opt) => opt.value === "idCard" || opt.value === "custCode"
+          )
+        : SEARCH_METHOD_OPTIONS;
 
-    return SEARCH_METHOD_OPTIONS;
-  }, [mode]);
+    return filtered.map((opt) => ({
+      value: opt.value,
+      label: locale === "th" ? opt.labelTh : opt.labelEn,
+    }));
+  }, [mode, locale]);
+
+  const handleSearchMethodChange = (method: TSearchUserMethod) => {
+    onChangeSearchMethod(method);
+    onSetUser(null);
+    reset({ searchValue: "" });
+  };
   const requestKey = useMemo(
     () => searchMethodMapper(searchMethod),
     [searchMethod],
@@ -128,53 +138,12 @@ function SearchCustomer({
     <section className="flex flex-col gap-6">
       <h2 className="text-2xl font-bold text-gray-900">{t.searchTitle}</h2>
 
-      <div className="space-y-3">
-        <p className="text-sm font-semibold text-gray-700">
-          {locale === "th" ? "ค้นหาด้วย" : "Search By"}
-        </p>
-
-        {filteredSearchMethods.map((opt) => {
-          const isActive = searchMethod === opt.value;
-
-          return (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => {
-                onChangeSearchMethod(opt.value);
-                onSetUser(null);
-                reset({ searchValue: "" });
-              }}
-              className={clsx(
-                "w-full flex items-center gap-4 rounded-xl border px-4 py-3 text-left transition",
-                isActive
-                  ? "border-brand-red bg-brand-red/5"
-                  : "border-gray-300 bg-white hover:border-gray-400",
-              )}
-            >
-              <span
-                className={clsx(
-                  "flex h-4 w-4 items-center justify-center rounded-full border",
-                  isActive ? "border-brand-red" : "border-gray-400",
-                )}
-              >
-                {isActive && (
-                  <span className="h-2 w-2 rounded-full bg-brand-red" />
-                )}
-              </span>
-
-              <span
-                className={clsx(
-                  "text-sm font-medium",
-                  isActive ? "text-brand-red" : "text-gray-800",
-                )}
-              >
-                {locale === "th" ? opt.labelTh : opt.labelEn}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      <RadioGroup
+        options={radioOptions}
+        value={searchMethod}
+        onChange={handleSearchMethodChange}
+        label={locale === "th" ? "ค้นหาด้วย" : "Search By"}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Controller

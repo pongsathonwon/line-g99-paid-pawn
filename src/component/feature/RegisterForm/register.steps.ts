@@ -1,5 +1,7 @@
+export type TStepType = "search" | "otp" | "term" | "success" | "pending";
+
 export type RegisterStep = {
-  key: string;
+  key: TStepType;
   label: string;
 };
 
