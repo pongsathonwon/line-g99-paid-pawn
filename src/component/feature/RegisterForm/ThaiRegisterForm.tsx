@@ -5,7 +5,11 @@ import { SuccessStep } from "../RegisterSubform/SuccessStep";
 import TermStep from "../RegisterSubform/TermStep";
 import { useState } from "react";
 import type { TMaybe } from "@/types/base.type";
-import type { TOtpRequestRes, TSearchUserRes } from "@/types/register";
+import type {
+  TOtpRequestRes,
+  TSearchUserMethod,
+  TSearchUserRes,
+} from "@/types/register";
 import StepIndicator from "./StepIndicator";
 import { THAI_REGISTER_STEPS } from "./register.steps";
 
@@ -13,9 +17,10 @@ function ThaiRegisterForm() {
   const { activePage } = useMultistepForm();
   const [user, setUser] = useState<TMaybe<TSearchUserRes>>(null);
   const mobileNo = user?.mobileNo ?? null;
-  const onSetUser = (res: TSearchUserRes) => {
+  const onSetUser = (res: TSearchUserRes | null) => {
     setUser(res);
   };
+  const [searchMethod, setSearchMethod] = useState<TSearchUserMethod>("idCard");
   const [reqOtp, setReqOtp] = useState<TMaybe<TOtpRequestRes>>(null);
   const [isVerify, setIsVerify] = useState(false);
   const onSetOtp = (optRes: TOtpRequestRes) => {
@@ -29,15 +34,17 @@ function ThaiRegisterForm() {
   const onSetConsent = (consent: boolean) => {
     setIsConsent(consent);
   };
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <StepIndicator steps={THAI_REGISTER_STEPS} />
       {activePage === 1 && (
         <SearchCustomer
+          searchMethod={searchMethod}
           userForm={user}
           onSetUser={onSetUser}
-          searchMethod="idCard"
           locale="th"
+          onChangeSearchMethod={setSearchMethod}
         />
       )}
       {activePage === 2 && (

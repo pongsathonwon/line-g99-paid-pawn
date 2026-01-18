@@ -1,69 +1,88 @@
 import { Link } from "react-router-dom";
-
+import RegisterCard from "@/component/ui/RegisterForm/RegisterCard/RegisterCard";
 function RegisterPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">ลงทะเบียน</h1>
-        </div>
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <Link to="/thai-register" className="text-blue-400 underline">
-            ลูกค้าไทย ลงทะเบียนออนไลน์
-          </Link>
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+      <header className="flex justify-center h-16 border-b bg-white">
+        <img src="\logo\logo.png" className="h-15" />
+      </header>
 
-          <Link to="/foreign-register" className="text-blue-400 underline">
-            ลูกค้าต่างชาติ ลงทะเบียนผ่านเบอร์โทรศัพท์
-          </Link>
-          <Link
+      <main className="mx-auto max-w-4xl px-4 py-12">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">ลงทะเบียน</h1>
+          <p className="text-gray-600">เลือกรูปแบบการลงทะเบียนที่เหมาะกับคุณ</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <RegisterCard
+            to="/thai-register"
+            title="ลูกค้าไทย"
+            description="ลงทะเบียนออนไลน์"
+            highlight
+          />
+
+          <RegisterCard
+            to="/foreign-register"
+            title="Foreign Customer"
+            description="Register with mobile number"
+          />
+
+          <RegisterCard
             to="/foreign-counter-register"
-            className="text-blue-400 underline"
-          >
-            ลูกค้าต่างชาติ ลงทะเบียนหน้าร้าน
-          </Link>
+            title="Foreign Customer"
+            description="Register at G99 counter"
+          />
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-blue-900 mb-3">
+        <div className="bg-white rounded-2xl shadow-md border p-6 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
             สิ่งที่ต้องเตรียม
           </h3>
-          <ul className="space-y-2 text-sm text-blue-800">
-            <li className="ps-4">
-              <div className="grid grid-cols-2 md:grid-cols-4">
-                <strong>เอกสารยืนยันตัวตน</strong>
-                <span className="col-start-2 -col-end-1">
-                  เลขประจำตัวประชาชน รหัสลูกค้า หรือเบอร์โทรศัพท์ลงทะเบียน
-                </span>
-              </div>
+
+          <ul className="space-y-4 text-sm text-gray-700 mb-6">
+            <li>
+              <strong className="block">เอกสารยืนยันตัวตน</strong>
+              เลขประจำตัวประชาชน / รหัสลูกค้า / เบอร์โทรศัพท์
             </li>
-            <li className="ps-4">
-              <div className="grid grid-cols-2 md:grid-cols-4">
-                <strong>เบอร์โทรศัพท์มือถือ</strong>
-                <span className="col-start-2 -col-end-1">
-                  ยืนยันตัวตนผ่าน otp
-                </span>
-              </div>
+            <li>
+              <strong className="block">เบอร์โทรศัพท์มือถือ</strong>
+              ใช้สำหรับยืนยันตัวตนผ่าน OTP
             </li>
-            <li className="ps-4">
-              <div className="grid grid-cols-2 md:grid-cols-4">
-                <strong>ยืนยันตัวตน</strong>
-                <span className="col-start-2 -col-end-1">
-                  กรณีไม่สามารถยืนยัน otp ได้ ลงทะเบียนผ่านหน้าร้าน
-                </span>
-              </div>
+            <li>
+              <strong className="block">การยืนยันตัวตน</strong>
+              หากไม่สามารถยืนยัน OTP ได้ กรุณาลงทะเบียนที่หน้าร้าน
+            </li>
+          </ul>
+
+          <div className="border-t border-gray-200 my-6" />
+
+          <h4 className="text-base font-semibold text-gray-900 mb-3">
+            For Foreign Customers
+          </h4>
+
+          <ul className="space-y-4 text-sm text-gray-700">
+            <li>
+              <strong className="block">Identity Information</strong>
+              Passport, customer code, or registered mobile number
+            </li>
+            <li>
+              <strong className="block">Mobile Phone</strong>
+              Used for OTP verification
+            </li>
+            <li>
+              <strong className="block">In-store Registration</strong>
+              If OTP verification is not possible, please register at our store
             </li>
           </ul>
         </div>
 
         <div className="text-center text-sm text-gray-600">
-          <p>
-            ความช่วยเหลือ{" "}
-            <a href="#" className="text-brand-red hover:underline font-medium">
-              ติดต่อเรา
-            </a>
-          </p>
+          ต้องการความช่วยเหลือ?{" "}
+          <a href="#" className="text-brand-red font-medium hover:underline">
+            ติดต่อเรา
+          </a>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
