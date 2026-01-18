@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import RegisterCard from "@/component/ui/RegisterForm/RegisterCard/RegisterCard";
 function RegisterPage() {
   return (
