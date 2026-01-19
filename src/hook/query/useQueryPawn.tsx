@@ -11,12 +11,14 @@ function useQueryPawnById({ custCode }: TUseQueryPawnByIdProps) {
     queryKey: ["pawn", "cust", custCode],
     queryFn: async ({ queryKey }) => await getManyPawnByCust({ custCode }),
     select: transformPawnStatus,
-    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
   const canBePaid = q.data?.filter(({ pawnStatus }) =>
-    ["due", "due-soon", "normal", "overdue"].includes(pawnStatus),
+    ["due", "due-soon"].includes(pawnStatus),
   );
-  const cannotBePaid = q.data?.filter((_) => false);
+  const cannotBePaid = q.data?.filter(({ pawnStatus }) =>
+    ["normal", "overdue"].includes(pawnStatus),
+  );
   return { ...q, cannotBePaid, canBePaid };
 }
 
