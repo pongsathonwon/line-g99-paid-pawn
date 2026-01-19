@@ -14,11 +14,9 @@ function useQueryPawnById({ custCode }: TUseQueryPawnByIdProps) {
     refetchOnWindowFocus: true,
   });
   const canBePaid = q.data?.filter(({ pawnStatus }) =>
-    ["due", "due-soon"].includes(pawnStatus)
+    ["due", "due-soon", "normal", "overdue"].includes(pawnStatus),
   );
-  const cannotBePaid = q.data?.filter(({ pawnStatus }) =>
-    ["normal", "overdue"].includes(pawnStatus)
-  );
+  const cannotBePaid = q.data?.filter((_) => false);
   return { ...q, cannotBePaid, canBePaid };
 }
 
