@@ -12,7 +12,6 @@ import type { TRegisterReq, TRegisterRequestReq } from "@/types/register";
 import { useLineContext } from "@/context/LineContext/LineContext";
 import { useToast } from "@/context/ToastContext/ToastContext";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
-import { REGISTER_TERMS } from "@/component/feature/RegisterForm/register.terms";
 
 type TTermStepProps = {
   isConsent: boolean;
@@ -160,7 +159,9 @@ function TermStep({
           {/* conntent */}
           <div className="space-y-5">
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">การเก็บรวบรวมข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                การเก็บรวบรวมข้อมูลส่วนบุคคล
+              </h4>
               <p className="mb-2">
                 เราจะเก็บรวบรวมข้อมูลส่วนบุคคลที่ได้รับโดยตรงจากคุณผ่านช่องทาง
                 ดังต่อไปนี้
@@ -171,37 +172,58 @@ function TermStep({
               </ul>
             </div>
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">ประเภทข้อมูลส่วนบุคคลที่เก็บรวบรวม</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                ประเภทข้อมูลส่วนบุคคลที่เก็บรวบรวม
+              </h4>
               <div className="space-y-3 bg-white p-4 rounded-lg">
                 <p>
-                  <b className="text-gray-800">ข้อมูลส่วนบุคคล</b> <span className="text-gray-600">เช่น ชื่อ นามสกุล อายุ วันเดือนปีเกิด
-                  สัญชาติ เลขประจำตัวประชาชน หนังสือเดินทาง เป็นต้น</span>
+                  <b className="text-gray-800">ข้อมูลส่วนบุคคล</b>{" "}
+                  <span className="text-gray-600">
+                    เช่น ชื่อ นามสกุล อายุ วันเดือนปีเกิด สัญชาติ
+                    เลขประจำตัวประชาชน หนังสือเดินทาง เป็นต้น
+                  </span>
                 </p>
                 <p>
-                  <b className="text-gray-800">ข้อมูลการติดต่อ</b> <span className="text-gray-600">เช่น ที่อยู่ หมายเลขโทรศัพท์ อีเมล
-                  เป็นต้น</span>
+                  <b className="text-gray-800">ข้อมูลการติดต่อ</b>{" "}
+                  <span className="text-gray-600">
+                    เช่น ที่อยู่ หมายเลขโทรศัพท์ อีเมล เป็นต้น
+                  </span>
                 </p>
                 <p>
-                  <b className="text-gray-800">ข้อมูลบัญชี</b> <span className="text-gray-600">เช่น บัญชีผู้ใช้งาน ประวัติการใช้งาน เป็นต้น</span>
+                  <b className="text-gray-800">ข้อมูลบัญชี</b>{" "}
+                  <span className="text-gray-600">
+                    เช่น บัญชีผู้ใช้งาน ประวัติการใช้งาน เป็นต้น
+                  </span>
                 </p>
                 <p>
-                  <b className="text-gray-800">หลักฐานแสดงตัวตน</b> <span className="text-gray-600">เช่น สำเนาบัตรประจำตัวประชาชน
-                  สำเนาหนังสือเดินทาง เป็นต้น</span>
+                  <b className="text-gray-800">หลักฐานแสดงตัวตน</b>{" "}
+                  <span className="text-gray-600">
+                    เช่น สำเนาบัตรประจำตัวประชาชน สำเนาหนังสือเดินทาง เป็นต้น
+                  </span>
                 </p>
                 <p>
-                  <b className="text-gray-800">ข้อมูลการทำธุรกรรมและการเงิน</b> <span className="text-gray-600">เช่น ประวัติการสั่งซื้อ
-                  รายละเอียดบัตรเครดิต บัญชีธนาคาร เป็นต้น</span>
+                  <b className="text-gray-800">ข้อมูลการทำธุรกรรมและการเงิน</b>{" "}
+                  <span className="text-gray-600">
+                    เช่น ประวัติการสั่งซื้อ รายละเอียดบัตรเครดิต บัญชีธนาคาร
+                    เป็นต้น
+                  </span>
                 </p>
                 <p>
-                  <b className="text-gray-800">ข้อมูลทางเทคนิค</b> <span className="text-gray-600">เช่น IP address, Cookie ID,
-                  ประวัติการใช้งานเว็บไซต์ (Activity Log) เป็นต้น</span>
+                  <b className="text-gray-800">ข้อมูลทางเทคนิค</b>{" "}
+                  <span className="text-gray-600">
+                    เช่น IP address, Cookie ID, ประวัติการใช้งานเว็บไซต์
+                    (Activity Log) เป็นต้น
+                  </span>
                 </p>
                 <p>
-                  <b className="text-gray-800">ข้อมูลอื่น ๆ </b><span className="text-gray-600">เช่น รูปภาพ ภาพเคลื่อนไหว
-                  และข้อมูลอื่นใดที่ถือว่าเป็นข้อมูลส่วนบุคคลตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
-                  เราจะเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลอ่อนไหว
-                  ดังต่อไปนี้ เมื่อเราได้รับความยินยอมโดยชัดแจ้งจากคุณ
-                  เว้นแต่กฎหมายกำหนดให้ทำได้</span>
+                  <b className="text-gray-800">ข้อมูลอื่น ๆ </b>
+                  <span className="text-gray-600">
+                    เช่น รูปภาพ ภาพเคลื่อนไหว
+                    และข้อมูลอื่นใดที่ถือว่าเป็นข้อมูลส่วนบุคคลตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
+                    เราจะเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลอ่อนไหว
+                    ดังต่อไปนี้ เมื่อเราได้รับความยินยอมโดยชัดแจ้งจากคุณ
+                    เว้นแต่กฎหมายกำหนดให้ทำได้
+                  </span>
                 </p>
               </div>
 
@@ -215,7 +237,9 @@ function TermStep({
               </ul>
             </div>
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">ผู้เยาว์</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                ผู้เยาว์
+              </h4>
               <p className="text-gray-600">
                 หากคุณมีอายุต่ำกว่า 20 ปีหรือมีข้อจำกัดความสามารถตามกฎหมาย
                 เราอาจเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของคุณ
@@ -225,7 +249,9 @@ function TermStep({
               </p>
             </div>
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">วิธีการเก็บรักษาข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                วิธีการเก็บรักษาข้อมูลส่วนบุคคล
+              </h4>
               <p className="text-gray-600 mb-2">
                 เราจะเก็บรักษาข้อมูลส่วนบุคคลของคุณในรูปแบบเอกสารและรูปแบบอิเล็กทรอนิกส์
                 เราเก็บรักษาข้อมูลส่วนบุคคลของคุณ ดังต่อไปนี้
@@ -234,7 +260,9 @@ function TermStep({
                 <li>เซิร์ฟเวอร์บริษัทของเราในประเทศไทย</li>
               </ul>
 
-              <h4 className="font-semibold text-gray-800 mb-2 text-base mt-4">การประมวลผลข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base mt-4">
+                การประมวลผลข้อมูลส่วนบุคคล
+              </h4>
               <p className="text-gray-600 mb-2">
                 เราจะเก็บรวบรวม ใช้
                 หรือเปิดเผยข้อมูลส่วนบุคคลของคุณเพื่อวัตถุประสงค์ดังต่อไปนี้
@@ -256,7 +284,9 @@ function TermStep({
             </div>
 
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">ระยะเวลาจัดเก็บข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                ระยะเวลาจัดเก็บข้อมูลส่วนบุคคล
+              </h4>
               <p className="text-gray-600">
                 เราจะเก็บรักษาข้อมูลส่วนบุคคลของคุณไว้ตามระยะเวลาที่จำเป็นในระหว่างที่คุณเป็นลูกค้าหรือมีความสัมพันธ์อยู่กับเราหรือตลอดระยะเวลาที่จำเป็นเพื่อให้บรรลุวัตถุประสงค์ที่เกี่ยวข้องกับนโยบายฉบับนี้
                 ซึ่งอาจจำเป็นต้องเก็บรักษาไว้ต่อไปภายหลังจากนั้น
@@ -265,33 +295,43 @@ function TermStep({
                 เมื่อหมดความจำเป็นหรือสิ้นสุดระยะเวลาดังกล่าว
               </p>
 
-              <h4 className="font-semibold text-gray-800 mb-2 text-base mt-4">สิทธิของเจ้าของข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base mt-4">
+                สิทธิของเจ้าของข้อมูลส่วนบุคคล
+              </h4>
               <p className="text-gray-600 mb-3">
                 ภายใต้กฎหมายคุ้มครองข้อมูลส่วนบุคคล
                 คุณมีสิทธิในการดำเนินการดังต่อไปนี้
               </p>
               <div className="space-y-3 bg-white p-4 rounded-lg">
                 <p className="text-gray-600">
-                  <b className="text-gray-800">สิทธิขอถอนความยินยอม (right to withdraw consent)</b>{" "}
+                  <b className="text-gray-800">
+                    สิทธิขอถอนความยินยอม (right to withdraw consent)
+                  </b>{" "}
                   หากคุณได้ให้ความยินยอม เราจะเก็บรวบรวม ใช้
                   หรือเปิดเผยข้อมูลส่วนบุคคลของคุณ
                   ไม่ว่าจะเป็นความยินยอมที่คุณให้ไว้ก่อนวันที่กฎหมายคุ้มครองข้อมูลส่วนบุคคลใช้บังคับหรือหลังจากนั้น
                   คุณมีสิทธิที่จะถอนความยินยอมเมื่อใดก็ได้ตลอดเวลา
                 </p>
                 <p className="text-gray-600">
-                  <b className="text-gray-800">สิทธิขอเข้าถึงข้อมูล (right to access) </b>
+                  <b className="text-gray-800">
+                    สิทธิขอเข้าถึงข้อมูล (right to access){" "}
+                  </b>
                   คุณมีสิทธิขอเข้าถึงข้อมูลส่วนบุคคลของคุณที่อยู่ในความรับผิดชอบของเราและขอให้เราทำสำเนาข้อมูลดังกล่าวให้แก่คุณ
                   รวมถึงขอให้เราเปิดเผยว่าเราได้ข้อมูลส่วนบุคคลของคุณมาได้อย่างไร
                 </p>
                 <p className="text-gray-600">
-                  <b className="text-gray-800">สิทธิขอถ่ายโอนข้อมูล (right to data portability) </b>
+                  <b className="text-gray-800">
+                    สิทธิขอถ่ายโอนข้อมูล (right to data portability){" "}
+                  </b>
                   คุณมีสิทธิขอรับข้อมูลส่วนบุคคลของคุณในกรณีที่เราได้จัดทำข้อมูลส่วนบุคคลนั้นอยู่ในรูปแบบให้สามารถอ่านหรือใช้งานได้ด้วยเครื่องมือหรืออุปกรณ์ที่ทำงานได้โดยอัตโนมัติและสามารถใช้หรือเปิดเผยข้อมูลส่วนบุคคลได้ด้วยวิธีการอัตโนมัติ
                   รวมทั้งมีสิทธิขอให้เราส่งหรือโอนข้อมูลส่วนบุคคลในรูปแบบดังกล่าวไปยังผู้ควบคุมข้อมูลส่วนบุคคลอื่นเมื่อสามารถทำได้ด้วยวิธีการอัตโนมัติ
                   และมีสิทธิขอรับข้อมูลส่วนบุคคลที่เราส่งหรือโอนข้อมูลส่วนบุคคลในรูปแบบดังกล่าวไปยังผู้ควบคุมข้อมูลส่วนบุคคลอื่นโดยตรง
                   เว้นแต่ไม่สามารถดำเนินการได้เพราะเหตุทางเทคนิค
                 </p>
                 <p className="text-gray-600">
-                  <b className="text-gray-800">สิทธิขอคัดค้าน (right to object)</b>{" "}
+                  <b className="text-gray-800">
+                    สิทธิขอคัดค้าน (right to object)
+                  </b>{" "}
                   คุณมีสิทธิขอคัดค้านการเก็บรวบรวม ใช้
                   หรือเปิดเผยข้อมูลส่วนบุคคลของคุณในเวลาใดก็ได้ หากการเก็บรวบรวม
                   ใช้
@@ -315,14 +355,19 @@ function TermStep({
                   คุณมีสิทธิขอให้ระงับการใช้ข้อมูลส่วนบุคคลชั่วคราวในกรณีที่เราอยู่ระหว่างตรวจสอบตามคำร้องขอใช้สิทธิขอแก้ไขข้อมูลส่วนบุคคลหรือขอคัดค้านของคุณหรือกรณีอื่นใดที่เราหมดความจำเป็นและต้องลบหรือทำลายข้อมูลส่วนบุคคลของคุณตามกฎหมายที่เกี่ยวข้องแต่คุณขอให้เราระงับการใช้แทน
                 </p>
                 <p className="text-gray-600">
-                  <b className="text-gray-800">สิทธิขอให้แก้ไขข้อมูล (right to rectification)</b>{" "}
+                  <b className="text-gray-800">
+                    สิทธิขอให้แก้ไขข้อมูล (right to rectification)
+                  </b>{" "}
                   คุณมีสิทธิขอแก้ไขข้อมูลส่วนบุคคลของคุณให้ถูกต้อง เป็นปัจจุบัน
                   สมบูรณ์ และไม่ก่อให้เกิดความเข้าใจผิด
                 </p>
                 <p className="text-gray-600">
-                  <b className="text-gray-800">สิทธิร้องเรียน (right to lodge a complaint) </b>
+                  <b className="text-gray-800">
+                    สิทธิร้องเรียน (right to lodge a complaint){" "}
+                  </b>
                   คุณมีสิทธิร้องเรียนต่อผู้มีอำนาจตามกฎหมายที่เกี่ยวข้อง
-                  หากคุณเชื่อว่าการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของคุณ
+                  หากคุณเชื่อว่าการเก็บรวบรวม ใช้
+                  หรือเปิดเผยข้อมูลส่วนบุคคลของคุณ
                   เป็นการกระทำในลักษณะที่ฝ่าฝืนหรือไม่ปฏิบัติตามกฎหมายที่เกี่ยวข้อง
                 </p>
               </div>
@@ -338,7 +383,9 @@ function TermStep({
             </div>
 
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">การโฆษณาและการตลาด</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                การโฆษณาและการตลาด
+              </h4>
               <p className="text-gray-600">
                 เราอาจส่งข้อมูลหรือจดหมายข่าวไปยังอีเมลของคุณ
                 โดยมีวัตถุประสงค์เพื่อเสนอสิ่งที่น่าสนกับคุณ
@@ -349,7 +396,9 @@ function TermStep({
             </div>
 
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">เทคโนโลยีติดตามตัวบุคคล (Cookies)</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                เทคโนโลยีติดตามตัวบุคคล (Cookies)
+              </h4>
               <p className="text-gray-600">
                 เพื่อเพิ่มประสบการณ์การใช้งานของคุณให้สมบูรณ์และมีประสิทธิภาพมากขึ้น
                 เราใช้คุกกี้ (Cookies)หรือเทคโนโลยีที่คล้ายคลึงกัน
@@ -361,7 +410,9 @@ function TermStep({
               </p>
             </div>
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">การรักษาความมั่งคงปลอดภัยของข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                การรักษาความมั่งคงปลอดภัยของข้อมูลส่วนบุคคล
+              </h4>
               <p className="text-gray-600">
                 เราจะรักษาความมั่นคงปลอดภัยของข้อมูลส่วนบุคคลของคุณไว้ตามหลักการ
                 การรักษาความลับ (confidentiality) ความถูกต้องครบถ้วน (integrity)
@@ -375,7 +426,9 @@ function TermStep({
                 control)
               </p>
 
-              <h4 className="font-semibold text-gray-800 mb-2 text-base mt-4">การแจ้งเหตุละเมิดข้อมูลส่วนบุคคล</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base mt-4">
+                การแจ้งเหตุละเมิดข้อมูลส่วนบุคคล
+              </h4>
               <p className="text-gray-600">
                 ในกรณีที่มีเหตุละเมิดข้อมูลส่วนบุคคลของคุณเกิดขึ้น
                 เราจะแจ้งให้สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลทราบโดยไม่ชักช้าภายใน
@@ -386,17 +439,23 @@ function TermStep({
               </p>
             </div>
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">การแก้ไขเปลี่ยนแปลงนโยบายความเป็นส่วนตัว</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                การแก้ไขเปลี่ยนแปลงนโยบายความเป็นส่วนตัว
+              </h4>
               <p className="text-gray-600">
                 เราอาจแก้ไขเปลี่ยนแปลงนโยบายนี้เป็นครั้งคราว
                 โดยคุณสามารถทราบข้อกำหนดและเงื่อนไขนโยบายที่มีการแก้ไขเปลี่ยนแปลงนี้ได้ผ่านทางเว็บไซต์ของเรา
                 <br />
-                <span className="text-amber-600 font-medium">นโยบายนี้แก้ไขล่าสุดและมีผลใช้บังคับตั้งแต่วันที่ 20 ธันวาคม
-                2566</span>
+                <span className="text-amber-600 font-medium">
+                  นโยบายนี้แก้ไขล่าสุดและมีผลใช้บังคับตั้งแต่วันที่ 20 ธันวาคม
+                  2566
+                </span>
               </p>
             </div>
             <div className="mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2 text-base">นโยบายความเป็นส่วนตัวของเว็บไซต์อื่น</h4>
+              <h4 className="font-semibold text-gray-800 mb-2 text-base">
+                นโยบายความเป็นส่วนตัวของเว็บไซต์อื่น
+              </h4>
               <p className="text-gray-600">
                 นโยบายความเป็นส่วนตัวฉบับนี้ใช้สำหรับการเสนอสินค้า บริการ
                 และการใช้งานบนเว็บไซต์สำหรับลูกค้าของเราเท่านั้น
@@ -409,7 +468,9 @@ function TermStep({
           </div>
           {/* footer */}
           <div className="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
-            <h4 className="font-semibold text-gray-800 mb-3 text-base">รายละเอียดการติดต่อ</h4>
+            <h4 className="font-semibold text-gray-800 mb-3 text-base">
+              รายละเอียดการติดต่อ
+            </h4>
             <p className="text-gray-600 mb-4">
               หากคุณต้องการสอบถามข้อมูลเกี่ยวกับนโยบายความเป็นส่วนตัวฉบับนี้
               รวมถึงการขอใช้สิทธิต่าง ๆ
@@ -419,7 +480,9 @@ function TermStep({
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="bg-white p-3 rounded-lg border border-gray-200">
-                <b className="text-amber-700 text-sm">ผู้ควบคุมข้อมูลส่วนบุคคล</b>
+                <b className="text-amber-700 text-sm">
+                  ผู้ควบคุมข้อมูลส่วนบุคคล
+                </b>
                 <p className="text-gray-600 text-sm mt-2">
                   บริษัท โกลด์เด้น 99 จำกัด
                   <br />
@@ -435,7 +498,9 @@ function TermStep({
               </div>
 
               <div className="bg-white p-3 rounded-lg border border-gray-200">
-                <b className="text-amber-700 text-sm">เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล</b>
+                <b className="text-amber-700 text-sm">
+                  เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล
+                </b>
                 <p className="text-gray-600 text-sm mt-2">
                   นายนัฐกาญ จันทร์ขำ
                   <br />
