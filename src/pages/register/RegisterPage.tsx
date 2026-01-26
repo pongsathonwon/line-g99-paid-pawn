@@ -16,20 +16,20 @@ function RegisterPage() {
           <RegisterCard
             to="/thai-register"
             title="ลูกค้าไทย"
-            description="ลงทะเบียนออนไลน์"
+            description="ยืนยันตัวตนผ่านโทรศัพท์มือถือ"
             highlight
           />
 
           <RegisterCard
             to="/foreign-register"
-            title="Foreign Customer"
-            description="Register with mobile number"
+            title="ลูกค้าชาวต่างชาติ"
+            description="ยืนยันตัวตนผ่านโทรศัพท์มือถือ"
           />
 
           <RegisterCard
             to="/foreign-counter-register"
-            title="Foreign Customer"
-            description="Register at G99 counter"
+            title="ลูกค้าชาวต่างชาติ"
+            description="ยืนยันตัวตนผ่านหน้าสาขา"
           />
         </div>
 
@@ -41,7 +41,7 @@ function RegisterPage() {
           <ul className="space-y-4 text-sm text-gray-700 mb-6">
             <li>
               <strong className="block">เอกสารยืนยันตัวตน</strong>
-              เลขประจำตัวประชาชน / รหัสลูกค้า / เบอร์โทรศัพท์
+              เลขประจำตัวประชาชน / รหัสลูกค้า
             </li>
             <li>
               <strong className="block">เบอร์โทรศัพท์มือถือ</strong>
@@ -49,37 +49,17 @@ function RegisterPage() {
             </li>
             <li>
               <strong className="block">การยืนยันตัวตน</strong>
-              หากไม่สามารถยืนยัน OTP ได้ กรุณาลงทะเบียนที่หน้าร้าน
-            </li>
-          </ul>
-
-          <div className="border-t border-gray-200 my-6" />
-
-          <h4 className="text-base font-semibold text-gray-900 mb-3">
-            For Foreign Customers
-          </h4>
-
-          <ul className="space-y-4 text-sm text-gray-700">
-            <li>
-              <strong className="block">Identity Information</strong>
-              Passport, customer code, or registered mobile number
-            </li>
-            <li>
-              <strong className="block">Mobile Phone</strong>
-              Used for OTP verification
-            </li>
-            <li>
-              <strong className="block">In-store Registration</strong>
-              If OTP verification is not possible, please register at our store
+              หากไม่สามารถยืนยัน OTP ได้ หรือเปลี่ยนเบอร์โทรศัพท์
+              กรุณาลงทะเบียนที่หน้าร้าน
             </li>
           </ul>
         </div>
 
         <div className="text-center text-sm text-gray-600">
-          ต้องการความช่วยเหลือ?{" "}
-          <a href="#" className="text-brand-red font-medium hover:underline">
+          ต้องการความช่วยเหลือ{" "}
+          <span className="text-brand-red font-medium hover:underline">
             ติดต่อเรา
-          </a>
+          </span>
         </div>
       </main>
     </div>

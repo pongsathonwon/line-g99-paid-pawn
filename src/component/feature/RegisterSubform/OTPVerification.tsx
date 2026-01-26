@@ -9,13 +9,10 @@ import type { TOtpRequestRes } from "@/types/register";
 import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
 
-type RegisterLocale = "th" | "en";
-
 type TOTPVerificationProps = PropsWithChildren<{
   mobileNo: TMaybe<string>;
   otpRes: TMaybe<TOtpRequestRes>;
   otpLength: number;
-  locale: RegisterLocale;
   onSuccess: (verifyRes: boolean) => void;
   onSetOtp: (otpRes: TOtpRequestRes) => void;
 }>;
@@ -26,10 +23,9 @@ function OTPVerification({
   otpRes,
   onSetOtp,
   onSuccess,
-  locale,
   children,
 }: TOTPVerificationProps) {
-  const t = REGISTER_LOCALE_TEXT[locale].otp;
+  const t = REGISTER_LOCALE_TEXT.th.otp;
   const { next } = useMultistepForm();
   const [otpError, setOtpError] = useState<string>("");
   const [currentOtp, setCurrentOtp] = useState<string>("");

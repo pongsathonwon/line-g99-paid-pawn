@@ -74,6 +74,22 @@ export type TRegisterReq = {
   isVerified: boolean;
 };
 
+// Register Request for foreign counter (simplified - backend fetches branchCode from CustInfo)
+export type TRegisterRequestReq = {
+  lineUid: string;
+  custNo: string;
+  isConsent: boolean;
+};
+
+export type TRegisterRequestRes = {
+  lineUid: string;
+  custNo: string;
+  branchCode: string;
+  isConsent: boolean;
+  isVerified: boolean;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+};
+
 export type TForeignRegisterReq = TRegisterReq & {
   passportNumber?: string;
   nationality?: string;

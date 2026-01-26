@@ -6,7 +6,6 @@ function ForeignRegisterForm() {
     <BaseRegisterForm
       config={{
         nationCode: "2",
-        locale: "en",
         defaultSearchMethod: "custCode",
         steps: FOREIGN_REGISTER_STEPS,
         mode: "foreign",

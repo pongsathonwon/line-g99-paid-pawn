@@ -6,7 +6,6 @@ function ThaiRegisterForm() {
     <BaseRegisterForm
       config={{
         nationCode: "1",
-        locale: "th",
         defaultSearchMethod: "idCard",
         steps: THAI_REGISTER_STEPS,
         mode: "thai",

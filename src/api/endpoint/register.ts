@@ -8,6 +8,8 @@ import type {
   TOtpVerifyReq,
   TOtpVerifyRes,
   TRegisterReq,
+  TRegisterRequestReq,
+  TRegisterRequestRes,
   TForeignRegisterReq,
   TRegisterRes,
   TForeignRegisterStatusReq,
@@ -126,7 +128,30 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
   }
 }
 
-
+/**
+ * Register request for foreign counter (simplified registration)
+ * Endpoint: POST /register-request
+ * Backend saves: lineUid, custNo, branchCode (from CustInfo), isConsent, isVerified=false, status=PENDING
+ */
+export const registerRequest = async (req: TRegisterRequestReq): Promise<TRegisterRequestRes> => {
+  try {
+    const { data } = await axiosClient.post<TRegisterRequestRes>(
+      '/register-request',
+      req
+    );
+    return data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      const apiErrorMessage = e.response?.data.message;
+      if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
+      throw new Error(apiErrorMessage);
+    }
+    if (e instanceof Error) {
+      throw e;
+    }
+    throw new Error(String(e));
+  }
+};
 
 /**
  * Register foreign user (requires approval)
@@ -203,6 +228,7 @@ export const REGISTER_API = {
   requestOtp,
   verifyOtp,
   registerUser,
+  registerRequest,
   registerForeignUser,
   foreignRegisterStatus,
 };

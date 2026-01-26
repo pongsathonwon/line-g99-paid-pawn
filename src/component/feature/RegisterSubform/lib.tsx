@@ -29,3 +29,20 @@ export const searchValidator = (searchMethod: TSearchUserMethod) => {
     case "custCode":
   }
 };
+
+export type TRegisterFormMode = "thai" | "foreign" | "foreign-counter";
+
+export type TSearchMethodOption = { value: TSearchUserMethod; label: string };
+
+export const getSearchOption = (
+  reigsterMode: TRegisterFormMode,
+): TSearchMethodOption[] => {
+  switch (reigsterMode) {
+    case "thai":
+      return [{ value: "idCard", label: "บัตรประชาชน" }];
+    case "foreign":
+      return [{ value: "custCode", label: "รหัสลูกค้า" }];
+    case "foreign-counter":
+      return [{ value: "custCode", label: "รหัสลูกค้า" }];
+  }
+};

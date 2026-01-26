@@ -2,9 +2,15 @@ import FormControl from "@/component/FormControl/FormControl";
 import { useMemo, type PropsWithChildren } from "react";
 import type { TSearchUserMethod, TSearchUserRes } from "@/types/register";
 import { Button } from "@/component/Button";
-import { searchMethodMapper } from "./lib";
+import {
+  getSearchOption,
+  searchMethodMapper,
+  type TRegisterFormMode,
+} from "./lib";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
-import RadioGroup, { type TRadioOption } from "@/component/ui/RadioGroup/RadioGroup";
+import RadioGroup, {
+  type TRadioOption,
+} from "@/component/ui/RadioGroup/RadioGroup";
 import { useMutation } from "@tanstack/react-query";
 import { REGISTER_API } from "@/api/endpoint/register";
 import { Controller, useForm } from "react-hook-form";
@@ -19,8 +25,7 @@ type TSearchCustomerProps = {
   userForm: TMaybe<TSearchUserRes>;
   onSetUser: (res: TSearchUserRes | null) => void;
   onChangeSearchMethod: (method: TSearchUserMethod) => void;
-  locale: "th" | "en";
-  mode?: "thai" | "foreign" | "foreign-counter";
+  mode: TRegisterFormMode;
   nationCode: string;
 };
 
@@ -28,53 +33,21 @@ type TSearchCustomerFormState = {
   searchValue: string;
 };
 
-const SEARCH_METHOD_OPTIONS: {
-  value: TSearchUserMethod;
-  labelTh: string;
-  labelEn: string;
-}[] = [
-  {
-    value: "idCard",
-    labelTh: "บัตรประชาชน / Passport",
-    labelEn: "ID Card / Passport",
-  },
-  {
-    value: "mobileNumber",
-    labelTh: "เบอร์โทรศัพท์",
-    labelEn: "Mobile Number",
-  },
-  {
-    value: "custCode",
-    labelTh: "รหัสลูกค้า",
-    labelEn: "Customer Code",
-  },
-];
-
 function SearchCustomer({
   searchMethod,
   userForm,
   onSetUser,
   onChangeSearchMethod,
-  locale,
   mode,
   nationCode,
 }: PropsWithChildren<TSearchCustomerProps>) {
-  const t = REGISTER_LOCALE_TEXT[locale];
+  const t = REGISTER_LOCALE_TEXT.th;
   const { next } = useMultistepForm();
   const validUserForm = userForm !== null;
-  const radioOptions = useMemo((): TRadioOption<TSearchUserMethod>[] => {
-    const filtered =
-      mode === "foreign-counter"
-        ? SEARCH_METHOD_OPTIONS.filter(
-            (opt) => opt.value === "idCard" || opt.value === "custCode"
-          )
-        : SEARCH_METHOD_OPTIONS;
-
-    return filtered.map((opt) => ({
-      value: opt.value,
-      label: locale === "th" ? opt.labelTh : opt.labelEn,
-    }));
-  }, [mode, locale]);
+  const radioOptions = useMemo(
+    (): TRadioOption<TSearchUserMethod>[] => getSearchOption(mode),
+    [mode],
+  );
 
   const handleSearchMethodChange = (method: TSearchUserMethod) => {
     onChangeSearchMethod(method);
@@ -86,10 +59,7 @@ function SearchCustomer({
     [searchMethod],
   );
 
-  const searchLabel = useMemo(
-    () => t.labels[searchMethod],
-    [locale, searchMethod],
-  );
+  const searchLabel = useMemo(() => t.labels[searchMethod], [searchMethod]);
 
   const validationSchema = useMemo(
     () =>
@@ -97,7 +67,7 @@ function SearchCustomer({
         required: t.errors.requiredByField[searchMethod],
         pattern: t.errors.pattern[searchMethod],
       }),
-    [locale, searchMethod],
+    [searchMethod],
   );
 
   const {
@@ -130,8 +100,13 @@ function SearchCustomer({
   };
 
   const onGoNext = () => {
+    console.log(validUserForm);
     if (!validUserForm) return;
-    next();
+    try {
+      next();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -142,7 +117,7 @@ function SearchCustomer({
         options={radioOptions}
         value={searchMethod}
         onChange={handleSearchMethodChange}
-        label={locale === "th" ? "ค้นหาด้วย" : "Search By"}
+        label="ค้นหาด้วย"
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

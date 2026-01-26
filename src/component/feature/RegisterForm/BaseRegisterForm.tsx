@@ -11,13 +11,13 @@ import {
 } from "./hooks/useRegisterFormState";
 import type { RegisterStep, TStepType } from "./register.steps";
 import type { TSearchUserMethod } from "@/types/register";
+import type { TRegisterFormMode } from "../RegisterSubform/lib";
 
 export type TRegisterFormConfig = {
   nationCode: string;
-  locale: "th" | "en";
   defaultSearchMethod: TSearchUserMethod;
   steps: RegisterStep[];
-  mode?: "thai" | "foreign" | "foreign-counter";
+  mode: TRegisterFormMode;
   includeOtp: boolean;
 };
 
@@ -33,7 +33,6 @@ function StepRenderer({ stepType, config, formState }: TStepRendererProps) {
       return (
         <SearchCustomer
           nationCode={config.nationCode}
-          locale={config.locale}
           mode={config.mode}
           searchMethod={formState.searchMethod}
           userForm={formState.user}
@@ -45,7 +44,6 @@ function StepRenderer({ stepType, config, formState }: TStepRendererProps) {
       if (!config.includeOtp) return null;
       return (
         <OTPVerification
-          locale={config.locale}
           otpLength={6}
           mobileNo={formState.mobileNo}
           otpRes={formState.reqOtp}
@@ -57,11 +55,11 @@ function StepRenderer({ stepType, config, formState }: TStepRendererProps) {
       if (!formState.user) return null;
       return (
         <TermStep
-          locale={config.locale}
           isConsent={formState.isConsent}
           onConsent={formState.setConsent}
           userData={formState.user}
           isVerified={formState.isVerify}
+          mode={config.mode}
         />
       );
     case "success":
