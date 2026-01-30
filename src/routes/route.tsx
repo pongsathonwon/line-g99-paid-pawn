@@ -12,13 +12,13 @@ import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 // Lazy load page components
 const RegisterPage = lazy(() => import("../pages/register/RegisterPage"));
 const ThaiRegisterPage = lazy(
-  () => import("../pages/register/ThaiRegisterPage")
+  () => import("../pages/register/ThaiRegisterPage"),
 );
 const ForeignRegisterPage = lazy(
-  () => import("../pages/register/ForeignRegisterPage")
+  () => import("../pages/register/ForeignRegisterPage"),
 );
 const ForeignCounterRegisterPage = lazy(
-  () => import("@/pages/register/ForeignCounterRegisterPage")
+  () => import("@/pages/register/ForeignCounterRegisterPage"),
 );
 const RegisterResultPage = lazy(() => import("../pages/RegisterResultPage"));
 const HomePage = lazy(() => import("../pages/HomePage"));
@@ -29,6 +29,7 @@ const PaymentErrorPage = lazy(() => import("@/pages/PaymentErrorPage"));
 const PaymentPendingPage = lazy(() => import("@/pages/PaymentPendingPage"));
 const HistoryPage = lazy(() => import("../pages/HistoryPage"));
 const TermPage = lazy(() => import("@/pages/TermPage"));
+const TestPage = lazy(() => import("@/pages/TestPage"));
 
 export const APP_ROUTES = createBrowserRouter([
   {
@@ -121,5 +122,9 @@ export const APP_ROUTES = createBrowserRouter([
         element: <HistoryPage />,
       },
     ],
+  },
+  {
+    path: "test",
+    element: <TestPage />,
   },
 ]);
