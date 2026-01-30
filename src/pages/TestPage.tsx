@@ -12,7 +12,12 @@ import Toast from "@/component/ui/Toast/Toast";
 import type { TPawnStatusEnum } from "@/hook/query/lib";
 import type { TToast } from "@/types/toast.type";
 
-const formFieldStyle: Array<{ color: TColor; label: string }> = [
+const formFieldStyle: Array<{
+  color: TColor;
+  label: string;
+  helper?: string;
+  error?: string;
+}> = [
   {
     color: "base",
     label: "พื้น",
@@ -20,6 +25,26 @@ const formFieldStyle: Array<{ color: TColor; label: string }> = [
   {
     color: "gold",
     label: "สีทอง",
+  },
+  {
+    color: "base",
+    label: "พื้น",
+    helper: "กรอกข้อมูล",
+  },
+  {
+    color: "gold",
+    label: "สีทอง",
+    helper: "กรอกข้อมูล",
+  },
+  {
+    color: "base",
+    label: "พื้น",
+    error: "ข้อมูลไม่ถูกต้อง",
+  },
+  {
+    color: "gold",
+    label: "สีทอง",
+    error: "ข้อมูลไม่ถูกต้อง",
   },
 ];
 
@@ -141,10 +166,12 @@ function TestPage() {
     <section>
       <div className="flex flex-col p-4 gap-4">
         <span>input box</span>
-        {formFieldStyle.map(({ color, label }, i) => (
+        {formFieldStyle.map(({ color, label, helper, error }, i) => (
           <FormControl color={color} key={i}>
             <FormControl.Label>{label}</FormControl.Label>
             <FormControl.Input placeholder="กรอก" />
+            {helper && <FormControl.Helper>{helper}</FormControl.Helper>}
+            {error && <FormControl.Error>{error}</FormControl.Error>}
           </FormControl>
         ))}
         <span>button</span>
