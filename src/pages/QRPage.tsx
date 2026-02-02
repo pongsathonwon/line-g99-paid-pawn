@@ -12,7 +12,7 @@ function QRPage() {
   if (!interest) return <div>มีข้อผิดพลาด ไม่พบเอกสารจำนำที่ชำระได้</div>;
 
   const ref1 = interest.pawnNumb;
-  const ref2 = interest.custCode;
+  const ref2 = String(interest.id).padStart(13, "0");
   const amount = (interest.fee + interest.netInterest).toFixed(2);
 
   return (
