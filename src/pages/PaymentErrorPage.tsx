@@ -29,7 +29,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
         styleType="outline"
         size="md"
         fullWidth
-        className="mb-4 max-w-[260px]"
+        className="mb-4 max-w-65"
         onClick={onContact}
       >
         ติดต่อเจ้าหน้าที่
@@ -41,7 +41,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
         styleType="solid"
         size="md"
         fullWidth
-        className="max-w-[260px]"
+        className="max-w-65"
         onClick={onRetry}
       >
         ตรวจสอบอีกครั้ง
