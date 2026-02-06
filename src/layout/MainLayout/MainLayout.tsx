@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import ProfileBadge from "@/component/ui/ProfileBadge";
-import BottomNav from "@/component/ui/BottomNav";
 import { useLineContext } from "@/context/LineContext/LineContext";
 import { useAuthContext } from "@/context/AuthContext/AuthContext";
+import ProfileBadge from "@/component/Ui/ProfileBadge";
+import BottomNav from "@/component/Ui/BottomNav";
 
 function MainLayout() {
   const { lineCtx } = useLineContext();
