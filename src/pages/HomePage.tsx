@@ -48,7 +48,7 @@ function HomePage() {
                 />
               </NavLink>
             </li>
-          )
+          ),
         )}
         {cannotBePaid?.map(
           ({ pawnNumb, pawnPrice, nextPaidDate, pawnStatus, dateDiff }) => (
@@ -61,7 +61,7 @@ function HomePage() {
                 pawnStatus={pawnStatus}
               />
             </li>
-          )
+          ),
         )}
       </ul>
     </div>

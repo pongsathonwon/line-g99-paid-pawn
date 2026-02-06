@@ -15,8 +15,9 @@ function ForeignRegisterPage() {
             </p>
             <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4 inline-block">
               <p className="text-sm text-yellow-800">
-                <strong>Note:</strong> Foreign user registrations require approval from our staff.
-                You will be notified via LINE once your account is approved.
+                <strong>Note:</strong> Foreign user registrations require
+                approval from our staff. You will be notified via LINE once your
+                account is approved.
               </p>
             </div>
           </div>

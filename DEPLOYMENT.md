@@ -44,11 +44,11 @@ Vercel should automatically detect these settings from [vercel.json](vercel.json
 
 Click **"Environment Variables"** and add:
 
-| Name | Value | Environment |
-|------|-------|-------------|
-| `VITE_LIFF_ID` | `2008362552-k7e4Yw0N` | Production, Preview, Development |
-| `VITE_BASE_URL` | `https://g99pawnpay.golden99.co.th/pawn-online-api` | Production, Preview, Development |
-| `VITE_APP_VERSION` | `1.0.2-poc` | Production, Preview, Development |
+| Name               | Value                                               | Environment                      |
+| ------------------ | --------------------------------------------------- | -------------------------------- |
+| `VITE_LIFF_ID`     | `2008362552-k7e4Yw0N`                               | Production, Preview, Development |
+| `VITE_BASE_URL`    | `https://g99pawnpay.golden99.co.th/pawn-online-api` | Production, Preview, Development |
+| `VITE_APP_VERSION` | `1.0.2-poc`                                         | Production, Preview, Development |
 
 > **Note**: Apply to all environments (Production, Preview, Development) for consistent behavior
 
@@ -138,15 +138,19 @@ vercel env add VITE_APP_VERSION
 ### Troubleshooting
 
 **Issue**: "LIFF ID is not registered"
+
 - **Solution**: Ensure LIFF Endpoint URL in LINE Developers Console matches your Vercel URL exactly
 
 **Issue**: "API requests failing (404/CORS)"
+
 - **Solution**: Verify `VITE_BASE_URL` is set correctly in Vercel environment variables
 
 **Issue**: "Blank page after refresh"
+
 - **Solution**: Ensure [vercel.json](vercel.json) has the SPA rewrite rule (should be auto-included)
 
 **Issue**: "Build fails on Vercel but works locally"
+
 - **Solution**: Check for case-sensitive import issues (Windows is case-insensitive, Linux is not)
   - Ensure all imports match actual file names exactly: `@/component/ui/Toast/ToastContainer`
 
@@ -162,6 +166,7 @@ Once set up, Vercel automatically deploys:
 ### Enable Auto-Deploy
 
 In Vercel Dashboard:
+
 1. Go to **Project Settings** → **Git**
 2. Ensure "Production Branch" is set to `main` (or your preferred branch)
 3. Enable preview deployments for all branches
@@ -223,6 +228,7 @@ To use a custom domain instead of `vercel.app`:
 ## Cost Estimate
 
 **Vercel Hobby (Free) Tier**:
+
 - ✅ Unlimited deployments
 - ✅ 100GB bandwidth/month
 - ✅ Automatic HTTPS
@@ -231,6 +237,7 @@ To use a custom domain instead of `vercel.app`:
 - ✅ Free for POC use
 
 **When to Upgrade**:
+
 - Bandwidth exceeds 100GB/month
 - Need team collaboration features
 - Need password-protected deployments
@@ -250,6 +257,7 @@ To use a custom domain instead of `vercel.app`:
 ## Support
 
 For issues with:
+
 - **Vercel Deployment**: Check [Vercel Status](https://vercel-status.com) or contact Vercel support
 - **LINE LIFF**: Refer to [LINE Developers FAQ](https://developers.line.biz/en/faq/)
 - **This Application**: Contact the development team
