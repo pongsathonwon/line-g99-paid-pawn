@@ -15,12 +15,15 @@ import {
 } from "@/utils/otp";
 
 export function OTPVerificationStep() {
-  const { formData, setFormData, setCurrentStep } = useRegistrationContext();
+  const { formData, handleSetFormData, setCurrentStep } =
+    useRegistrationContext();
   const { auth } = useAuthContext();
   const [otpError, setOtpError] = useState<string>("");
   const [canSubmit, setCanSubmit] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
   const otpInputsRef = useRef<HTMLDivElement>(null);
+
+  const renderArray = Array.from({ length: 6 });
 
   // Request OTP on mount
   const requestOtpMutation = useMutation({
@@ -31,7 +34,7 @@ export function OTPVerificationStep() {
       return REGISTER_API.requestOtp({ msisdn: formData.userData.mobileNo });
     },
     onSuccess: (data) => {
-      setFormData({
+      handleSetFormData({
         otpToken: data.token,
         otpRefNo: data.refno,
       });
@@ -54,7 +57,7 @@ export function OTPVerificationStep() {
       });
     },
     onSuccess: () => {
-      setFormData({ otpCode: getOtpValue() });
+      handleSetFormData({ otpCode: getOtpValue() });
       // Register user after OTP verification
       registerMutation.mutate();
     },
@@ -174,7 +177,7 @@ export function OTPVerificationStep() {
         {/* OTP Input Fields */}
         <div className="space-y-4">
           <div ref={otpInputsRef} className="flex justify-center gap-3">
-            {[...Array(6)].map((_, index) => (
+            {[...renderArray].map((_, index) => (
               <input
                 key={index}
                 type="text"

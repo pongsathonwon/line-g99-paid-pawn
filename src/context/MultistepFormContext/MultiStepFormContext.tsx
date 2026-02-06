@@ -5,6 +5,7 @@ type TMultiStepFormContext = {
   next: () => void;
   back: () => void;
   activePage: number;
+  totalPage: number;
 };
 
 export const MultiStepFormContext =
@@ -34,7 +35,9 @@ export function MultiStepFormContextProvider({
     });
   };
   return (
-    <MultiStepFormContext.Provider value={{ activePage, next, back }}>
+    <MultiStepFormContext.Provider
+      value={{ activePage, totalPage, next, back }}
+    >
       {children}
     </MultiStepFormContext.Provider>
   );

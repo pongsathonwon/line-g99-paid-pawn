@@ -1,11 +1,9 @@
-import { useLineContext } from "@/context/LineContext/LineContext";
+type TProfileBadgeProps = {
+  readonly pictureUrl: string;
+  readonly displayName: string;
+};
 
-function ProfileBadge() {
-  const { lineCtx } = useLineContext();
-  const displayName = lineCtx?.profile?.displayName ?? "ไม่พบชื่อในระบบ";
-  const pictureUrl =
-    lineCtx?.profile?.pictureUrl ??
-    "https://fastly.picsum.photos/id/962/200/200.jpg?hmac=XehF7z9JYkgC-2ZfSP05h7eyumIq9wNKUDoCLklIhr4";
+function ProfileBadge({ pictureUrl, displayName }: TProfileBadgeProps) {
   return (
     <header className="fixed top-0 left-0 w-full h-(--header-height) overflow-hidden bg-white">
       <div className="relative -z-10">
@@ -39,11 +37,14 @@ function ProfileBadge() {
           />
         </svg>
       </div>
-      <div className="container mx-auto mt-auto h-full px-4 sm:px-8 lg:px-16">
+      <div className="container mx-auto mt-auto h-full p-4 sm:px-8 lg:px-16">
         <div className="flex flex-col h-full justify-between">
-          <div className="flex justify-between items-center">
-            <div>left</div>
-            <div>end</div>
+          <div>
+            <img
+              src="logo/logo-text-large.png"
+              className="max-h-10 mx-auto"
+              alt="logo with text"
+            />
           </div>
           <div className="flex gap-1.5 backdrop-blur-xs p-1 bg-white/5 w-fit rounded-lg">
             <img

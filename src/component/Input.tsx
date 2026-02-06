@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type {
   FormComponentProps,
   InputSize,
@@ -55,6 +55,16 @@ interface InputProps
       </div>
 
 */
+const createInputId = ({
+  id,
+  errorMessage,
+  helperText,
+}: Pick<InputProps, "id" | "errorMessage" | "helperText">) => {
+  if (errorMessage) return `${id}-error`;
+  if (helperText) return `${id}-helper`;
+  return undefined;
+};
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -116,8 +126,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ${variantClasses[actualVariant]}
       ${className}
     `;
-    // .trim()
-    // .replace(/\s+/g, " ");
+
+    const inputId = useMemo(
+      () => createInputId({ id, helperText, errorMessage }),
+      [id, errorMessage, helperText]
+    );
 
     return (
       <div className={`w-full ${containerClassName}`}>
@@ -136,13 +149,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={inputClasses}
           aria-invalid={actualVariant === "error"}
           aria-required={isRequired}
-          aria-describedby={
-            errorMessage
-              ? `${id}-error`
-              : helperText
-              ? `${id}-helper`
-              : undefined
-          }
+          aria-describedby={inputId}
           {...restProps}
         />
 

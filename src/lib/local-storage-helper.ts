@@ -4,7 +4,7 @@ import { LocalTokenSchema } from "../zod/token";
 
 const baseSetToLocal = ({ key, duration }: TLocalStorageSetup) => <T>(
     value: T) => {
-    const exp = (new Date()).getTime() + duration
+    const exp = Date.now() + duration
     const formattedValue = { value, exp }
     const stringValue = JSON.stringify(formattedValue)
     localStorage.setItem(key, stringValue)
@@ -17,7 +17,7 @@ const baseGetLocal = (key: string) => <T>(safeParser: (v: unknown) => ZodSafePar
     const temp = safeParser(raw)
     if (!temp.success) return null
     const praseData = temp.data
-    const currentUnix = (new Date()).getTime()
+    const currentUnix = Date.now()
     if (praseData.exp <= currentUnix) return null
     return praseData.value
 }

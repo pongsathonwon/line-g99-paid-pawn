@@ -11,9 +11,15 @@ import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 
 // Lazy load page components
 const RegisterPage = lazy(() => import("../pages/register/RegisterPage"));
-const ThaiRegisterPage = lazy(() => import("../pages/register/ThaiRegisterPage"));
-const ForeignRegisterPage = lazy(() => import("../pages/register/ForeignRegisterPage"));
-const ForeignCounterRegisterPage = lazy(() => import("@/pages/register/ForeignCounterRegisterPage"));
+const ThaiRegisterPage = lazy(
+  () => import("../pages/register/ThaiRegisterPage"),
+);
+const ForeignRegisterPage = lazy(
+  () => import("../pages/register/ForeignRegisterPage"),
+);
+const ForeignCounterRegisterPage = lazy(
+  () => import("@/pages/register/ForeignCounterRegisterPage"),
+);
 const RegisterResultPage = lazy(() => import("../pages/RegisterResultPage"));
 const HomePage = lazy(() => import("../pages/HomePage"));
 const PaymentDetailPage = lazy(() => import("../pages/PaymentDetailPage"));
@@ -22,8 +28,8 @@ const PaymentSuccessPage = lazy(() => import("../pages/PaymentSuccessPage"));
 const PaymentErrorPage = lazy(() => import("@/pages/PaymentErrorPage"));
 const PaymentPendingPage = lazy(() => import("@/pages/PaymentPendingPage"));
 const HistoryPage = lazy(() => import("../pages/HistoryPage"));
-const NotificationPage = lazy(() => import("../pages/NotificationPage"));
 const TermPage = lazy(() => import("@/pages/TermPage"));
+const TestPage = lazy(() => import("@/pages/TestPage"));
 
 export const APP_ROUTES = createBrowserRouter([
   {
@@ -32,7 +38,11 @@ export const APP_ROUTES = createBrowserRouter([
     errorElement: <NotfoundPage />,
   },
   {
-    element: <PreventReRegister><Outlet /></PreventReRegister>,
+    element: (
+      <PreventReRegister>
+        <Outlet />
+      </PreventReRegister>
+    ),
     children: [
       {
         path: "register/result",
@@ -111,10 +121,10 @@ export const APP_ROUTES = createBrowserRouter([
         path: "history",
         element: <HistoryPage />,
       },
-      {
-        path: "notification",
-        element: <NotificationPage />,
-      },
     ],
+  },
+  {
+    path: "test",
+    element: <TestPage />,
   },
 ]);

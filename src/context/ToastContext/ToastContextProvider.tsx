@@ -7,22 +7,16 @@ import {
 import { ToastContext } from "./ToastContext";
 import type { TToast, TToastInput } from "@/types/toast.type";
 import ToastContainer from "@/component/ui/Toast/ToastContainer";
+import { filterToast } from "./lib";
 
 function ToastContextProvider({ children }: PropsWithChildren) {
   const [toasts, setToasts] = useState<TToast[]>([]);
   const timerStep = 1000;
+  const filterToastWithStep = filterToast(timerStep);
   useEffect(() => {
     if (toasts.length === 0) return;
-
     const interval = setInterval(() => {
-      setToasts((prev) =>
-        prev.flatMap(({ duration, ...res }) => {
-          if (!duration || duration <= 0) {
-            return [];
-          }
-          return [{ ...res, duration: duration - timerStep }];
-        })
-      );
+      setToasts((prev) => prev.flatMap(filterToastWithStep));
     }, timerStep);
 
     return () => clearInterval(interval);
@@ -35,7 +29,7 @@ function ToastContextProvider({ children }: PropsWithChildren) {
 
   // Add toast to queue
   const addToast = useCallback((toastInput: TToastInput) => {
-    const id = crypto.randomUUID?.() || `toast-${Date.now()}-${Math.random()}`;
+    const id = crypto.randomUUID?.() || `toast-${Date.now()}`;
     const toast: TToast = {
       id,
       duration: 1000,

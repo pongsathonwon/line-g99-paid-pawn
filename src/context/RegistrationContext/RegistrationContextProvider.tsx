@@ -23,18 +23,18 @@ export function RegistrationContextProvider({
   userType,
 }: TRegistrationContextProviderProps) {
   const [currentStep, setCurrentStep] = useState<TRegistrationStep>("search");
-  const [formData, setFormDataState] = useState<TRegistrationFormData>({
+  const [formData, setFormData] = useState<TRegistrationFormData>({
     ...initialFormData,
     userType,
   });
 
-  const setFormData = (data: Partial<TRegistrationFormData>) => {
-    setFormDataState((prev) => ({ ...prev, ...data }));
+  const handleSetFormData = (data: Partial<TRegistrationFormData>) => {
+    setFormData((prev) => ({ ...prev, ...data }));
   };
 
   const resetForm = () => {
     setCurrentStep("search");
-    setFormDataState({ ...initialFormData, userType });
+    setFormData({ ...initialFormData, userType });
   };
 
   return (
@@ -43,7 +43,7 @@ export function RegistrationContextProvider({
         currentStep,
         formData,
         setCurrentStep,
-        setFormData,
+        handleSetFormData,
         resetForm,
       }}
     >

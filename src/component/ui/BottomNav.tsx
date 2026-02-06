@@ -1,4 +1,4 @@
-import { BellIcon, HistoryIcon, HomeIcon, ReceiptTextIcon } from "lucide-react";
+import { HistoryIcon, HomeIcon, ReceiptTextIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 function BottomNav() {
@@ -43,19 +43,6 @@ function BottomNav() {
             >
               <ReceiptTextIcon />
               <span>เงื่อนไข</span>
-            </NavLink>
-          </li>
-          <li className="aspect-square w-10 lg:w-20 flex flex-col">
-            <NavLink
-              to="/notification"
-              className={({ isActive }) =>
-                isActive
-                  ? "flex flex-col justify-between h-full items-center text-brand-red text-[10px] lg:text-lg"
-                  : "flex flex-col justify-between h-full items-center text-[10px] lg:text-lg"
-              }
-            >
-              <BellIcon />
-              <span>แจ้งเตือน</span>
             </NavLink>
           </li>
         </ul>

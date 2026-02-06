@@ -1,6 +1,59 @@
-# React + TypeScript + Vite
+# LINE G99 Pawn Payment App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A LINE LIFF mini app for G99 Pawn Shop's online payment system (ต่อดอกออนไลน์). Built with React 19, TypeScript, and Vite.
+
+## Quick Start
+
+### Development
+
+```bash
+npm install
+npm run dev
+```
+
+### Production Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## Deployment
+
+### Vercel (Recommended for POC)
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+
+Quick deploy:
+1. Push to GitHub
+2. Import to [Vercel](https://vercel.com)
+3. Add environment variables (see below)
+4. Deploy!
+
+### Docker
+
+```bash
+docker build \
+  --build-arg VITE_LIFF_ID=your-liff-id \
+  --build-arg VITE_BASE_URL=your-api-url \
+  -t line-g99-paid-pawn:latest .
+
+docker run -p 80:80 line-g99-paid-pawn:latest
+```
+
+## Environment Variables
+
+Create a `.env` file or configure in your deployment platform:
+
+```env
+VITE_LIFF_ID=your-line-liff-id
+VITE_BASE_URL=your-backend-api-url
+VITE_APP_VERSION=1.0.2
+```
+
+## Tech Stack
+
+This project uses React + TypeScript + Vite with HMR and ESLint.
 
 Currently, two official plugins are available:
 

@@ -67,4 +67,5 @@ export type TGetPawnInterestRes = {
     netInterest: number
     interestRate: number
     pawnPrice: number
+    fee: number
 }
