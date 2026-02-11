@@ -123,8 +123,4 @@ export const APP_ROUTES = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "test",
-    element: <TestPage />,
-  },
 ]);
