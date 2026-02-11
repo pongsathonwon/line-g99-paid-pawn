@@ -8,11 +8,7 @@ function RegistrationLandingPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
-            <img
-              src="/logo/logo.png"
-              alt="logo"
-              className="w-32 h-auto"
-            />
+            <img src="/logo/logo.png" alt="logo" className="w-32 h-auto" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Welcome to G99 Pawn
@@ -55,7 +51,7 @@ function RegistrationLandingPage() {
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start">
                   <svg
-                    className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                    className="w-5 h-5 text-green-500 mr-2 mt-0.5 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -73,7 +69,7 @@ function RegistrationLandingPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                    className="w-5 h-5 text-green-500 mr-2 mt-0.5 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -91,7 +87,7 @@ function RegistrationLandingPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                    className="w-5 h-5 text-green-500 mr-2 mt-0.5 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -146,7 +142,7 @@ function RegistrationLandingPage() {
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start">
                   <svg
-                    className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0"
+                    className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -164,7 +160,7 @@ function RegistrationLandingPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0"
+                    className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -182,7 +178,7 @@ function RegistrationLandingPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0"
+                    className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -215,7 +211,7 @@ function RegistrationLandingPage() {
           <ul className="space-y-2 text-sm text-blue-800">
             <li className="flex items-start">
               <svg
-                className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                className="w-5 h-5 mr-2 mt-0.5 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -228,12 +224,13 @@ function RegistrationLandingPage() {
                 />
               </svg>
               <span>
-                <strong>ID Card / Passport Number</strong> (or Customer Code or Mobile Number)
+                <strong>ID Card / Passport Number</strong> (or Customer Code or
+                Mobile Number)
               </span>
             </li>
             <li className="flex items-start">
               <svg
-                className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                className="w-5 h-5 mr-2 mt-0.5 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -251,7 +248,7 @@ function RegistrationLandingPage() {
             </li>
             <li className="flex items-start">
               <svg
-                className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                className="w-5 h-5 mr-2 mt-0.5 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -273,7 +270,7 @@ function RegistrationLandingPage() {
         {/* Footer */}
         <div className="text-center text-sm text-gray-600">
           <p>
-            Need help?{' '}
+            Need help?{" "}
             <a href="#" className="text-brand-red hover:underline font-medium">
               Contact Support
             </a>
