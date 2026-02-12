@@ -22,14 +22,12 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
     suffix: "01",
   };
 
-  const qrRef = React.useRef<HTMLCanvasElement>(null);
+  const [dataUrl, setDataUrl] = React.useState<string>("");
 
   React.useEffect(() => {
-    if (!qrRef.current) return;
-
     const data = createBarcodeFilled(paymentData, config);
 
-    QRCode.toCanvas(qrRef.current, data, {
+    QRCode.toDataURL(data, {
       errorCorrectionLevel: "H",
       width: width,
       margin: 2,
@@ -37,10 +35,20 @@ function QrCode({ paymentData, width = 256, className = "" }: TQrCodeProps) {
         dark: "#000000",
         light: "#FFFFFF",
       },
-    });
+    }).then(setDataUrl);
   }, [paymentData, width, config]);
 
-  return <canvas ref={qrRef} className={className} />;
+  if (!dataUrl) return null;
+
+  return (
+    <img
+      src={dataUrl}
+      alt="QR Code"
+      width={width}
+      height={width}
+      className={className}
+    />
+  );
 }
 
 export default QrCode;

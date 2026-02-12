@@ -5,6 +5,9 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
   plugins: [
     react({
       babel: {
@@ -33,7 +36,7 @@ export default defineConfig({
           // Utility libraries
           'util-vendor': ['class-variance-authority', 'clsx', 'tailwind-merge'],
           // Heavy libraries (QR, screenshot, LIFF)
-          'heavy-vendor': ['qrcode', 'html2canvas', '@line/liff'],
+          'heavy-vendor': ['qrcode', 'html-to-image', '@line/liff'],
         },
       },
     },
