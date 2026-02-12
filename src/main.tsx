@@ -10,6 +10,9 @@ import PawnInterestContextProvider from "./context/PawnInterestContext/PawnInter
 import ToastContextProvider from "./context/ToastContext/ToastContextProvider";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
+declare const __BUILD_TIME__: string;
+console.log(`[build] ${__BUILD_TIME__}`);
+
 createRoot(document.getElementById("root")!).render(
   <ToastContextProvider>
     <QueryProvider>
@@ -24,5 +27,5 @@ createRoot(document.getElementById("root")!).render(
         </AuthContextProvider>
       </LineContextProvider>
     </QueryProvider>
-  </ToastContextProvider>
+  </ToastContextProvider>,
 );

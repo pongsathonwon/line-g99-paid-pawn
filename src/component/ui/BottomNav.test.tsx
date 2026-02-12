@@ -1,10 +1,17 @@
 import { render, screen } from "@testing-library/react";
 
-import { MemoryRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import {
+  MemoryRouter,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import BottomNav from "./BottomNav";
+
 import type { PropsWithChildren } from "react";
 import userEvent from "@testing-library/user-event";
+import BottomNav from "./BottomNav";
 
 // Helper component to display current location in tests
 const LocationDisplay = () => {
@@ -41,8 +48,9 @@ const RouterWapper = ({
 
 const partialWrapper =
   (initalRoute?: string) =>
-  ({ children }: PropsWithChildren) =>
-    <RouterWapper initialRoute={initalRoute}>{children}</RouterWapper>;
+  ({ children }: PropsWithChildren) => (
+    <RouterWapper initialRoute={initalRoute}>{children}</RouterWapper>
+  );
 
 describe("test bottom navigation bar", () => {
   describe("navbar should be render on every path", () => {
@@ -148,13 +156,21 @@ describe("test bottom navigation bar", () => {
     it("should have all navigation links accessible by role", () => {
       render(<BottomNav />, { wrapper: partialWrapper("/") });
 
-      expect(screen.getByRole("link", { name: /หน้าหลัก/i })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: /ประวัติ/i })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: /เงื่อนไข/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: /หน้าหลัก/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: /ประวัติ/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: /เงื่อนไข/i }),
+      ).toBeInTheDocument();
     });
 
     it("should render icons for each navigation item", () => {
-      const { container } = render(<BottomNav />, { wrapper: partialWrapper("/") });
+      const { container } = render(<BottomNav />, {
+        wrapper: partialWrapper("/"),
+      });
 
       // lucide-react icons render as SVGs
       const svgIcons = container.querySelectorAll("svg");

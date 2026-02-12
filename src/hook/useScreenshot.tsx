@@ -1,6 +1,7 @@
 import type { TMaybe } from "@/types/base.type";
 import { useRef, useState, useCallback } from "react";
 import { useToast } from "@/context/ToastContext/ToastContext";
+import { toBlob } from "html-to-image";
 
 export type UseScreenshotOptions = {
   backgroundColor?: string;
@@ -15,7 +16,7 @@ export type UseScreenshotReturn = {
 };
 
 export function useScreenshot(
-  options: UseScreenshotOptions = {}
+  options: UseScreenshotOptions = {},
 ): UseScreenshotReturn {
   const {
     backgroundColor = "#ffffff",
@@ -33,19 +34,10 @@ export function useScreenshot(
     setIsCapturing(true);
 
     try {
-      const html2canvas = (await import("html2canvas")).default;
-
-      const canvas = await html2canvas(captureRef.current, {
+      const blob = await toBlob(captureRef.current, {
         backgroundColor,
-        scale,
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-      });
-
-      // Convert canvas to blob
-      const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob(resolve, "image/png");
+        pixelRatio: scale,
+        cacheBust: true,
       });
 
       if (!blob) {
@@ -55,7 +47,7 @@ export function useScreenshot(
       const timestamp = new Date().toISOString().replaceAll(/[:.]/g, "-");
       const fileName = `${fileNamePrefix}-${timestamp}.png`;
 
-      // Try Web Share API first (works on iOS for saving to Photos)
+      // Try Web Share API first (works on mobile for saving to Photos)
       if (navigator.share && navigator.canShare) {
         const file = new File([blob], fileName, { type: "image/png" });
         const shareData = { files: [file] };
@@ -84,12 +76,12 @@ export function useScreenshot(
 
       showSuccess("บันทึกภาพสำเร็จ");
     } catch (error) {
-      console.error("Screenshot failed:", error);
       if (error instanceof Error && error.name === "AbortError") {
         // User cancelled the share dialog
         return;
       }
-      showError("ไม่สามารถบันทึกภาพหน้าจอได้ กรุณาลองใหม่อีกครั้ง");
+      const msg = error instanceof Error ? error.message : String(error);
+      showError(`บันทึกภาพไม่สำเร็จ: ${msg}`, 3000);
     } finally {
       setIsCapturing(false);
     }

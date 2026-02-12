@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-
 import { useLineContext } from "@/context/LineContext/LineContext";
 import { useAuthContext } from "@/context/AuthContext/AuthContext";
 import ProfileBadge from "@/component/ui/ProfileBadge";

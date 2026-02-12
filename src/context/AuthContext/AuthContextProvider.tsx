@@ -17,10 +17,12 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
   useEffect(() => {
     if (uid) {
       login(uid);
+      login(uid);
     }
   }, [uid]);
 
   useEffect(() => {
+    return registerAxiosTokenBearer();
     return registerAxiosTokenBearer();
   }, []);
 
