@@ -74,7 +74,9 @@ describe("test paid pawn card", () => {
     it("should render product type and gold type", () => {
       const label = screen.getByText("สินค้า");
       expect(label).toBeInTheDocument();
-      expect(label.nextElementSibling?.textContent).toBe("type 96.5");
+      expect(label.nextElementSibling?.textContent).toBe(
+        `${MOCK_PROPS.typeDesc} ${MOCK_PROPS.laiDesc}`,
+      );
     });
 
     it("should render weight", () => {
