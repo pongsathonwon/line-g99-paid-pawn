@@ -1,4 +1,4 @@
-import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
+import PaidPawnCard from "@/component/ui/PaidPawnCard/PaidPawnCard";
 import QueryError from "@/component/ui/QueryError";
 import QueryLoading from "@/component/ui/QueryLoading";
 import usePaidPawn from "@/hook/query/usePaidPawn";
@@ -19,60 +19,10 @@ function HistroyDetailPage() {
     return <QueryError error={error} />;
   }
 
-  if (!data) return <div className="text-center text-gray-500 p-6">ไม่พบข้อมูล</div>;
+  if (!data)
+    return <div className="text-center text-gray-500 p-6">ไม่พบข้อมูล</div>;
 
-  return (
-    <DisplayCard>
-      <DisplayCard.Mute>
-        <span>เลขที่สัญญา</span>
-        <span>{data.pawnNumb}</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>ครบกำหนด</span>
-        <span>{data.dueDate}</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>วันที่ชำระ</span>
-        <span>{data.paidDate}</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Summary>
-        <span>ยอดชำระ</span>
-        <span>{data.paidAmou} บาท</span>
-      </DisplayCard.Summary>
-      <DisplayCard.Mute>
-        <span>ส่วนลดสมาชิก</span>
-        <span>{data.paidDisc} บาท</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Divider />
-      <DisplayCard.Mute>
-        <span>ชื่อลูกค้า</span>
-        <span>{data.custName}</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>สาขา</span>
-        <span>{data.branchName}</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Divider />
-      <DisplayCard.Mute>
-        <span>สินค้า</span>
-        <span>
-          {data.typeDesc} {data.goldType}
-        </span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>น้ำหนัก</span>
-        <span>{data.goodWeight} กรัม</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>เงินต้น</span>
-        <span>{data.pawnPrice} บาท</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>ผู้ทำรายการ</span>
-        <span>{data.emplName}</span>
-      </DisplayCard.Mute>
-    </DisplayCard>
-  );
+  return <PaidPawnCard {...data} />;
 }
 
 export default HistroyDetailPage;

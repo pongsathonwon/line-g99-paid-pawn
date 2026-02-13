@@ -34,7 +34,7 @@ export type TGetHistPaidByIdRes = {
     laiDesc: string
     goldType: string
     emplName: string
-    pawnPrice: number,
+    pawnPrice: number
     goodWeight: number
 } & TGetHistPaidRes
 
