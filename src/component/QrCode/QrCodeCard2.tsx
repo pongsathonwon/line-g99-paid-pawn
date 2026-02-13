@@ -26,8 +26,8 @@ function QrCodeCard2({ paymentData, qrWidth = 280 }: TQrCodeCardProps) {
         <QrCode paymentData={paymentData} width={qrWidth} />
       </div>
       <DisplayCard.Mute>
-        <span className="text-black">ยอดชำระ</span>
-        <span className="text-black">{paymentData.amount} บาท</span>
+        <span className="text-black text-xl">ยอดชำระ</span>
+        <span className="text-black text-xl">{paymentData.amount} บาท</span>
       </DisplayCard.Mute>
       <DisplayCard.Mute>
         <span>เลขที่สัญญาฝากขาย</span>

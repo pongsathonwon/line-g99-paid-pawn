@@ -42,7 +42,7 @@ function PaidPawnCard(data: TGetHistPaidByIdRes) {
       <DisplayCard.Mute>
         <span>สินค้า</span>
         <span>
-          {data.typeDesc} {data.goldType}
+          {data.typeDesc} {data.laiDesc}
         </span>
       </DisplayCard.Mute>
       <DisplayCard.Mute>
