@@ -1,4 +1,6 @@
 import { useCustInfo } from "@/context/AuthContext/AuthContext";
+import QueryError from "@/component/ui/QueryError";
+import QueryLoading from "@/component/ui/QueryLoading";
 import useQueryPawnById from "@/hook/query/useQueryPawn";
 import { NavLink } from "react-router-dom";
 import PayCard from "@/component/ui/PayCard/PayCard";
@@ -12,10 +14,10 @@ function HomePage() {
     });
 
   if (isLoading) {
-    return <div>loading ...</div>;
+    return <QueryLoading />;
   }
   if (isError) {
-    return <div>{error.message}</div>;
+    return <QueryError error={error} />;
   }
 
   if (!data || data.length === 0) {

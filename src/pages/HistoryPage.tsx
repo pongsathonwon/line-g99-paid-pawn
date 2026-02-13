@@ -1,11 +1,18 @@
 import HistoryCard from "@/component/ui/HistoryCard/HistoryCard";
+import QueryError from "@/component/ui/QueryError";
+import QueryLoading from "@/component/ui/QueryLoading";
 import useHistPaid from "@/hook/query/useHistPaid";
+import { NavLink } from "react-router-dom";
 
 function HistoryPage() {
-  const { data: histPaidData, isLoading } = useHistPaid();
+  const { data: histPaidData, isLoading, isError, error } = useHistPaid();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <QueryLoading />;
+  }
+
+  if (isError) {
+    return <QueryError error={error} />;
   }
 
   if (!histPaidData || histPaidData.length === 0) {
@@ -28,7 +35,9 @@ function HistoryPage() {
       <ul className="flex flex-col gap-4">
         {histPaidData.map((item) => (
           <li key={item.paidNumb}>
-            <HistoryCard {...item} />
+            <NavLink to={item.paidNumb}>
+              <HistoryCard {...item} />
+            </NavLink>
           </li>
         ))}
       </ul>

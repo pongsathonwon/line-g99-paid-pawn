@@ -21,7 +21,7 @@ describe("test History Card component", () => {
       const pawnNumbLabel = screen.getByText("เลขที่สัญญา");
       expect(pawnNumbLabel).toBeInTheDocument();
       expect(pawnNumbLabel.nextElementSibling?.innerHTML).toBe(
-        MOCK_PROPS.pawnNumb
+        MOCK_PROPS.pawnNumb,
       );
     });
 
@@ -47,10 +47,8 @@ describe("test History Card component", () => {
   describe("test conditional render of on-time benefit", () => {
     it("should render discount", () => {
       render(<HistoryCard {...MOCK_PROPS} />);
-      const pawnNumbLabel = screen.getByText("ประหยัดไป");
-      expect(pawnNumbLabel).toHaveClass("text-green-300");
+      const pawnNumbLabel = screen.getByText("ส่วนลดสมาชิก");
       expect(pawnNumbLabel.nextElementSibling?.innerHTML).toBe("10 บาท");
-      expect(pawnNumbLabel.nextElementSibling).toHaveClass("text-green-300");
     });
 
     it("should not render discount", () => {

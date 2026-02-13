@@ -1,9 +1,9 @@
 import { Button } from "@/component";
 import DisplayCard from "@/component/ui/DisplayCard/DisplayCard";
+import QueryError from "@/component/ui/QueryError";
+import QueryLoading from "@/component/ui/QueryLoading";
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
 import { formatThaiDate } from "@/lib/date-time";
-import { parseApiError } from "@/zod/api-error";
-import { AxiosError } from "axios";
 import { NavLink } from "react-router-dom";
 
 const formatDiscount = (membDisc: number) =>
@@ -12,37 +12,11 @@ const formatDiscount = (membDisc: number) =>
 function PaymentDetailPage() {
   const { interest, isSuccess, isError, error } = usePawnInterest();
 
-  const getErrorMessage = (error: Error | null): string => {
-    if (!error) return "";
-    if (error instanceof AxiosError) {
-      const body = parseApiError(error.response?.data);
-      return body?.message ?? "เกิดข้อผิดพลาดในการโหลดข้อมูล";
-    }
-
-    return error.message ?? "เกิดข้อผิดพลาดในการโหลดข้อมูล";
-  };
-
   if (isError) {
-    return (
-      <div>
-        <div className="flex flex-col items-center justify-center p-6 text-center">
-          <div className="text-red-600 font-semibold text-lg mb-2">
-            เกิดข้อผิดพลาด
-          </div>
-          <div className="text-gray-700 mb-4">{getErrorMessage(error)}</div>
-          <NavLink to="/home">
-            <Button>กลับหน้าหลัก</Button>
-          </NavLink>
-        </div>
-      </div>
-    );
+    return <QueryError error={error} backTo="/home" />;
   }
   if (!isSuccess || !interest) {
-    return (
-      <div>
-        <div>loading ....</div>
-      </div>
-    );
+    return <QueryLoading />;
   }
 
   return (
