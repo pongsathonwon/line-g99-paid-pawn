@@ -16,7 +16,7 @@ function HistroyDetailPage() {
   }
 
   if (isError) {
-    return <QueryError error={error} />;
+    return <QueryError error={error} backTo="/history" />;
   }
 
   if (!data)
