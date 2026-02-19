@@ -1,17 +1,9 @@
-import { useMultistepForm } from "@/context/MultistepFormContext/MultiStepFormContext";
-import React, {
-  type PropsWithChildren,
-  useRef,
-  useState,
-  useEffect,
-} from "react";
+import React, { type PropsWithChildren, useState } from "react";
 import { Button } from "@/component/Button";
-import { useMutation } from "@tanstack/react-query";
-import { REGISTER_API } from "@/api/endpoint/register";
-import type { TRegisterReq, TRegisterRequestReq } from "@/types/register";
 import { useLineContext } from "@/context/LineContext/LineContext";
-import { useToast } from "@/context/ToastContext/ToastContext";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
+import { useRegisterMutation } from "./useRegisterMutation";
+import useScrollPosition from "./useScrollPosition";
 
 type TTermStepProps = {
   isConsent: boolean;
@@ -29,7 +21,7 @@ type TTermStepProps = {
     gender?: string;
   };
   isVerified: boolean;
-  mode?: "thai" | "foreign" | "foreign-counter";
+  mode: "thai" | "foreign" | "foreign-counter";
 };
 
 function TermStep({
@@ -39,56 +31,12 @@ function TermStep({
   isVerified,
   mode,
 }: PropsWithChildren<TTermStepProps>) {
-  const { next } = useMultistepForm();
   const { lineCtx } = useLineContext();
-  const { error: showError } = useToast();
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const { mutate, isPending } = useRegisterMutation(mode);
   const [isChecked, setIsChecked] = useState(isConsent);
-  const termsBoxRef = useRef<HTMLDivElement>(null);
-
+  const { hasScrolledToBottom, termsBoxRef } =
+    useScrollPosition<HTMLDivElement>();
   const t = REGISTER_LOCALE_TEXT.th.term;
-
-  const registerMutation = useMutation({
-    mutationFn: (req: TRegisterReq) => REGISTER_API.registerUser(req),
-    onSuccess: () => {
-      next();
-    },
-    onError: (error: any) => {
-      showError(
-        error.message || "เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองใหม่อีกครั้ง",
-      );
-    },
-  });
-
-  const registerRequestMutation = useMutation({
-    mutationFn: (req: TRegisterRequestReq) => REGISTER_API.registerRequest(req),
-    onSuccess: () => {
-      next();
-    },
-    onError: (error: any) => {
-      showError(
-        error.message || "เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองใหม่อีกครั้ง",
-      );
-    },
-  });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (termsBoxRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = termsBoxRef.current;
-        // Check if scrolled to bottom (with 10px tolerance)
-        if (scrollTop + clientHeight >= scrollHeight - 10) {
-          setHasScrolledToBottom(true);
-        }
-      }
-    };
-
-    const termsBox = termsBoxRef.current;
-    if (termsBox) {
-      termsBox.addEventListener("scroll", handleScroll);
-      return () => termsBox.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -101,22 +49,16 @@ function TermStep({
       return;
     }
 
-    // Get LINE UID from LineContext
-    const lineUid = lineCtx?.isLogin ? lineCtx.profile.userId : "mock-line-uid";
+    const lineUid = lineCtx?.profile?.userId;
 
-    // For foreign-counter mode, use simplified registerRequest API
+    if (!lineUid) return;
+
     if (mode === "foreign-counter") {
-      const registerRequestData: TRegisterRequestReq = {
-        lineUid,
-        custNo: userData.custNo,
-        isConsent: isChecked,
-      };
-      registerRequestMutation.mutate(registerRequestData);
+      mutate({ lineUid, custNo: userData.custNo, isConsent: isChecked });
       return;
     }
 
-    // For other modes, use full registerUser API
-    const registerData: TRegisterReq = {
+    mutate({
       lineUid,
       custNo: userData.custNo,
       fullname: userData.fullname,
@@ -130,9 +72,7 @@ function TermStep({
       gender: userData.gender,
       isConsent: isChecked,
       isVerified: isVerified,
-    };
-
-    registerMutation.mutate(registerData);
+    });
   };
 
   return (
@@ -496,7 +436,7 @@ function TermStep({
                   หมายเลขโทรศัพท์ 066-1606161
                 </p>
               </div>
-
+              {/* fix this display data */}
               <div className="bg-white p-3 rounded-lg border border-gray-200">
                 <b className="text-amber-700 text-sm">
                   เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล
@@ -546,11 +486,9 @@ function TermStep({
       <Button
         fullWidth
         onClick={handleRegister}
-        disabled={
-          !isChecked || !hasScrolledToBottom || registerMutation.isPending
-        }
+        disabled={!isChecked || !hasScrolledToBottom || isPending}
       >
-        {registerMutation.isPending ? t.submitting : t.submit}
+        {isPending ? t.submitting : t.submit}
       </Button>
     </section>
   );
