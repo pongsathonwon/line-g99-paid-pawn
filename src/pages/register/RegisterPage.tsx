@@ -1,4 +1,5 @@
-import RegisterCard from "@/component/ui/RegisterForm/RegisterCard/RegisterCard";
+import RegisterCard from "@/component/ui/RegisterCard/RegisterCard";
+
 function RegisterPage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
