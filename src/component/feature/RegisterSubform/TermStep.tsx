@@ -436,20 +436,22 @@ function TermStep({
                   หมายเลขโทรศัพท์ 066-1606161
                 </p>
               </div>
-              {/* fix this display data */}
               <div className="bg-white p-3 rounded-lg border border-gray-200">
                 <b className="text-amber-700 text-sm">
                   เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล
                 </b>
                 <p className="text-gray-600 text-sm mt-2">
-                  นายนัฐกาญ จันทร์ขำ
+                  ฝ่ายการตลาด บริษัทโกลด์เด้น 99 จํากัด
                   <br />
                   15/1-3 อาคารอุดมสุขทาวเวอร์ ซ.อุดมสุข9 บางจาก พระโขนง
                   กรุงเทพมหานคร 10260
                   <br />
-                  อีเมล gus_115@hotmail.co.th
+                  อีเมล{" "}
+                  <a href="mailto:golden99.sp@gmail.com">
+                    golden99.sp@gmail.com
+                  </a>
                   <br />
-                  หมายเลขโทรศัพท์ 066-1606161
+                  <a href="tel:+66661606161">หมายเลขโทรศัพท์ 066-1606161</a>
                 </p>
               </div>
             </div>
