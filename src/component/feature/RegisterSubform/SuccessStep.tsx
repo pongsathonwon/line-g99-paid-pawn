@@ -1,18 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/component/Button";
-import { useAuthContext } from "@/context/AuthContext/AuthContext";
-import { useEffect } from "react";
 
 export function SuccessStep() {
   const navigate = useNavigate();
-  const { relogin } = useAuthContext();
   const handleContinue = async () => {
     navigate("/home");
   };
-
-  useEffect(() => {
-    relogin();
-  }, []);
 
   return (
     <div className="space-y-6 text-center">

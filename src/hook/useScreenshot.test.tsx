@@ -16,9 +16,11 @@ vi.mock("@/context/ToastContext/ToastContext", () => ({
   useToast: () => mockToast,
 }));
 
-const mockHtml2Canvas = vi.fn();
-vi.mock("html2canvas", () => ({
-  default: mockHtml2Canvas,
+const { mockToBlob } = vi.hoisted(() => ({
+  mockToBlob: vi.fn(),
+}));
+vi.mock("html-to-image", () => ({
+  toBlob: mockToBlob,
 }));
 
 describe("useScreenshot", () => {
@@ -79,16 +81,10 @@ describe("useScreenshot", () => {
   });
 
   describe("captureScreenshot with element", () => {
-    let mockCanvas: HTMLCanvasElement;
+    const mockBlob = new Blob(["test"], { type: "image/png" });
 
     beforeEach(() => {
-      mockCanvas = document.createElement("canvas");
-      mockCanvas.toBlob = vi.fn((callback) => {
-        const blob = new Blob(["test"], { type: "image/png" });
-        callback(blob);
-      });
-
-      mockHtml2Canvas.mockResolvedValue(mockCanvas);
+      mockToBlob.mockResolvedValue(mockBlob);
     });
 
     afterEach(() => {
@@ -106,9 +102,9 @@ describe("useScreenshot", () => {
 
       let capturingDuringExecution = false;
 
-      mockHtml2Canvas.mockImplementation(async () => {
+      mockToBlob.mockImplementation(async () => {
         capturingDuringExecution = result.current.isCapturing;
-        return mockCanvas;
+        return mockBlob;
       });
 
       await act(async () => {
@@ -120,7 +116,7 @@ describe("useScreenshot", () => {
       });
     });
 
-    it("should call html2canvas with correct options", async () => {
+    it("should call toBlob with correct options", async () => {
       const options = {
         backgroundColor: "#ff0000",
         scale: 4,
@@ -139,12 +135,10 @@ describe("useScreenshot", () => {
         await result.current.captureScreenshot();
       });
 
-      expect(mockHtml2Canvas).toHaveBeenCalledWith(div, {
+      expect(mockToBlob).toHaveBeenCalledWith(div, {
         backgroundColor: "#ff0000",
-        scale: 4,
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
+        pixelRatio: 4,
+        cacheBust: true,
       });
     });
 
@@ -165,7 +159,7 @@ describe("useScreenshot", () => {
     });
 
     it("should reset isCapturing to false even if error occurs", async () => {
-      mockHtml2Canvas.mockRejectedValue(new Error("Canvas error"));
+      mockToBlob.mockRejectedValue(new Error("Image capture error"));
 
       const { result } = renderHook(() => useScreenshot());
 
@@ -182,10 +176,8 @@ describe("useScreenshot", () => {
       expect(result.current.isCapturing).toBe(false);
     });
 
-    it("should show error toast when blob creation fails", async () => {
-      mockCanvas.toBlob = vi.fn((callback) => {
-        callback(null);
-      });
+    it("should show error toast when toBlob returns null", async () => {
+      mockToBlob.mockResolvedValue(null);
 
       const { result } = renderHook(() => useScreenshot());
 
@@ -200,14 +192,15 @@ describe("useScreenshot", () => {
       });
 
       expect(mockToast.error).toHaveBeenCalledWith(
-        "ไม่สามารถบันทึกภาพหน้าจอได้ กรุณาลองใหม่อีกครั้ง",
+        "บันทึกภาพไม่สำเร็จ: Failed to create image blob",
+        3000,
       );
     });
 
     it("should not show error toast when user cancels share dialog", async () => {
       const abortError = new Error("User cancelled");
       abortError.name = "AbortError";
-      mockHtml2Canvas.mockRejectedValue(abortError);
+      mockToBlob.mockRejectedValue(abortError);
 
       const { result } = renderHook(() => useScreenshot());
 

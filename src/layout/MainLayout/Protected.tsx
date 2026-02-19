@@ -14,18 +14,6 @@ function Protected({ children }: PropsWithChildren) {
     );
   }
 
-  if (!isAllowBranch(auth.branchCode)) {
-    return (
-      <div className="flex min-h-svh flex-col items-center justify-center px-6 text-center">
-        <h2 className="text-2xl font-bold text-black mb-2">ขออภัย</h2>
-        <p className="text-lg text-black">ขณะนี้อยู่ระหว่างทดลองระบบ</p>
-        <p className="text-sm text-gray-500 mt-1">
-          ระบบเปิดให้บริการเฉพาะสาขาที่ร่วมทดสอบเท่านั้น
-        </p>
-      </div>
-    );
-  }
-
   return <>{children}</>;
 }
 

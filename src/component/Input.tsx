@@ -7,8 +7,7 @@ import type {
 
 // Props ของ Input Component และ ประเภทของ Input variants
 interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    FormComponentProps {
+  extends React.InputHTMLAttributes<HTMLInputElement>, FormComponentProps {
   inputSize?: InputSize;
   variant?: InputVariant;
 }
@@ -83,7 +82,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       //readOnly
       //disabled
     },
-    ref
+    ref,
   ) => {
     // กำหนด variant อัตโนมัติถ้ามี errorMessage
     const actualVariant = errorMessage ? "error" : variant;
@@ -129,7 +128,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const inputId = useMemo(
       () => createInputId({ id, helperText, errorMessage }),
-      [id, errorMessage, helperText]
+      [id, errorMessage, helperText],
     );
 
     return (
@@ -172,7 +171,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 // ตั้งชื่อ Component สำหรับ debugging

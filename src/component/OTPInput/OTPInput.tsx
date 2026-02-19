@@ -151,7 +151,7 @@ function OTPInput({
                 handleInputChange(index, e.target.value);
               }}
               onKeyDown={(e) => handleKeyDown(index, e)}
-              onPaste={index === 0 ? handlePaste : undefined}
+              onPaste={handlePaste}
               disabled={disabled}
               className={cn(
                 "w-12 h-14 text-center text-2xl font-bold border-2 rounded-lg transition-all",

@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "bash deploy.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",

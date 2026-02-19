@@ -36,10 +36,8 @@ function HistoryCard({
       </DisplayCard.Summary>
       {paidDisc > 0 && paidAmou != 20 && (
         <DisplayCard.Mute>
-          <span className="text-green-300">ประหยัดไป</span>
-          <span className="text-green-300">
-            {paidDisc.toLocaleString()} บาท
-          </span>
+          <span>ส่วนลดสมาชิก</span>
+          <span>{paidDisc.toLocaleString()} บาท</span>
         </DisplayCard.Mute>
       )}
     </DisplayCard>

@@ -28,21 +28,7 @@ function AuthContextProvider({ children }: React.PropsWithChildren) {
     <AuthContext.Provider
       value={{
         error,
-        auth: {
-          id: "442295",
-          custNo: "3007477",
-          fullname: "พงศธร วงศ์อ่อนดี",
-          idCard: "1100600364418",
-          lineUid: "U5fa267319809e247136b1f4cc205e988",
-          mobileNo: "0851493695",
-          branchCode: "30",
-          custType: "G",
-          custStat: 1,
-          isConsent: true,
-          isVerified: true,
-          birthDate: "1996-12-17T17:00:00.000Z",
-          gender: "x",
-        },
+        auth,
         relogin,
         loginStatus: {
           isPending,

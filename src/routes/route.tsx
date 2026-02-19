@@ -28,6 +28,7 @@ const PaymentSuccessPage = lazy(() => import("../pages/PaymentSuccessPage"));
 const PaymentErrorPage = lazy(() => import("@/pages/PaymentErrorPage"));
 const PaymentPendingPage = lazy(() => import("@/pages/PaymentPendingPage"));
 const HistoryPage = lazy(() => import("../pages/HistoryPage"));
+const HistoryDetailPage = lazy(() => import("../pages/HistroyDetailPage"));
 const TermPage = lazy(() => import("@/pages/TermPage"));
 
 export const APP_ROUTES = createBrowserRouter([
@@ -119,6 +120,10 @@ export const APP_ROUTES = createBrowserRouter([
       {
         path: "history",
         element: <HistoryPage />,
+      },
+      {
+        path: "history/:paidNumb",
+        element: <HistoryDetailPage />,
       },
     ],
   },

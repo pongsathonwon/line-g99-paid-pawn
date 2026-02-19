@@ -45,28 +45,28 @@ function ToastContextProvider({ children }: PropsWithChildren) {
     (message: string, duration?: number) => {
       addToast({ type: "success", message, duration: duration ?? 1000 });
     },
-    [addToast]
+    [addToast],
   );
 
   const error = useCallback(
     (message: string, duration?: number) => {
       addToast({ type: "error", message, duration: duration ?? 1000 });
     },
-    [addToast]
+    [addToast],
   );
 
   const warning = useCallback(
     (message: string, duration?: number) => {
       addToast({ type: "warning", message, duration: duration ?? 1000 });
     },
-    [addToast]
+    [addToast],
   );
 
   const info = useCallback(
     (message: string, duration?: number) => {
       addToast({ type: "info", message, duration: duration ?? 1000 });
     },
-    [addToast]
+    [addToast],
   );
 
   return (

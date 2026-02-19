@@ -27,5 +27,5 @@ createRoot(document.getElementById("root")!).render(
         </AuthContextProvider>
       </LineContextProvider>
     </QueryProvider>
-  </ToastContextProvider>
+  </ToastContextProvider>,
 );
