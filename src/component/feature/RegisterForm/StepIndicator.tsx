@@ -46,7 +46,7 @@ function StepIndicator({ steps }: StepIndicatorProps) {
                       // 4. ใส่ bg-white ตอนยังไม่ถึง
                       "bg-white border-gray-200 text-gray-400":
                         !isActive && !isCompleted,
-                    }
+                    },
                   )}
                 >
                   {isCompleted ? (
@@ -63,7 +63,7 @@ function StepIndicator({ steps }: StepIndicatorProps) {
                       {
                         "text-brand-red font-bold": isActive || isCompleted,
                         "text-gray-400": !isActive && !isCompleted,
-                      }
+                      },
                     )}
                   >
                     {stepItem.label}
