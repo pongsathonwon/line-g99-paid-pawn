@@ -9,27 +9,59 @@ import PreventReRegister from "../layout/RegisterLayout/PreventReRegister";
 import MainLayout from "../layout/MainLayout/MainLayout";
 import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 
+/**
+ * Wraps a dynamic import so that if the chunk is missing (stale cache after
+ * a new deploy), the browser does one hard reload to fetch the latest build.
+ * After reload the new chunk hash will be served correctly.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function lazyWithReload<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>,
+) {
+  return lazy(() =>
+    factory().catch(() => {
+      window.location.reload();
+      // Return a never-resolving promise — the reload above will take over
+      return new Promise<never>(() => {});
+    }),
+  );
+}
+
 // Lazy load page components
-const RegisterPage = lazy(() => import("../pages/register/RegisterPage"));
-const ThaiRegisterPage = lazy(
+const RegisterPage = lazyWithReload(
+  () => import("../pages/register/RegisterPage"),
+);
+const ThaiRegisterPage = lazyWithReload(
   () => import("../pages/register/ThaiRegisterPage"),
 );
-const ForeignRegisterPage = lazy(
+const ForeignRegisterPage = lazyWithReload(
   () => import("../pages/register/ForeignRegisterPage"),
 );
-const ForeignCounterRegisterPage = lazy(
+const ForeignCounterRegisterPage = lazyWithReload(
   () => import("@/pages/register/ForeignCounterRegisterPage"),
 );
-const RegisterResultPage = lazy(() => import("../pages/RegisterResultPage"));
-const HomePage = lazy(() => import("../pages/HomePage"));
-const PaymentDetailPage = lazy(() => import("../pages/PaymentDetailPage"));
-const QRPage = lazy(() => import("../pages/QRPage"));
-const PaymentSuccessPage = lazy(() => import("../pages/PaymentSuccessPage"));
-const PaymentErrorPage = lazy(() => import("@/pages/PaymentErrorPage"));
-const PaymentPendingPage = lazy(() => import("@/pages/PaymentPendingPage"));
-const HistoryPage = lazy(() => import("../pages/HistoryPage"));
-const HistoryDetailPage = lazy(() => import("../pages/HistroyDetailPage"));
-const TermPage = lazy(() => import("@/pages/TermPage"));
+const RegisterResultPage = lazyWithReload(
+  () => import("../pages/RegisterResultPage"),
+);
+const HomePage = lazyWithReload(() => import("../pages/HomePage"));
+const PaymentDetailPage = lazyWithReload(
+  () => import("../pages/PaymentDetailPage"),
+);
+const QRPage = lazyWithReload(() => import("../pages/QRPage"));
+const PaymentSuccessPage = lazyWithReload(
+  () => import("../pages/PaymentSuccessPage"),
+);
+const PaymentErrorPage = lazyWithReload(
+  () => import("@/pages/PaymentErrorPage"),
+);
+const PaymentPendingPage = lazyWithReload(
+  () => import("@/pages/PaymentPendingPage"),
+);
+const HistoryPage = lazyWithReload(() => import("../pages/HistoryPage"));
+const HistoryDetailPage = lazyWithReload(
+  () => import("../pages/HistroyDetailPage"),
+);
+const TermPage = lazyWithReload(() => import("@/pages/TermPage"));
 
 export const APP_ROUTES = createBrowserRouter([
   {
