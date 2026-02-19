@@ -13,13 +13,17 @@ const baseSetToLocal = ({ key, duration }: TLocalStorageSetup) => <T>(
 const baseGetLocal = (key: string) => <T>(safeParser: (v: unknown) => ZodSafeParseResult<TLocalStorageSavedValue<T>>) => (): TMaybe<T> => {
     const strValue = localStorage.getItem(key)
     if (!strValue) return null
-    const raw = JSON.parse(strValue)
-    const temp = safeParser(raw)
-    if (!temp.success) return null
-    const praseData = temp.data
-    const currentUnix = Date.now()
-    if (praseData.exp <= currentUnix) return null
-    return praseData.value
+    try {
+        const raw = JSON.parse(strValue)
+        const temp = safeParser(raw)
+        if (!temp.success) return null
+        const praseData = temp.data
+        const currentUnix = Date.now()
+        if (praseData.exp <= currentUnix) return null
+        return praseData.value
+    } catch {
+        return null
+    }
 }
 
 const baseRemoveLocal = (key: string) => () => localStorage.removeItem(key)

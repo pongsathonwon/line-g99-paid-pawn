@@ -32,6 +32,7 @@ export const createSearchCustomerSchema = (
     custCode: z
       .string()
       .min(1, messages.required)
+      .max(7)
       .regex(/\d{6,7}$/, messages.pattern), // test case with customer code of branch 0 ie. 000002
   };
   return z.object({
