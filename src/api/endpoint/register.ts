@@ -10,7 +10,6 @@ import type {
   TRegisterReq,
   TRegisterRequestReq,
   TRegisterRequestRes,
-  TForeignRegisterReq,
   TRegisterRes,
   TForeignRegisterStatusReq,
   TForeignRegisterStatusRes,
