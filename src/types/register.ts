@@ -24,10 +24,11 @@ export type TSearchUserRes = {
   custType: string;
   custStat: number;
   nationCode: string;
-  gender?: string;
+  gender: string;
+  //dataFrom?: string;
   // Additional POS data
-  currentPoint?: number;
-  totalBuy?: number;
+  currentPoint: number;
+  totalBuy: number;
 };
 
 // OTP Request/Response
@@ -72,6 +73,9 @@ export type TRegisterReq = {
   gender?: string;
   isConsent: boolean;
   isVerified: boolean;
+  dataFrom: string;
+  currentPoint: number;
+  totalBuy: number;
 };
 
 // Register Request for foreign counter (simplified - backend fetches branchCode from CustInfo)

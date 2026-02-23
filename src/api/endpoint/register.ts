@@ -96,15 +96,12 @@ export const verifyOtp = async (req: TOtpVerifyReq): Promise<TOtpVerifyRes> => {
 }
 
 /**
- * Register Thai user (domestic)
- * Mock endpoint: POST /api/register
+ * Register user (always POST /api/sb/v1/customer/create — only called when user exists in HUG CRM)
  */
 export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => {
-  // TODO: Replace with actual API call
-  // const { data } = await axiosClient.post<TRegisterRes>('/api/register', req);
   try {
     const { data } = await axiosClient.post<TWrappedRes<TRegisterRes>>(
-      '/api/sb/v1/customer/update',
+      '/api/sb/v1/customer/create',
       req,
       {
         baseURL: 'https://api.simatic.golden99.co.th',

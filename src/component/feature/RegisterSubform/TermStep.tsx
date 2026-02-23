@@ -18,7 +18,9 @@ type TTermStepProps = {
     custType: string;
     custStat: number;
     nationCode: string;
-    gender?: string;
+    gender: string;
+    currentPoint: number;
+    totalBuy: number;
   };
   isVerified: boolean;
   mode: "thai" | "foreign" | "foreign-counter";
@@ -72,6 +74,9 @@ function TermStep({
       gender: userData.gender,
       isConsent: isChecked,
       isVerified: isVerified,
+      dataFrom: "HUG_exist",
+      currentPoint: userData.currentPoint,
+      totalBuy: userData.totalBuy,
     });
   };
 

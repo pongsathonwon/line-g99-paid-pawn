@@ -47,6 +47,9 @@ const mockRegisterReq: TRegisterReq = {
   nationCode: "TH",
   isConsent: true,
   isVerified: true,
+  dataFrom: "HUG_exist",
+  currentPoint: 100,
+  totalBuy: 5000,
 };
 
 const mockRegisterRequestReq: TRegisterRequestReq = {
@@ -98,6 +101,28 @@ describe("useRegisterMutation", () => {
       await waitFor(() => {
         expect(REGISTER_API.registerUser).toHaveBeenCalledWith(mockRegisterReq);
         expect(REGISTER_API.registerRequest).not.toHaveBeenCalled();
+      });
+    });
+
+    it("passes dataFrom, currentPoint and totalBuy to registerUser", async () => {
+      vi.mocked(REGISTER_API.registerUser).mockResolvedValue(mockRegisterRes);
+
+      const { result } = renderHook(() => useRegisterMutation("thai"), {
+        wrapper: createWrapper(),
+      });
+
+      act(() => {
+        result.current.mutate(mockRegisterReq);
+      });
+
+      await waitFor(() => {
+        expect(REGISTER_API.registerUser).toHaveBeenCalledWith(
+          expect.objectContaining({
+            dataFrom: "HUG_exist",
+            currentPoint: 100,
+            totalBuy: 5000,
+          }),
+        );
       });
     });
 
