@@ -429,11 +429,21 @@ function TermStep({
                   15/1-3 อาคารอุดมสุขทาวเวอร์ ซ.อุดมสุข9 บางจาก พระโขนง
                   กรุงเทพมหานคร 10260
                   <br />
-                  อีเมล gus_115@hotmail.co.th
+                  อีเมล{" "}
+                  <a href="mailto:gus_115@hotmail.co.th">
+                    gus_115@hotmail.co.th
+                  </a>
                   <br />
-                  เว็บไซต์ www.golden99.co.th
+                  เว็บไซต์{" "}
+                  <a
+                    href="https://www.golden99.co.th"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    www.golden99.co.th
+                  </a>
                   <br />
-                  หมายเลขโทรศัพท์ 066-1606161
+                  หมายเลขโทรศัพท์ <a href="tel:+66958299031">095-829-9031</a>
                 </p>
               </div>
               <div className="bg-white p-3 rounded-lg border border-gray-200">
@@ -446,13 +456,12 @@ function TermStep({
                   15/1-3 อาคารอุดมสุขทาวเวอร์ ซ.อุดมสุข9 บางจาก พระโขนง
                   กรุงเทพมหานคร 10260
                   <br />
-                  อีเมล
+                  อีเมล{" "}
                   <a href="mailto:golden99.sp@gmail.com">
                     golden99.sp@gmail.com
                   </a>
                   <br />
-                  หมายเลขโทรศัพท์
-                  <a href="tel:+66661606161">066-1606161</a>
+                  หมายเลขโทรศัพท์ <a href="tel:+66958299031">095-829-9031</a>
                 </p>
               </div>
             </div>

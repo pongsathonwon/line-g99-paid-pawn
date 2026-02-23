@@ -115,7 +115,6 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
     if (!res) throw new Error(`ลงทะเบียนไม่สำเร็จ : [${data.resultCode}]`)
     return res
   } catch (e) {
-    console.error(e)
     if (e instanceof AxiosError) {
       const apiErrorMessage = e.response?.data.message;
       if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
@@ -139,6 +138,7 @@ export const registerRequest = async (req: TRegisterRequestReq): Promise<TRegist
       '/register-request',
       req
     );
+    if (!data?.lineUid) throw new Error('ลงทะเบียนไม่สำเร็จ');
     return data;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -157,25 +157,25 @@ export const registerRequest = async (req: TRegisterRequestReq): Promise<TRegist
  * Register foreign user (requires approval)
  * Mock endpoint: POST /api/foreign-register
  */
-export const registerForeignUser = async (req: TForeignRegisterReq): Promise<TRegisterRes> => {
-  // TODO: Replace with actual API call
-  // const { data } = await axiosClient.post<TRegisterRes>('/api/foreign-register', req);
+// export const registerForeignUser = async (req: TForeignRegisterReq): Promise<TRegisterRes> => {
+//   // TODO: Replace with actual API call
+//   // const { data } = await axiosClient.post<TRegisterRes>('/api/foreign-register', req);
 
-  // Mock response for development
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        id: 'foreign_user_' + Date.now(),
-        custNo: req.custNo,
-        fullname: req.fullname,
-        lineUid: req.lineUid,
-        mobileNo: req.mobileNo,
-        isVerified: true,
-        approvalStatus: 'pending', // Foreign users require approval
-      });
-    }, 1000);
-  });
-};
+//   // Mock response for development
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve({
+//         id: 'foreign_user_' + Date.now(),
+//         custNo: req.custNo,
+//         fullname: req.fullname,
+//         lineUid: req.lineUid,
+//         mobileNo: req.mobileNo,
+//         isVerified: true,
+//         approvalStatus: 'pending', // Foreign users require approval
+//       });
+//     }, 1000);
+//   });
+//};
 
 /**
  * Check foreign user registration approval status
@@ -229,6 +229,5 @@ export const REGISTER_API = {
   verifyOtp,
   registerUser,
   registerRequest,
-  registerForeignUser,
   foreignRegisterStatus,
 };
