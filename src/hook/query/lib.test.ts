@@ -56,7 +56,7 @@ describe("test mapping next paid date into pawn state", () => {
         });
     });
 
-    describe("due — overdue by 0 to 6 days", () => {
+    describe("due — overdue by 0 to 7 days", () => {
         it("assigns 'due' when diff = 0 (today)", () => {
             expect(map(makePawn(dateAt(0))).pawnStatus).toBe("due");
         });
@@ -65,22 +65,22 @@ describe("test mapping next paid date into pawn state", () => {
             expect(map(makePawn(dateAt(-1))).pawnStatus).toBe("due");
         });
 
-        it("assigns 'due' when diff = -6", () => {
-            expect(map(makePawn(dateAt(-6))).pawnStatus).toBe("due");
+        it("assigns 'due' when diff = -7", () => {
+            expect(map(makePawn(dateAt(-7))).pawnStatus).toBe("due");
         });
     });
 
-    describe("overdue — overdue by 7 or more days", () => {
-        it("assigns 'overdue' when diff = -7", () => {
-            expect(map(makePawn(dateAt(-7))).pawnStatus).toBe("overdue");
+    describe("overdue — overdue by more than 7 days", () => {
+        it("assigns 'overdue' when diff = -8", () => {
+            expect(map(makePawn(dateAt(-8))).pawnStatus).toBe("overdue");
         });
 
         it("assigns 'overdue' when diff = -30", () => {
             expect(map(makePawn(dateAt(-30))).pawnStatus).toBe("overdue");
         });
 
-        it("dateDiff is -7 or less", () => {
-            expect(map(makePawn(dateAt(-10))).dateDiff).toBeLessThanOrEqual(-7);
+        it("dateDiff is less than -7", () => {
+            expect(map(makePawn(dateAt(-10))).dateDiff).toBeLessThan(-7);
         });
     });
 
@@ -97,9 +97,9 @@ describe("test mapping next paid date into pawn state", () => {
             expect(map(makePawn(dateAt(0))).pawnStatus).toBe("due");
         });
 
-        it("diff = -6 → due,  diff = -7 → overdue", () => {
-            expect(map(makePawn(dateAt(-6))).pawnStatus).toBe("due");
-            expect(map(makePawn(dateAt(-7))).pawnStatus).toBe("overdue");
+        it("diff = -7 → due,  diff = -8 → overdue", () => {
+            expect(map(makePawn(dateAt(-7))).pawnStatus).toBe("due");
+            expect(map(makePawn(dateAt(-8))).pawnStatus).toBe("overdue");
         });
     });
 

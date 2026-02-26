@@ -16,7 +16,7 @@ export const mapDateIntoState = (targetDate: Dayjs) => (item: TGetManyPawmRes): 
 
     if (diffInDays > 0) return { ...item, pawnStatus: "due-soon", dateDiff: diffInDays };
 
-    if (diffInDays > -7) return { ...item, pawnStatus: "due", dateDiff: diffInDays };
+    if (diffInDays >= -7) return { ...item, pawnStatus: "due", dateDiff: diffInDays };
 
     return { ...item, pawnStatus: "overdue", dateDiff: diffInDays };
 }
