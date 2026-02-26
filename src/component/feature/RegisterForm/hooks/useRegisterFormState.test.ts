@@ -13,6 +13,9 @@ const MOCK_USER: TSearchUserRes = {
   custType: "1",
   custStat: 1,
   nationCode: "1",
+  gender: 'x',
+  currentPoint: 0,
+  totalBuy: 0
 };
 
 const MOCK_OTP: TOtpRequestRes = {
