@@ -42,7 +42,7 @@ function HistoryPage() {
         ))}
       </ul>
       <div className="mt-auto text-center text-gray-400 p-2">
-        ยอดชำระไม่รวมค่าธรรมเนียม 5 บาท
+        ยอดชำระไม่รวมค่าธรรมเนียมธนาคาร 5 บาท
       </div>
     </>
   );

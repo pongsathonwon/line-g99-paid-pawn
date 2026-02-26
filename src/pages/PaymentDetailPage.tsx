@@ -59,7 +59,7 @@ function PaymentDetailPage() {
           <span>{interest.netInterest} บาท</span>
         </DisplayCard.Mute>
         <DisplayCard.Mute>
-          <span>ค่าธรรมเนียม</span>
+          <span>ค่าธรรมเนียมธนาคาร</span>
           <span>{interest.fee} บาท</span>
         </DisplayCard.Mute>
         <DisplayCard.Summary>
