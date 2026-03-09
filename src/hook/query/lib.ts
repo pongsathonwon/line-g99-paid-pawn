@@ -8,7 +8,16 @@ type TGetManyPawnWithStatus = TGetManyPawmRes & {
     dateDiff: number
 }
 
-export const mapDateIntoState = (targetDate: Dayjs) => (item: TGetManyPawmRes): TGetManyPawnWithStatus => {
+interface IMapDateIntoState {
+    nextPaidDate: string;
+}
+
+type TWithPawnStatus = {
+    pawnStatus: TPawnStatusEnum
+    dateDiff: number
+}
+
+export const mapDateIntoState = (targetDate: Dayjs) => <T extends IMapDateIntoState>(item: T): T & TWithPawnStatus => {
     const nextPaidDate = dayjs(item.nextPaidDate);
     const diffInDays = nextPaidDate.diff(targetDate, "day");
 
