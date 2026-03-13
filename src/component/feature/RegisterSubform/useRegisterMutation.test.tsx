@@ -12,6 +12,7 @@ import type { TRegisterReq, TRegisterRequestReq } from "@/types/register";
 vi.mock("@/api/endpoint/register", () => ({
   REGISTER_API: {
     registerUser: vi.fn(),
+    updateUser: vi.fn(),
     registerRequest: vi.fn(),
   },
 }));
@@ -86,9 +87,9 @@ describe("useRegisterMutation", () => {
     vi.clearAllMocks();
   });
 
-  describe("non foreign-counter mode (thai / foreign)", () => {
-    it("calls registerUser and advances to next step on success", async () => {
-      vi.mocked(REGISTER_API.registerUser).mockResolvedValue(mockRegisterRes);
+  describe("thai mode", () => {
+    it("calls updateUser and advances to next step on success", async () => {
+      vi.mocked(REGISTER_API.updateUser).mockResolvedValue(mockRegisterRes);
 
       const { result } = renderHook(() => useRegisterMutation("thai"), {
         wrapper: createWrapper(),
@@ -99,13 +100,14 @@ describe("useRegisterMutation", () => {
       });
 
       await waitFor(() => {
-        expect(REGISTER_API.registerUser).toHaveBeenCalledWith(mockRegisterReq);
+        expect(REGISTER_API.updateUser).toHaveBeenCalledWith(mockRegisterReq);
+        expect(REGISTER_API.registerUser).not.toHaveBeenCalled();
         expect(REGISTER_API.registerRequest).not.toHaveBeenCalled();
       });
     });
 
-    it("passes dataFrom, currentPoint and totalBuy to registerUser", async () => {
-      vi.mocked(REGISTER_API.registerUser).mockResolvedValue(mockRegisterRes);
+    it("passes dataFrom, currentPoint and totalBuy to updateUser", async () => {
+      vi.mocked(REGISTER_API.updateUser).mockResolvedValue(mockRegisterRes);
 
       const { result } = renderHook(() => useRegisterMutation("thai"), {
         wrapper: createWrapper(),
@@ -116,7 +118,7 @@ describe("useRegisterMutation", () => {
       });
 
       await waitFor(() => {
-        expect(REGISTER_API.registerUser).toHaveBeenCalledWith(
+        expect(REGISTER_API.updateUser).toHaveBeenCalledWith(
           expect.objectContaining({
             dataFrom: "HUG_exist",
             currentPoint: 100,
@@ -126,24 +128,8 @@ describe("useRegisterMutation", () => {
       });
     });
 
-    it("does NOT call registerRequest for thai mode", async () => {
-      vi.mocked(REGISTER_API.registerUser).mockResolvedValue(mockRegisterRes);
-
-      const { result } = renderHook(() => useRegisterMutation("foreign"), {
-        wrapper: createWrapper(),
-      });
-
-      act(() => {
-        result.current.mutate(mockRegisterReq);
-      });
-
-      await waitFor(() => {
-        expect(REGISTER_API.registerRequest).not.toHaveBeenCalled();
-      });
-    });
-
-    it("sets isPending to true while registerUser is in-flight", async () => {
-      vi.mocked(REGISTER_API.registerUser).mockImplementation(
+    it("sets isPending to true while updateUser is in-flight", async () => {
+      vi.mocked(REGISTER_API.updateUser).mockImplementation(
         () =>
           new Promise((resolve) =>
             setTimeout(() => resolve(mockRegisterRes), 100),
@@ -169,9 +155,9 @@ describe("useRegisterMutation", () => {
       });
     });
 
-    it("sets isPending to false after registerUser error", async () => {
-      vi.mocked(REGISTER_API.registerUser).mockRejectedValue(
-        new Error("ลงทะเบียนไม่สำเร็จ"),
+    it("sets isPending to false after updateUser error", async () => {
+      vi.mocked(REGISTER_API.updateUser).mockRejectedValue(
+        new Error("อัปเดตข้อมูลไม่สำเร็จ"),
       );
 
       const { result } = renderHook(() => useRegisterMutation("thai"), {
@@ -186,7 +172,27 @@ describe("useRegisterMutation", () => {
         expect(result.current.isPending).toBe(false);
       });
 
-      expect(REGISTER_API.registerUser).toHaveBeenCalledOnce();
+      expect(REGISTER_API.updateUser).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe("foreign mode", () => {
+    it("calls registerUser and does NOT call updateUser or registerRequest", async () => {
+      vi.mocked(REGISTER_API.registerUser).mockResolvedValue(mockRegisterRes);
+
+      const { result } = renderHook(() => useRegisterMutation("foreign"), {
+        wrapper: createWrapper(),
+      });
+
+      act(() => {
+        result.current.mutate(mockRegisterReq);
+      });
+
+      await waitFor(() => {
+        expect(REGISTER_API.registerUser).toHaveBeenCalledWith(mockRegisterReq);
+        expect(REGISTER_API.updateUser).not.toHaveBeenCalled();
+        expect(REGISTER_API.registerRequest).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -210,6 +216,7 @@ describe("useRegisterMutation", () => {
           mockRegisterRequestReq,
         );
         expect(REGISTER_API.registerUser).not.toHaveBeenCalled();
+        expect(REGISTER_API.updateUser).not.toHaveBeenCalled();
       });
     });
 

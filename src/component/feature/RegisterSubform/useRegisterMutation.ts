@@ -27,11 +27,19 @@ export function useRegisterMutation(mode: TMode) {
     onError,
   });
 
-  const isPending = registerMutation.isPending || registerRequestMutation.isPending;
+  const updateUserMutation = useMutation({
+    mutationFn: (req: TRegisterReq) => REGISTER_API.updateUser(req),
+    onSuccess,
+    onError,
+  });
+
+  const isPending = registerMutation.isPending || registerRequestMutation.isPending || updateUserMutation.isPending;
 
   const mutate = (req: TRegisterReq | TRegisterRequestReq) => {
     if (mode === "foreign-counter") {
       registerRequestMutation.mutate(req as TRegisterRequestReq);
+    } else if (mode === "thai") {
+      updateUserMutation.mutate(req as TRegisterReq);
     } else {
       registerMutation.mutate(req as TRegisterReq);
     }

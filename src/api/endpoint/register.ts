@@ -96,6 +96,34 @@ export const verifyOtp = async (req: TOtpVerifyReq): Promise<TOtpVerifyRes> => {
 }
 
 /**
+ * Update existing user in HUG CRM
+ */
+export const updateUser = async (req: TRegisterReq): Promise<TRegisterRes> => {
+  try {
+    const { data } = await axiosClient.post<TWrappedRes<TRegisterRes>>(
+      '/api/sb/v1/customer/update',
+      req,
+      {
+        baseURL: 'https://api.simatic.golden99.co.th',
+      }
+    );
+    const res = data.body
+    if (!res) throw new Error(`อัปเดตข้อมูลไม่สำเร็จ : [${data.resultCode}]`)
+    return res
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      const apiErrorMessage = e.response?.data.message;
+      if (!apiErrorMessage) throw new Error(`ไม่สามารถใช้งานได้ในขณะนี้ : [${e.code}]`);
+      throw new Error(apiErrorMessage);
+    }
+    if (e instanceof Error) {
+      throw e;
+    }
+    throw new Error(String(e));
+  }
+}
+
+/**
  * Register user (always POST /api/sb/v1/customer/create — only called when user exists in HUG CRM)
  */
 export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => {
@@ -122,6 +150,9 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
     throw new Error(String(e));
   }
 }
+
+
+
 
 /**
  * Register request for foreign counter (simplified registration)
@@ -224,6 +255,7 @@ export const REGISTER_API = {
   requestOtp,
   verifyOtp,
   registerUser,
+  updateUser,
   registerRequest,
   foreignRegisterStatus,
 };
