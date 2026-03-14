@@ -107,6 +107,7 @@ export const updateUser = async ({ dataFrom, ...r }: TRegisterReq): Promise<TReg
         baseURL: 'https://api.simatic.golden99.co.th',
       }
     );
+    if (data.resultError) throw new Error(data.resultError.message)
     const res = data.body
     if (!res) throw new Error(`อัปเดตข้อมูลไม่สำเร็จ : [${data.resultCode}]`)
     return res
@@ -135,6 +136,7 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
         baseURL: 'https://api.simatic.golden99.co.th',
       }
     );
+    if (data.resultError) throw new Error(data.resultError.message)
     const res = data.body
     if (!res) throw new Error(`ลงทะเบียนไม่สำเร็จ : [${data.resultCode}]`)
     return res

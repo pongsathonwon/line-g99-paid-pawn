@@ -46,6 +46,7 @@ export type TWrappedRes<T> = {
   resultCode: number
   resultDescription: string
   body?: T
+  resultError?: { message: string }
 }
 
 export type TOtpVerifyReq = {
