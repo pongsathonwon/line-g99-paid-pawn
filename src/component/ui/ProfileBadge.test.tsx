@@ -7,6 +7,7 @@ describe("ProfileBadge", () => {
   const MOCK_LINE = {
     pictureUrl: "test-url",
     displayName: "test-name",
+    custNo: "C001",
   };
 
   beforeEach(() => {
@@ -31,6 +32,10 @@ describe("ProfileBadge", () => {
 
   it("should display welcome text in Thai", () => {
     expect(screen.getByText("ยินดีต้อนรับ")).toBeInTheDocument();
+  });
+
+  it("should display the member ID", () => {
+    expect(screen.getByText("รหัสสมาชิก: C001")).toBeInTheDocument();
   });
 
   it("should render as a header element", () => {

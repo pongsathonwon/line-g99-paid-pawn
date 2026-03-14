@@ -98,11 +98,11 @@ export const verifyOtp = async (req: TOtpVerifyReq): Promise<TOtpVerifyRes> => {
 /**
  * Update existing user in HUG CRM
  */
-export const updateUser = async (req: TRegisterReq): Promise<TRegisterRes> => {
+export const updateUser = async ({ dataFrom, ...r }: TRegisterReq): Promise<TRegisterRes> => {
   try {
     const { data } = await axiosClient.post<TWrappedRes<TRegisterRes>>(
       '/api/sb/v1/customer/update',
-      req,
+      r,
       {
         baseURL: 'https://api.simatic.golden99.co.th',
       }

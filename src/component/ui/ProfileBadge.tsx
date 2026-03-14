@@ -1,9 +1,10 @@
 type TProfileBadgeProps = {
   readonly pictureUrl: string;
   readonly displayName: string;
+  readonly custNo: string;
 };
 
-function ProfileBadge({ pictureUrl, displayName }: TProfileBadgeProps) {
+function ProfileBadge({ pictureUrl, displayName, custNo }: TProfileBadgeProps) {
   return (
     <header className="fixed top-0 left-0 w-full h-(--header-height) overflow-hidden bg-white">
       <div className="relative -z-10">
@@ -55,6 +56,7 @@ function ProfileBadge({ pictureUrl, displayName }: TProfileBadgeProps) {
             <div className="flex flex-col justify-center">
               <h2 className="text-sm font-bold">ยินดีต้อนรับ</h2>
               <span className="text-sm">{displayName}</span>
+              <span className="text-sm">รหัสสมาชิก: {custNo}</span>
             </div>
           </div>
         </div>
