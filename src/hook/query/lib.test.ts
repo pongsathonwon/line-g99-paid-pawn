@@ -70,17 +70,33 @@ describe("test mapping next paid date into pawn state", () => {
         });
     });
 
-    describe("overdue — overdue by more than 7 days", () => {
+    describe("overdue — overdue by 8 to 14 days", () => {
         it("assigns 'overdue' when diff = -8", () => {
             expect(map(makePawn(dateAt(-8))).pawnStatus).toBe("overdue");
         });
 
-        it("assigns 'overdue' when diff = -30", () => {
-            expect(map(makePawn(dateAt(-30))).pawnStatus).toBe("overdue");
+        it("assigns 'overdue' when diff = -14", () => {
+            expect(map(makePawn(dateAt(-14))).pawnStatus).toBe("overdue");
         });
 
-        it("dateDiff is less than -7", () => {
-            expect(map(makePawn(dateAt(-10))).dateDiff).toBeLessThan(-7);
+        it("dateDiff is between -8 and -14", () => {
+            const result = map(makePawn(dateAt(-10)));
+            expect(result.dateDiff).toBeLessThan(-7);
+            expect(result.dateDiff).toBeGreaterThanOrEqual(-14);
+        });
+    });
+
+    describe("expire — overdue by more than 14 days", () => {
+        it("assigns 'expire' when diff = -15", () => {
+            expect(map(makePawn(dateAt(-15))).pawnStatus).toBe("expire");
+        });
+
+        it("assigns 'expire' when diff = -30", () => {
+            expect(map(makePawn(dateAt(-30))).pawnStatus).toBe("expire");
+        });
+
+        it("dateDiff is less than -14", () => {
+            expect(map(makePawn(dateAt(-20))).dateDiff).toBeLessThan(-14);
         });
     });
 
@@ -101,6 +117,11 @@ describe("test mapping next paid date into pawn state", () => {
             expect(map(makePawn(dateAt(-7))).pawnStatus).toBe("due");
             expect(map(makePawn(dateAt(-8))).pawnStatus).toBe("overdue");
         });
+
+        it("diff = -14 → overdue,  diff = -15 → expire", () => {
+            expect(map(makePawn(dateAt(-14))).pawnStatus).toBe("overdue");
+            expect(map(makePawn(dateAt(-15))).pawnStatus).toBe("expire");
+        });
     });
 
     // ─── array handling ───────────────────────────────────────────────────────
@@ -116,12 +137,14 @@ describe("test mapping next paid date into pawn state", () => {
                 makePawn(dateAt(3)),    // due-soon
                 makePawn(dateAt(-3)),   // due
                 makePawn(dateAt(-10)),  // overdue
+                makePawn(dateAt(-20)),  // expire
             ];
-            const [a, b, c, d] = input.map(map);
+            const [a, b, c, d, e] = input.map(map);
             expect(a.pawnStatus).toBe("normal");
             expect(b.pawnStatus).toBe("due-soon");
             expect(c.pawnStatus).toBe("due");
             expect(d.pawnStatus).toBe("overdue");
+            expect(e.pawnStatus).toBe("expire");
         });
 
         it("preserves all original pawn fields", () => {

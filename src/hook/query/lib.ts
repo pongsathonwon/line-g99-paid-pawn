@@ -1,7 +1,7 @@
 import type { TGetManyPawmRes } from "@/api/endpoint/pawn";
 import dayjs, { Dayjs } from "dayjs";
 
-export type TPawnStatusEnum = "overdue" | "due-soon" | "normal" | "due";
+export type TPawnStatusEnum = "overdue" | "due-soon" | "normal" | "due" | "expire";
 
 type TGetManyPawnWithStatus = TGetManyPawmRes & {
     pawnStatus: TPawnStatusEnum
@@ -27,7 +27,9 @@ export const mapDateIntoState = (targetDate: Dayjs) => <T extends IMapDateIntoSt
 
     if (diffInDays >= -7) return { ...item, pawnStatus: "due", dateDiff: diffInDays };
 
-    return { ...item, pawnStatus: "overdue", dateDiff: diffInDays };
+    if (diffInDays >= -14) return { ...item, pawnStatus: "overdue", dateDiff: diffInDays };
+
+    return { ...item, pawnStatus: "expire", dateDiff: diffInDays };
 }
 
 export const transformPawnStatus = (pawn: TGetManyPawmRes[]): TGetManyPawnWithStatus[] => {

@@ -25,6 +25,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   backgroundImage = "/bg_paycard.png",
 }) => {
   const statusColors = {
+    expire: "text-brand-red",
     overdue: "text-brand-red",
     normal: "text-gray-600",
     "due-soon": "text-gold",
@@ -35,6 +36,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
     TPawnStatusEnum,
     { color: ButtonColor; styleType: ButtonStyleType }
   > = {
+    expire: { color: "black", styleType: "solid" },
     overdue: { color: "black", styleType: "solid" },
     normal: { color: "black", styleType: "solid" },
     "due-soon": { color: "gold", styleType: "solid" },
@@ -42,6 +44,7 @@ export const PayCard: React.FC<PaymentCardProps> = ({
   };
 
   const statusText: Record<TPawnStatusEnum, (dateDiff: number) => string> = {
+    expire: (diff) => "หมดอายุ",
     overdue: (diffDays) => "เลยกำหนด",
     normal: (dateDiff) => "ยังไม่ถึงกำหนด",
     "due-soon": (dateDiff) => `${dateDiff} วันก่อนกำหนด`,
