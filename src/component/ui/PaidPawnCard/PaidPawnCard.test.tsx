@@ -15,12 +15,10 @@ const MOCK_PROPS: TGetHistPaidByIdRes = {
   paidStat: "1",
   custName: "cust",
   branchName: "branch",
-  typeDesc: "type",
-  laiDesc: "lai",
-  goldType: "96.5",
   emplName: "online",
-  pawnPrice: 20000,
-  goodWeight: 1.36,
+  pawnItem: [
+    { typeDesc: "type", laiDesc: "lai", goldType: "96.5", pawnPrice: 20000, goodWeight: 1.36 },
+  ],
 };
 
 describe("test paid pawn card", () => {
@@ -71,30 +69,37 @@ describe("test paid pawn card", () => {
       expect(label.nextElementSibling?.innerHTML).toBe(MOCK_PROPS.branchName);
     });
 
-    it("should render product type and gold type", () => {
-      const label = screen.getByText("สินค้า");
-      expect(label).toBeInTheDocument();
-      expect(label.nextElementSibling?.textContent).toBe(
-        `${MOCK_PROPS.typeDesc} ${MOCK_PROPS.laiDesc}`,
-      );
-    });
-
-    it("should render weight", () => {
-      const label = screen.getByText("น้ำหนัก");
-      expect(label).toBeInTheDocument();
-      expect(label.nextElementSibling?.innerHTML).toBe("1.36 กรัม");
-    });
-
-    it("should render pawn price", () => {
-      const label = screen.getByText("เงินต้น");
-      expect(label).toBeInTheDocument();
-      expect(label.nextElementSibling?.innerHTML).toBe("20,000 บาท");
-    });
-
     it("should render employee name", () => {
       const label = screen.getByText("ผู้ทำรายการ");
       expect(label).toBeInTheDocument();
       expect(label.nextElementSibling?.innerHTML).toBe(MOCK_PROPS.emplName);
+    });
+  });
+
+  describe("test pawnItem list rendering", () => {
+    it("should render all items", () => {
+      const items = [
+        { typeDesc: "typeA", laiDesc: "laiA", goldType: "96.5", pawnPrice: 10000, goodWeight: 1.0 },
+        { typeDesc: "typeB", laiDesc: "laiB", goldType: "99.9", pawnPrice: 5000, goodWeight: 0.5 },
+      ];
+      render(<PaidPawnCard {...MOCK_PROPS} pawnItem={items} />);
+
+      const productLabels = screen.getAllByText("สินค้า");
+      expect(productLabels).toHaveLength(2);
+      expect(productLabels[0].nextElementSibling?.textContent).toBe("typeA laiA");
+      expect(productLabels[1].nextElementSibling?.textContent).toBe("typeB laiB");
+    });
+
+    it("should render total pawn price sum", () => {
+      const items = [
+        { typeDesc: "typeA", laiDesc: "laiA", goldType: "96.5", pawnPrice: 10000, goodWeight: 1.0 },
+        { typeDesc: "typeB", laiDesc: "laiB", goldType: "99.9", pawnPrice: 5000, goodWeight: 0.5 },
+      ];
+      render(<PaidPawnCard {...MOCK_PROPS} pawnItem={items} />);
+
+      const label = screen.getByText("เงินต้นรวม");
+      expect(label).toBeInTheDocument();
+      expect(label.nextElementSibling?.textContent).toBe("15,000 บาท");
     });
   });
 

@@ -27,15 +27,21 @@ export type TGetHistPaidByIdReq = {
     paidNumb: string
 }
 
-export type TGetHistPaidByIdRes = {
-    custName: string
-    branchName: string
+export type THistPaidPawnItem = {
+    pawnPrice: number
+    goodWeight: number
     typeDesc: string
     laiDesc: string
     goldType: string
+}
+
+export type TGetHistPaidByIdRes = {
+    custName: string
+    branchName: string
+
     emplName: string
-    pawnPrice: number
-    goodWeight: number
+
+    pawnItem: THistPaidPawnItem[]
 } & TGetHistPaidRes
 
 export type TGetHistPaidReq = {

@@ -1,6 +1,7 @@
 import type { TGetHistPaidByIdRes } from "@/api/endpoint/pawn";
 import DisplayCard from "../DisplayCard/DisplayCard";
 import { formatThaiDate } from "@/lib/date-time";
+import { Fragment } from "react/jsx-runtime";
 
 function PaidPawnCard(data: TGetHistPaidByIdRes) {
   const getDiscount = ({ paidDisc, paidAmou }: TGetHistPaidByIdRes) => {
@@ -39,20 +40,35 @@ function PaidPawnCard(data: TGetHistPaidByIdRes) {
         <span>{data.branchName}</span>
       </DisplayCard.Mute>
       <DisplayCard.Divider />
+      {data.pawnItem.map((item, i) => (
+        <Fragment key={i}>
+          <DisplayCard.Mute>
+            <span>สินค้า</span>
+            <span>
+              {item.typeDesc} {item.laiDesc}
+            </span>
+          </DisplayCard.Mute>
+          <DisplayCard.Mute>
+            <span>น้ำหนัก</span>
+            <span>{item.goodWeight} กรัม</span>
+          </DisplayCard.Mute>
+          <DisplayCard.Mute>
+            <span>เงินต้น</span>
+            <span>{item.pawnPrice.toLocaleString()} บาท</span>
+          </DisplayCard.Mute>
+          <DisplayCard.Divider line="dash" />
+        </Fragment>
+      ))}
       <DisplayCard.Mute>
-        <span>สินค้า</span>
+        <span>เงินต้นรวม</span>
         <span>
-          {data.typeDesc} {data.laiDesc}
+          {data.pawnItem
+            .reduce((acc, cur) => acc + cur.pawnPrice, 0)
+            .toLocaleString()}{" "}
+          บาท
         </span>
       </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>น้ำหนัก</span>
-        <span>{data.goodWeight} กรัม</span>
-      </DisplayCard.Mute>
-      <DisplayCard.Mute>
-        <span>เงินต้น</span>
-        <span>{data.pawnPrice.toLocaleString()} บาท</span>
-      </DisplayCard.Mute>
+      <DisplayCard.Divider />
       <DisplayCard.Mute>
         <span>ผู้ทำรายการ</span>
         <span>{data.emplName}</span>
