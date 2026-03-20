@@ -156,20 +156,6 @@ export const registerUser = async (req: TRegisterReq): Promise<TRegisterRes> => 
 
 
 
-/**
- * Register foreign user with fallback: try create, if duplicate key → update
- */
-export const registerUserWithFallback = async (req: TRegisterReq): Promise<TRegisterRes> => {
-  try {
-    return await registerUser(req);
-  } catch (e) {
-    if (e instanceof Error && e.message.includes('duplicate key')) {
-      // User already exists in vendor DB — fall back to update
-      return await updateUser(req);
-    }
-    throw e;
-  }
-};
 
 /**
  * Register request for foreign counter (simplified registration)
@@ -272,7 +258,6 @@ export const REGISTER_API = {
   requestOtp,
   verifyOtp,
   registerUser,
-  registerUserWithFallback,
   updateUser,
   registerRequest,
   foreignRegisterStatus,
