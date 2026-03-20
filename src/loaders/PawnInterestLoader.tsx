@@ -52,7 +52,8 @@ function PawnInterestLoader({ children }: { children: React.ReactNode }) {
 
   // Gate 2: verify against interest result's dueDate (covers deep-links / stale cache)
   if (isSuccess && interest) {
-    const interestStatus = mapDateIntoState(dayjs())({
+    const today = dayjs().startOf("day");
+    const interestStatus = mapDateIntoState(today)({
       nextPaidDate: interest.dueDate,
     }).pawnStatus;
 

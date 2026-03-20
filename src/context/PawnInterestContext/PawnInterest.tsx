@@ -16,7 +16,7 @@ export const usePawnInterestContext = () => {
 };
 
 export const usePawnInterest = () => {
-  const { data, getInterest, isIdle, isPaused, isSuccess, isError, error } =
+  const { data, getInterest, isIdle, isPaused, isSuccess, isPending, isError, error } =
     usePawnInterestContext();
   return {
     interest: data,
@@ -24,6 +24,7 @@ export const usePawnInterest = () => {
     isIdle,
     isPaused,
     isSuccess,
+    isPending,
     isError,
     error,
   };

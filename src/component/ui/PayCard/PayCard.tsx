@@ -1,9 +1,4 @@
 import React from "react";
-import {
-  Button,
-  type ButtonColor,
-  type ButtonStyleType,
-} from "@/component/Button";
 import { formatThaiDate } from "@/lib/date-time";
 import type { TPawnStatusEnum } from "@/hook/query/lib";
 
@@ -32,15 +27,12 @@ export const PayCard: React.FC<PaymentCardProps> = ({
     due: "text-brand-red",
   };
 
-  const buttonStyles: Record<
-    TPawnStatusEnum,
-    { color: ButtonColor; styleType: ButtonStyleType }
-  > = {
-    expire: { color: "black", styleType: "solid" },
-    overdue: { color: "black", styleType: "solid" },
-    normal: { color: "black", styleType: "solid" },
-    "due-soon": { color: "gold", styleType: "solid" },
-    due: { color: "primary", styleType: "solid" },
+  const buttonColors: Record<TPawnStatusEnum, string> = {
+    expire: "bg-gray text-white",
+    overdue: "bg-gray text-white",
+    normal: "bg-gray text-white",
+    "due-soon": "bg-gold text-white",
+    due: "bg-brand-red text-white",
   };
 
   const statusText: Record<TPawnStatusEnum, (dateDiff: number) => string> = {
@@ -99,14 +91,11 @@ export const PayCard: React.FC<PaymentCardProps> = ({
           {statusText[pawnStatus](dateDiff)}
         </span>
 
-        <Button
-          color={buttonStyles[pawnStatus].color}
-          styleType={buttonStyles[pawnStatus].styleType}
-          size="xs"
-          className="text-[10px] rounded-md lg:text-base"
+        <div
+          className={`inline-flex items-center justify-center font-medium px-2.5 py-0.5 text-[10px] rounded-md lg:text-base ${buttonColors[pawnStatus]}`}
         >
           ชำระเลย
-        </Button>
+        </div>
       </div>
     </div>
   );

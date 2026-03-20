@@ -19,7 +19,7 @@ const testSuit: TTestPawnStatus[] = [
   {
     pawnStatus: "normal",
     test: [
-      (screen) => expect(screen.getByRole("button")).toHaveClass("bg-gray"),
+      (screen) => expect(screen.getByText("ชำระเลย")).toHaveClass("bg-gray"),
       (screen) =>
         expect(screen.getByTestId("button-label")).toHaveClass("text-gray-600"),
       (screen) =>
@@ -29,7 +29,7 @@ const testSuit: TTestPawnStatus[] = [
   {
     pawnStatus: "due-soon",
     test: [
-      (screen) => expect(screen.getByRole("button")).toHaveClass("bg-gold"),
+      (screen) => expect(screen.getByText("ชำระเลย")).toHaveClass("bg-gold"),
       (screen) =>
         expect(screen.getByTestId("button-label")).toHaveClass("text-gold"),
       (screen) =>
@@ -42,7 +42,7 @@ const testSuit: TTestPawnStatus[] = [
     pawnStatus: "due",
     test: [
       (screen) =>
-        expect(screen.getByRole("button")).toHaveClass("bg-brand-red"),
+        expect(screen.getByText("ชำระเลย")).toHaveClass("bg-brand-red"),
       (screen) =>
         expect(screen.getByTestId("button-label")).toHaveClass(
           "text-brand-red"
@@ -53,7 +53,7 @@ const testSuit: TTestPawnStatus[] = [
   {
     pawnStatus: "overdue",
     test: [
-      (screen) => expect(screen.getByRole("button")).toHaveClass("bg-gray"),
+      (screen) => expect(screen.getByText("ชำระเลย")).toHaveClass("bg-gray"),
       (screen) =>
         expect(screen.getByTestId("button-label")).toHaveClass(
           "text-brand-red"
