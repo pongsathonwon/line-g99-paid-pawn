@@ -12,6 +12,7 @@ import type { TRegisterReq, TRegisterRequestReq } from "@/types/register";
 vi.mock("@/api/endpoint/register", () => ({
   REGISTER_API: {
     registerUser: vi.fn(),
+    registerUserWithFallback: vi.fn(),
     updateUser: vi.fn(),
     registerRequest: vi.fn(),
   },
@@ -177,8 +178,8 @@ describe("useRegisterMutation", () => {
   });
 
   describe("foreign mode", () => {
-    it("calls registerUser and does NOT call updateUser or registerRequest", async () => {
-      vi.mocked(REGISTER_API.registerUser).mockResolvedValue(mockRegisterRes);
+    it("calls registerUserWithFallback and does NOT call updateUser or registerRequest", async () => {
+      vi.mocked(REGISTER_API.registerUserWithFallback).mockResolvedValue(mockRegisterRes);
 
       const { result } = renderHook(() => useRegisterMutation("foreign"), {
         wrapper: createWrapper(),
@@ -189,7 +190,7 @@ describe("useRegisterMutation", () => {
       });
 
       await waitFor(() => {
-        expect(REGISTER_API.registerUser).toHaveBeenCalledWith(mockRegisterReq);
+        expect(REGISTER_API.registerUserWithFallback).toHaveBeenCalledWith(mockRegisterReq);
         expect(REGISTER_API.updateUser).not.toHaveBeenCalled();
         expect(REGISTER_API.registerRequest).not.toHaveBeenCalled();
       });
