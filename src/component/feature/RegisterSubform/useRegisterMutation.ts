@@ -16,7 +16,7 @@ export function useRegisterMutation(mode: TMode) {
   const onError = (error: any) => showError(error.message || ERROR_MESSAGE);
 
   const registerMutation = useMutation({
-    mutationFn: (req: TRegisterReq) => REGISTER_API.registerUser(req),
+    mutationFn: (req: TRegisterReq) => REGISTER_API.registerUserWithFallback(req),
     onSuccess,
     onError,
   });
