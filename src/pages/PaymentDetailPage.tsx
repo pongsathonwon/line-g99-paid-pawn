@@ -5,13 +5,19 @@ import QueryLoading from "@/component/ui/QueryLoading";
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
 import { formatThaiDate } from "@/lib/date-time";
 import { NavLink } from "react-router-dom";
+// import dayjs from "dayjs";
+// import { useMemo } from "react";
 
 const formatDiscount = (membDisc: number) =>
   membDisc > 0 ? `- ${membDisc.toFixed(2)}` : "0.00";
 
 function PaymentDetailPage() {
   const { interest, isSuccess, isError, error } = usePawnInterest();
-
+// const validBefore = interest?.validBefore
+// const modifiedValidDate = useMemo(() => {
+//   const dateObject = dayjs(validBefore)
+//   return formatThaiDate(dateObject.add(-1,"day").toISOString())
+// }, [validBefore])
   if (isError) {
     return <QueryError error={error} backTo="/home" />;
   }
@@ -43,7 +49,7 @@ function PaymentDetailPage() {
         <DisplayCard.Divider color="gold" line="dash" />
         <DisplayCard.Mute>
           <span>ชำระภายใน</span>
-          <span>{formatThaiDate(interest.validBefore)}</span>
+          <span>{formatThaiDate(interest?.createAt)}</span>
         </DisplayCard.Mute>
         <DisplayCard.Mute>
           <span>ดอกเบี้ย</span>
