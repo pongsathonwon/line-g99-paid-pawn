@@ -27,7 +27,7 @@ export const mapDateIntoState = (targetDate: Dayjs) => {
 
         if (diffInDays > 0) return { ...item, pawnStatus: "due-soon", dateDiff: diffInDays };
 
-        if (diffInDays > -7) return { ...item, pawnStatus: "due", dateDiff: diffInDays };
+        if (diffInDays >= -7) return { ...item, pawnStatus: "due", dateDiff: diffInDays };
 
         if (diffInDays >= -14) return { ...item, pawnStatus: "overdue", dateDiff: diffInDays };
 
