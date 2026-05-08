@@ -3,7 +3,6 @@ import { axiosClient } from "../axios"
 export const getManyPawnByCust = async ({ custCode }: TGetManyPawnReq) => {
     if (!custCode) return []
     const { data } = await axiosClient.get<TGetManyPawmRes[]>(`pawn/${custCode}`)
-    console.log(data)
     return data
 }
 

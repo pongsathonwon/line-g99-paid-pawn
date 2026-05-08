@@ -100,7 +100,6 @@ function SearchCustomer({
   };
 
   const onGoNext = () => {
-    console.log(validUserForm);
     if (!validUserForm) return;
     try {
       next();
