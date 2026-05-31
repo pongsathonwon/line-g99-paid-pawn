@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createBarcodeFilled, createBarcodeClean } from "./lib";
 import type { TQrCodeConfig } from "./lib.type";
+import type { TPaymentData } from "./QrCode";
 
 const CONFIG: TQrCodeConfig = {
   prefix: "|",
@@ -8,10 +9,11 @@ const CONFIG: TQrCodeConfig = {
   suffix: "01",
 };
 
-const PAY = {
+const PAY: TPaymentData = {
   ref1: "123",
   ref2: "456",
   amount: "100.00",
+  interestDate: '2025-01-01'
 };
 
 describe("createBarcodeFilled", () => {
