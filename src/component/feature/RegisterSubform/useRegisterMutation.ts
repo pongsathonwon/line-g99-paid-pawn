@@ -38,8 +38,6 @@ export function useRegisterMutation(mode: TMode) {
   const mutate = (req: TRegisterReq | TRegisterRequestReq) => {
     if (mode === "foreign-counter") {
       registerRequestMutation.mutate(req as TRegisterRequestReq);
-    } else if (mode === "thai") {
-      updateUserMutation.mutate(req as TRegisterReq);
     } else {
       registerMutation.mutate(req as TRegisterReq);
     }
