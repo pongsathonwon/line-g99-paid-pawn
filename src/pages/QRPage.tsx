@@ -22,7 +22,9 @@ function QRPage() {
             บันทึกหน้าจอ QR เพื่อชำระเงิน
           </p>
         </div> */}
-        <QrCodeCard2 paymentData={{ ref1, ref2, amount }} />
+        <QrCodeCard2
+          paymentData={{ ref1, ref2, amount, interestDate: interest.createAt }}
+        />
 
         <NavLink to="..">
           <Button styleType="outline" className="w-full">

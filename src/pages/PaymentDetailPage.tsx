@@ -13,11 +13,11 @@ const formatDiscount = (membDisc: number) =>
 
 function PaymentDetailPage() {
   const { interest, isSuccess, isError, error } = usePawnInterest();
-// const validBefore = interest?.validBefore
-// const modifiedValidDate = useMemo(() => {
-//   const dateObject = dayjs(validBefore)
-//   return formatThaiDate(dateObject.add(-1,"day").toISOString())
-// }, [validBefore])
+  // const validBefore = interest?.validBefore
+  // const modifiedValidDate = useMemo(() => {
+  //   const dateObject = dayjs(validBefore)
+  //   return formatThaiDate(dateObject.add(-1,"day").toISOString())
+  // }, [validBefore])
   if (isError) {
     return <QueryError error={error} backTo="/home" />;
   }
@@ -47,10 +47,6 @@ function PaymentDetailPage() {
           <span>{interest.interestRate} %</span>
         </DisplayCard.Mute>
         <DisplayCard.Divider color="gold" line="dash" />
-        <DisplayCard.Mute>
-          <span>ชำระภายใน</span>
-          <span>{formatThaiDate(interest?.createAt)}</span>
-        </DisplayCard.Mute>
         <DisplayCard.Mute>
           <span>ดอกเบี้ย</span>
           <span>{interest.totalInterest.toFixed(2)} บาท</span>

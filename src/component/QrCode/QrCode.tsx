@@ -7,6 +7,7 @@ export type TPaymentData = {
   ref1: string;
   ref2: string;
   amount: string;
+  interestDate: string;
 };
 
 type TQrCodeProps = {

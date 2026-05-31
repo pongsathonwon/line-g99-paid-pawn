@@ -1,3 +1,4 @@
+import { formatThaiDate } from "@/lib/date-time";
 import DisplayCard from "../ui/DisplayCard/DisplayCard";
 import type { TPaymentData } from "./QrCode";
 import QrCode from "./QrCode";
@@ -45,6 +46,12 @@ function QrCodeCard2({ paymentData, qrWidth = 280 }: TQrCodeCardProps) {
       <DisplayCard.Mute>
         <span>หมายเหตุ</span>
         <span className="text-black">บันทึกหน้าจอ QR เพื่อชำระ</span>
+      </DisplayCard.Mute>
+      <DisplayCard.Mute>
+        <span>คิวอาร์โค้ดสามารถชำระได้ถึง</span>
+        <span className="text-black">
+          {formatThaiDate(paymentData.interestDate)}
+        </span>
       </DisplayCard.Mute>
     </DisplayCard>
   );
