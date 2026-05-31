@@ -12,6 +12,7 @@ const MOCK_PAYMENT = {
   ref1: "CONTRACT001",
   ref2: "REF999",
   amount: "1500.00",
+  interestDate: "2025-06-30T00:00:00.000Z",
 };
 
 describe("QrCodeCard2", () => {
@@ -48,5 +49,10 @@ describe("QrCodeCard2", () => {
   it("displays payment instruction note", () => {
     render(<QrCodeCard2 paymentData={MOCK_PAYMENT} />);
     expect(screen.getByText("บันทึกหน้าจอ QR เพื่อชำระ")).toBeInTheDocument();
+  });
+
+  it("displays interestDate label", () => {
+    render(<QrCodeCard2 paymentData={MOCK_PAYMENT} />);
+    expect(screen.getByText("คิวอาร์โค้ดสามารถชำระได้ถึง")).toBeInTheDocument();
   });
 });

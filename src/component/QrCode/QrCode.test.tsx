@@ -15,6 +15,7 @@ const MOCK_PAYMENT = {
   ref1: "REF001",
   ref2: "REF002",
   amount: "500.00",
+  interestDate: "2025-06-30T00:00:00.000Z",
 };
 
 describe("QrCode", () => {
