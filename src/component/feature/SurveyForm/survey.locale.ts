@@ -32,6 +32,14 @@ export const SURVEY_TEXT = {
       "เชื่อมบัญชี LINE กับบัญชีสมาชิก Golden 99 เพื่อดูรายการจำนำและชำระดอกเบี้ยออนไลน์ได้ทันที",
     linkAccount: "เชื่อมบัญชีสมาชิก",
   },
+  testMode: {
+    banner: (uid: string | null | undefined) =>
+      uid ? `โหมดทดสอบ · uid …${uid.slice(-6)}` : "โหมดทดสอบ",
+    refusedTitle: "รหัสโหมดทดสอบไม่ถูกต้อง",
+    refused:
+      "ระบบไม่รับรหัสทดสอบนี้ หรือโหมดทดสอบถูกปิดอยู่ คำตอบจะไม่ถูกบันทึก",
+    exit: "ออกจากโหมดทดสอบ",
+  },
   linked: {
     title: "เชื่อมบัญชีสมาชิกเรียบร้อย",
     linkedResponses: (n: number) =>

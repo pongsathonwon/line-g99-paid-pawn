@@ -3,9 +3,24 @@ import { liff } from "@line/liff";
 import { Button } from "@/component/Button";
 import { SURVEY_TEXT } from "@/component/feature/SurveyForm/survey.locale";
 
-function SurveyLayout({ children }: PropsWithChildren) {
+type TSurveyLayoutProps = PropsWithChildren<{
+  /** set in test mode: shows the fixed test banner */
+  testUid?: string | null;
+  isTestMode?: boolean;
+}>;
+
+function SurveyLayout({ children, isTestMode = false, testUid }: TSurveyLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen bg-gray-50 ${isTestMode ? "pt-10" : ""}`}>
+      {isTestMode && (
+        <div
+          role="status"
+          data-testid="survey-test-banner"
+          className="fixed top-0 inset-x-0 z-50 h-10 flex items-center justify-center bg-yellow-400 text-black text-sm font-bold shadow-md"
+        >
+          {SURVEY_TEXT.testMode.banner(testUid)}
+        </div>
+      )}
       <header className="flex justify-center h-16 border-b bg-white">
         <img src="/logo/logo.png" alt="Golden 99" className="h-15" />
       </header>
@@ -55,6 +70,17 @@ export function ReloginButton() {
     >
       {SURVEY_TEXT.relogin}
     </Button>
+  );
+}
+
+export function TestKeyRefused({ onExit }: { onExit: () => void }) {
+  return (
+    <SurveyMessage title={SURVEY_TEXT.testMode.refusedTitle} tone="error">
+      <p className="text-gray-600">{SURVEY_TEXT.testMode.refused}</p>
+      <Button type="button" fullWidth styleType="outline" onClick={onExit}>
+        {SURVEY_TEXT.testMode.exit}
+      </Button>
+    </SurveyMessage>
   );
 }
 

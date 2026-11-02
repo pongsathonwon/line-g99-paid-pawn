@@ -1,5 +1,6 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { liff } from "@line/liff";
+import { getSurveyTestMode } from "@/lib/survey-test-mode";
 
 /**
  * Client for GoldenApi /api/survey/v1. Separate from the g99-online client in
@@ -10,10 +11,23 @@ export const surveyClient = axios.create({
 });
 
 export const LINE_ID_TOKEN_HEADER = "X-Line-Id-Token";
+export const SURVEY_TEST_KEY_HEADER = "X-Survey-Test-Key";
+export const SURVEY_TEST_UID_HEADER = "X-Survey-Test-Uid";
 
 export const attachLineIdToken = (config: InternalAxiosRequestConfig) => {
   const idToken = liff.getIDToken();
   if (idToken) config.headers.set(LINE_ID_TOKEN_HEADER, idToken);
+  return config;
+};
+
+// Test mode (?test=&uid=, see survey-test-mode.ts): sent next to the ID
+// token, never instead of it. GoldenApi checks the key.
+export const attachSurveyTestMode = (config: InternalAxiosRequestConfig) => {
+  const testMode = getSurveyTestMode();
+  if (testMode) {
+    config.headers.set(SURVEY_TEST_KEY_HEADER, testMode.test);
+    if (testMode.uid) config.headers.set(SURVEY_TEST_UID_HEADER, testMode.uid);
+  }
   return config;
 };
 
@@ -36,4 +50,5 @@ export const reloginOnUnauthorized = (error: unknown) => {
 };
 
 surveyClient.interceptors.request.use(attachLineIdToken);
+surveyClient.interceptors.request.use(attachSurveyTestMode);
 surveyClient.interceptors.response.use(undefined, reloginOnUnauthorized);

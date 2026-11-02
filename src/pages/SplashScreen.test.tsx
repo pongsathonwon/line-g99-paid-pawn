@@ -74,6 +74,14 @@ describe("SplashScreen", () => {
       expect(location()).toBe("/survey?b=6");
     });
 
+    it("keeps the survey test-mode params through the forward", () => {
+      const target = "/survey?b=6&test=k3y&uid=U0bf26f4085b0a41af588f6cb1774409e";
+      renderSplash(`/?liff.state=${encodeURIComponent(target)}`, {
+        auth: notMember,
+      });
+      expect(location()).toBe(target);
+    });
+
     it("accepts a liff.state without a leading slash", () => {
       renderSplash(`/?liff.state=${encodeURIComponent("survey?b=6")}`);
       expect(location()).toBe("/survey?b=6");

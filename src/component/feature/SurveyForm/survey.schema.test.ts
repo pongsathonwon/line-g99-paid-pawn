@@ -174,6 +174,12 @@ describe("toSurveyRequest", () => {
     expect(req.entry).toBe("manual");
   });
 
+  it("sends entry 'test' in test mode, whatever the branch", () => {
+    const testForm = { ...mockSurveyForm, testMode: true, effectiveUid: "U1" };
+    expect(toSurveyRequest(validValues, testForm).entry).toBe("test");
+    expect(toSurveyRequest({ ...validValues, branchCode: 30 }, testForm).entry).toBe("test");
+  });
+
   it("leaves out an empty comment and unanswered optional ratings", () => {
     const form = {
       ...mockSurveyForm,

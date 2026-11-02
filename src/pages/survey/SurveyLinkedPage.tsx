@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { SURVEY_API } from "@/api/endpoint/survey";
@@ -7,11 +8,20 @@ import QueryLoading from "@/component/ui/QueryLoading";
 import { SURVEY_TEXT } from "@/component/feature/SurveyForm/survey.locale";
 import {
   getHttpStatus,
+  isTestKeyRefused,
   retryOnServiceUnavailable,
 } from "@/component/feature/SurveyForm/lib";
+import {
+  clearSurveyTestMode,
+  getSurveyTestMode,
+} from "@/lib/survey-test-mode";
 import { useAuthContext } from "@/context/AuthContext/AuthContext";
 import { useLineContext } from "@/context/LineContext/LineContext";
-import SurveyLayout, { ReloginButton, SurveyMessage } from "./SurveyLayout";
+import SurveyLayout, {
+  ReloginButton,
+  SurveyMessage,
+  TestKeyRefused,
+} from "./SurveyLayout";
 
 const t = SURVEY_TEXT;
 
@@ -20,9 +30,12 @@ function SurveyLinkedPage() {
   const { lineCtx } = useLineContext();
   const isLineReady = Boolean(lineCtx?.isLogin);
   const { relogin } = useAuthContext();
+  // test mode set on /survey before the register flow; the headers come
+  // from sessionStorage, the banner uses the stored uid
+  const [testMode, setTestMode] = useState(getSurveyTestMode);
 
   const linkQuery = useQuery({
-    queryKey: ["survey-link"],
+    queryKey: ["survey-link", testMode?.test, testMode?.uid],
     queryFn: async () => {
       const res = await SURVEY_API.link();
       // The g99-online login failed before registering; refresh it so the
@@ -38,6 +51,16 @@ function SurveyLinkedPage() {
   const renderContent = () => {
     if (!isLineReady || linkQuery.isPending) return <QueryLoading />;
     if (linkQuery.isError) {
+      if (isTestKeyRefused(linkQuery.error)) {
+        return (
+          <TestKeyRefused
+            onExit={() => {
+              clearSurveyTestMode();
+              setTestMode(null);
+            }}
+          />
+        );
+      }
       return getHttpStatus(linkQuery.error) === 401 ? (
         <SurveyMessage title={t.errors.unauthorized} tone="error">
           <ReloginButton />
@@ -78,7 +101,11 @@ function SurveyLinkedPage() {
     );
   };
 
-  return <SurveyLayout>{renderContent()}</SurveyLayout>;
+  return (
+    <SurveyLayout isTestMode={Boolean(testMode)} testUid={testMode?.uid}>
+      {renderContent()}
+    </SurveyLayout>
+  );
 }
 
 export default SurveyLinkedPage;

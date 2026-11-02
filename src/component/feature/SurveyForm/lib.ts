@@ -11,3 +11,11 @@ export const getHttpStatus = (error: unknown) =>
 // 401 is handled by logging in again, anything else will not fix itself.
 export const retryOnServiceUnavailable = (failureCount: number, error: unknown) =>
   getHttpStatus(error) === 503 && failureCount < 2;
+
+// 403 40101 on a survey route = GoldenApi refused X-Survey-Test-Key
+// ("test mode disabled" / "invalid test key"). Never answered by liff.login().
+export const isTestKeyRefused = (error: unknown) =>
+  error instanceof AxiosError &&
+  error.response?.status === 403 &&
+  (error.response.data as { resultCode?: unknown } | undefined)?.resultCode ===
+    "40101";

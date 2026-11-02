@@ -41,6 +41,8 @@ type TRenderOptions = {
   lineCtx?: TMaybe<TLineStatus>;
   auth?: TAuthContext;
   toast?: TToastContext;
+  /** more routes next to `path`, e.g. a stand-in register page */
+  routes?: { path: string; element: ReactElement }[];
 };
 
 /**
@@ -55,6 +57,7 @@ export const renderWithSurveyProviders = (
     lineCtx = mockLineLogin,
     auth = createMockAuth(),
     toast = createMockToast(),
+    routes = [],
   }: TRenderOptions,
 ) => {
   const queryClient = new QueryClient({
@@ -71,6 +74,9 @@ export const renderWithSurveyProviders = (
             <MemoryRouter initialEntries={[initialEntry]}>
               <Routes>
                 <Route path={path} element={ui} />
+                {routes.map((route) => (
+                  <Route key={route.path} path={route.path} element={route.element} />
+                ))}
                 <Route path="*" element={<LocationProbe />} />
               </Routes>
             </MemoryRouter>

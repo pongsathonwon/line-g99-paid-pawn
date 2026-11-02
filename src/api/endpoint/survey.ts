@@ -76,9 +76,13 @@ export type TSurveyForm = {
   branches: TSurveyBranch[];
   presetBranchCode: number | null;
   member: TSurveyMember;
+  /** true when GoldenApi accepted X-Survey-Test-Key */
+  testMode?: boolean;
+  /** the uid answers are stored for in test mode */
+  effectiveUid?: string | null;
 };
 
-export type TSurveyEntry = "qr" | "manual";
+export type TSurveyEntry = "qr" | "manual" | "test";
 
 export type TSurveyAnswer = {
   questionId: number;

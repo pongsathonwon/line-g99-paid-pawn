@@ -1,15 +1,33 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
+import {
+  AxiosHeaders,
+  type AxiosAdapter,
+  type InternalAxiosRequestConfig,
+} from "axios";
 import { liff } from "@line/liff";
 import { createHttpError } from "@/test/setup/survey-api-mock";
 import {
   LINE_ID_TOKEN_HEADER,
   RELOGIN_COOLDOWN_MS,
+  SURVEY_TEST_KEY_HEADER,
+  SURVEY_TEST_UID_HEADER,
   attachLineIdToken,
   reloginOnUnauthorized,
   surveyClient,
 } from "./survey-axios";
 import { axiosClient } from "./axios";
+import { syncSurveyTestMode } from "@/lib/survey-test-mode";
+
+/** Sends a request through the client's real interceptors and returns its headers. */
+const sentHeaders = async (client: typeof surveyClient) => {
+  let headers: AxiosHeaders | undefined;
+  const adapter: AxiosAdapter = async (config) => {
+    headers = AxiosHeaders.from(config.headers);
+    return { data: {}, status: 200, statusText: "OK", headers: {}, config };
+  };
+  await client.get("form", { adapter });
+  return headers!;
+};
 
 vi.mock("@line/liff", () => ({
   liff: {
@@ -73,5 +91,41 @@ describe("survey axios client", () => {
   it("does not log in again on a network error", async () => {
     await expect(reloginOnUnauthorized(new Error("offline"))).rejects.toThrow("offline");
     expect(liff.login).not.toHaveBeenCalled();
+  });
+
+  describe("test mode headers", () => {
+    beforeEach(() => {
+      vi.mocked(liff.getIDToken).mockReturnValue("id-token-123");
+    });
+
+    it("sends no test headers without ?test", async () => {
+      const headers = await sentHeaders(surveyClient);
+      expect(headers.get(LINE_ID_TOKEN_HEADER)).toBe("id-token-123");
+      expect(headers.has(SURVEY_TEST_KEY_HEADER)).toBe(false);
+      expect(headers.has(SURVEY_TEST_UID_HEADER)).toBe(false);
+    });
+
+    it("sends the test key and uid next to the ID token", async () => {
+      syncSurveyTestMode(new URLSearchParams("test=k3y&uid=U1234567890abcdef"));
+      const headers = await sentHeaders(surveyClient);
+      expect(headers.get(LINE_ID_TOKEN_HEADER)).toBe("id-token-123");
+      expect(headers.get(SURVEY_TEST_KEY_HEADER)).toBe("k3y");
+      expect(headers.get(SURVEY_TEST_UID_HEADER)).toBe("U1234567890abcdef");
+    });
+
+    it("sends no uid header when only test is set", async () => {
+      syncSurveyTestMode(new URLSearchParams("test=k3y"));
+      const headers = await sentHeaders(surveyClient);
+      expect(headers.get(SURVEY_TEST_KEY_HEADER)).toBe("k3y");
+      expect(headers.has(SURVEY_TEST_UID_HEADER)).toBe(false);
+    });
+
+    it("never adds survey headers to the g99-online client", async () => {
+      syncSurveyTestMode(new URLSearchParams("test=k3y&uid=U1"));
+      const headers = await sentHeaders(axiosClient);
+      expect(headers.has(SURVEY_TEST_KEY_HEADER)).toBe(false);
+      expect(headers.has(SURVEY_TEST_UID_HEADER)).toBe(false);
+      expect(headers.has(LINE_ID_TOKEN_HEADER)).toBe(false);
+    });
   });
 });

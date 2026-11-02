@@ -52,12 +52,24 @@ export const mockSurveyLinkRes: TSurveyLinkRes = {
   isMember: true,
 };
 
+/** A /form answer in test mode (X-Survey-Test-Key accepted). */
+export const mockSurveyTestForm: TSurveyForm = {
+  ...mockSurveyForm,
+  member: { isMember: true, custCode: "4401837" },
+  testMode: true,
+  effectiveUid: "U0bf26f4085b0a41af588f6cb1774409e",
+};
+
 /** An axios error with an HTTP status, as the survey client would reject with. */
-export const createHttpError = (status: number) => {
+export const createHttpError = (
+  status: number,
+  resultCode = `${status}00`,
+  errorMessage = "mock",
+) => {
   const response = {
     status,
     statusText: String(status),
-    data: { resultCode: `${status}00`, resultData: { errorMessage: "mock" } },
+    data: { resultCode, resultData: { errorMessage } },
     headers: {},
     config: { headers: new AxiosHeaders() },
   } as AxiosResponse;
@@ -69,6 +81,10 @@ export const createHttpError = (status: number) => {
     response,
   );
 };
+
+/** GoldenApi refusing X-Survey-Test-Key. */
+export const createTestKeyRefusedError = (errorMessage = "invalid test key") =>
+  createHttpError(403, "40101", errorMessage);
 
 /**
  * Mock SURVEY_API module. Use in vi.mock("@/api/endpoint/survey", ...).

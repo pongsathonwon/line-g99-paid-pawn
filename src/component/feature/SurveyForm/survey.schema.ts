@@ -93,10 +93,12 @@ export const toSurveyRequest = (
   setId: form.questionSet.setId,
   branchCode: values.branchCode,
   txnType: values.txnType,
-  // "qr" only while the branch is still the one preset from the QR's ?b=
-  entry:
-    form.presetBranchCode !== null &&
-    values.branchCode === form.presetBranchCode
+  // test mode answers are test entries; otherwise "qr" only while the branch
+  // is still the one preset from the QR's ?b=
+  entry: form.testMode
+    ? "test"
+    : form.presetBranchCode !== null &&
+        values.branchCode === form.presetBranchCode
       ? "qr"
       : "manual",
   answers: form.questionSet.questions.flatMap((q): TSurveyAnswer[] => {

@@ -55,6 +55,8 @@ Click **"Environment Variables"** and add:
 
 > **`VITE_SURVEY_API_URL`** is the GoldenApi post-visit survey API used by `/survey` (the counter QR opens `https://liff.line.me/{LIFF_ID}/survey?b={branchCode}`). It is called with header `X-Line-Id-Token` = `liff.getIDToken()`, so the LIFF app needs the `openid` scope, and GoldenApi needs `Line:ChannelId` set to the LIFF channel id. Without this variable the survey page cannot load; the rest of the app is unaffected.
 
+> **Survey test mode** (production testing as a real customer's LINE uid): open `https://liff.line.me/{LIFF_ID}/survey?b=6&test=<key>&uid=<LINE uid>`. The page keeps `test`/`uid` in sessionStorage for that tab (cleared by `?test=` with an empty value) and sends them as `X-Survey-Test-Key` / `X-Survey-Test-Uid` next to the ID token. The key is not in the bundle: GoldenApi checks it against its own config, stores the answers as `entry='test'`, and refuses a wrong or disabled key with 403 `40101`. A yellow "โหมดทดสอบ" banner shows while it is on.
+
 ### Step 5: Deploy
 
 1. Click **"Deploy"**
