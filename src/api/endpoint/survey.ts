@@ -82,7 +82,7 @@ export type TSurveyForm = {
   effectiveUid?: string | null;
 };
 
-export type TSurveyEntry = "qr" | "manual" | "test";
+export type TSurveyEntry = "qr" | "manual";
 
 export type TSurveyAnswer = {
   questionId: number;

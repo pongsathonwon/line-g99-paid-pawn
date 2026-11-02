@@ -87,7 +87,7 @@ describe("survey test mode", () => {
     expect(banner()).not.toBeInTheDocument();
   });
 
-  it("submits entry 'test' and keeps the banner on the thank-you screen", async () => {
+  it("submits entry qr (not 'test') and keeps the banner on the thank-you screen", async () => {
     vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyTestForm);
     vi.mocked(SURVEY_API.submitResponse).mockResolvedValue({
       responseId: 9,
@@ -97,7 +97,8 @@ describe("survey test mode", () => {
     await fillAndSubmit();
 
     expect(await screen.findByText(SURVEY_TEXT.thankYou.title)).toBeInTheDocument();
-    expect(vi.mocked(SURVEY_API.submitResponse).mock.calls[0][0].entry).toBe("test");
+    // GoldenApi refuses any entry but qr/manual and stores test entries itself
+    expect(vi.mocked(SURVEY_API.submitResponse).mock.calls[0][0].entry).toBe("qr");
     expect(banner()).toBeInTheDocument();
   });
 

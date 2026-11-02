@@ -93,12 +93,12 @@ export const toSurveyRequest = (
   setId: form.questionSet.setId,
   branchCode: values.branchCode,
   txnType: values.txnType,
-  // test mode answers are test entries; otherwise "qr" only while the branch
-  // is still the one preset from the QR's ?b=
-  entry: form.testMode
-    ? "test"
-    : form.presetBranchCode !== null &&
-        values.branchCode === form.presetBranchCode
+  // "qr" only while the branch is still the one preset from the QR's ?b=.
+  // Also in test mode: GoldenApi accepts only qr/manual and records "test"
+  // itself.
+  entry:
+    form.presetBranchCode !== null &&
+    values.branchCode === form.presetBranchCode
       ? "qr"
       : "manual",
   answers: form.questionSet.questions.flatMap((q): TSurveyAnswer[] => {
