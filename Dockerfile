@@ -15,10 +15,12 @@ COPY . .
 # Accept build arguments for Vite environment variables
 ARG VITE_LIFF_ID
 ARG VITE_BASE_URL
+ARG VITE_SURVEY_API_URL
 
 # Set as environment variables so Vite can access them during build
 ENV VITE_LIFF_ID=$VITE_LIFF_ID
 ENV VITE_BASE_URL=$VITE_BASE_URL
+ENV VITE_SURVEY_API_URL=$VITE_SURVEY_API_URL
 
 # Build the application
 RUN npm run build

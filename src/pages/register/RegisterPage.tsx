@@ -1,6 +1,14 @@
+import { useSearchParams } from "react-router-dom";
 import RegisterCard from "@/component/ui/RegisterCard/RegisterCard";
+import { toSafeAppPath } from "@/lib/safe-path";
 
 function RegisterPage() {
+  // ?redirect= (e.g. from the survey) is passed on so SuccessStep can return there
+  const [searchParams] = useSearchParams();
+  const redirect = toSafeAppPath(searchParams.get("redirect"));
+  const withRedirect = (to: string) =>
+    redirect ? `${to}?redirect=${encodeURIComponent(redirect)}` : to;
+
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       <header className="flex justify-center h-16 border-b bg-white">
@@ -15,20 +23,20 @@ function RegisterPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <RegisterCard
-            to="/thai-register"
+            to={withRedirect("/thai-register")}
             title="ลูกค้าไทย"
             description="ยืนยันตัวตนผ่านโทรศัพท์มือถือ"
             highlight
           />
 
           <RegisterCard
-            to="/foreign-register"
+            to={withRedirect("/foreign-register")}
             title="ลูกค้าชาวต่างชาติ"
             description="ยืนยันตัวตนผ่านโทรศัพท์มือถือ"
           />
 
           <RegisterCard
-            to="/foreign-counter-register"
+            to={withRedirect("/foreign-counter-register")}
             title="ลูกค้าชาวต่างชาติ"
             description="ยืนยันตัวตนผ่านหน้าสาขา"
           />

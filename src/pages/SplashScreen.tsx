@@ -1,18 +1,28 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext/AuthContext";
+import { useLineContext } from "@/context/LineContext/LineContext";
+import { toSafeAppPath } from "@/lib/safe-path";
 
 export default function SplashScreen() {
   const [searchParams] = useSearchParams();
+  const { lineCtx } = useLineContext();
 
   const {
     loginStatus: { isSuccess, isError },
   } = useAuthContext();
 
-  if (isSuccess) {
+  // A deep link (liff.line.me/{id}/survey?b=6) first opens "/" with
+  // ?liff.state=/survey?b=6. liff.init() normally reloads the page at that
+  // path itself, so hold the splash until init settles; if we are still here
+  // afterwards, route there ourselves. Either way it wins over /home and
+  // /register.
+  const liffStatePath = toSafeAppPath(searchParams.get("liff.state"));
+  if (liffStatePath) {
+    if (lineCtx) return <Navigate to={liffStatePath} replace />;
+  } else if (isSuccess) {
     const redirectPath = searchParams.get("redirect");
     return <Navigate to={redirectPath ?? "/home"} replace />;
-  }
-  if (isError) {
+  } else if (isError) {
     return <Navigate to="/register" replace />;
   }
 

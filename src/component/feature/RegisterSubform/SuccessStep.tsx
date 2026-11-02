@@ -1,10 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/component/Button";
+import { toSafeAppPath } from "@/lib/safe-path";
 
 export function SuccessStep() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = toSafeAppPath(searchParams.get("redirect"));
   const handleContinue = async () => {
-    navigate("/home");
+    navigate(redirect ?? "/home");
   };
 
   return (
@@ -38,7 +41,7 @@ export function SuccessStep() {
       </div>
 
       <Button type="button" onClick={handleContinue} color="primary" fullWidth>
-        กลับสู่เมนูหลัก
+        {redirect ? "ดำเนินการต่อ" : "กลับสู่เมนูหลัก"}
       </Button>
     </div>
   );

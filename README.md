@@ -35,7 +35,7 @@ Quick deploy:
 ```bash
 docker build \
   --build-arg VITE_LIFF_ID=your-liff-id \
-  --build-arg VITE_BASE_URL=your-api-url \
+  --build-arg VITE_BASE_URL=your-api-url   --build-arg VITE_SURVEY_API_URL=your-survey-api-url \
   -t line-g99-paid-pawn:latest .
 
 docker run -p 80:80 line-g99-paid-pawn:latest
@@ -48,6 +48,7 @@ Create a `.env` file or configure in your deployment platform:
 ```env
 VITE_LIFF_ID=your-line-liff-id
 VITE_BASE_URL=your-backend-api-url
+VITE_SURVEY_API_URL=https://api.inhouse.golden99.co.th/api/survey/v1
 VITE_APP_VERSION=1.0.2
 ```
 
@@ -128,4 +129,4 @@ export default defineConfig([
 ```
 
 #build command
-docker build --build-arg VITE_LIFF_ID=... --build-arg VITE_BASE_URL=... -t line-g99-paid-pawn:latest .
+docker build --build-arg VITE_LIFF_ID=... --build-arg VITE_BASE_URL=... --build-arg VITE_SURVEY_API_URL=... -t line-g99-paid-pawn:latest .

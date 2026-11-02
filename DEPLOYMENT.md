@@ -49,8 +49,11 @@ Click **"Environment Variables"** and add:
 | `VITE_LIFF_ID`     | `2008362552-k7e4Yw0N`                               | Production, Preview, Development |
 | `VITE_BASE_URL`    | `https://g99pawnpay.golden99.co.th/pawn-online-api` | Production, Preview, Development |
 | `VITE_APP_VERSION` | `1.0.2-poc`                                         | Production, Preview, Development |
+| `VITE_SURVEY_API_URL` | `https://api.inhouse.golden99.co.th/api/survey/v1` | Production, Preview, Development |
 
 > **Note**: Apply to all environments (Production, Preview, Development) for consistent behavior
+
+> **`VITE_SURVEY_API_URL`** is the GoldenApi post-visit survey API used by `/survey` (the counter QR opens `https://liff.line.me/{LIFF_ID}/survey?b={branchCode}`). It is called with header `X-Line-Id-Token` = `liff.getIDToken()`, so the LIFF app needs the `openid` scope, and GoldenApi needs `Line:ChannelId` set to the LIFF channel id. Without this variable the survey page cannot load; the rest of the app is unaffected.
 
 ### Step 5: Deploy
 
@@ -99,6 +102,10 @@ vercel env add VITE_BASE_URL
 
 vercel env add VITE_APP_VERSION
 # Enter: 1.0.2-poc
+# Select: Production, Preview, Development
+
+vercel env add VITE_SURVEY_API_URL
+# Enter: https://api.inhouse.golden99.co.th/api/survey/v1
 # Select: Production, Preview, Development
 ```
 

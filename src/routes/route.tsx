@@ -62,12 +62,26 @@ const HistoryDetailPage = lazyWithReload(
   () => import("../pages/HistroyDetailPage"),
 );
 const TermPage = lazyWithReload(() => import("@/pages/TermPage"));
+const SurveyPage = lazyWithReload(() => import("@/pages/survey/SurveyPage"));
+const SurveyLinkedPage = lazyWithReload(
+  () => import("@/pages/survey/SurveyLinkedPage"),
+);
 
 export const APP_ROUTES = createBrowserRouter([
   {
     path: "",
     element: <SplashScreen />,
     errorElement: <NotfoundPage />,
+  },
+  // Post-visit survey: open to linked and unlinked LINE users alike, so it
+  // stays outside Protected and PreventReRegister.
+  {
+    path: "survey",
+    element: <SurveyPage />,
+  },
+  {
+    path: "survey/linked",
+    element: <SurveyLinkedPage />,
   },
   {
     element: (
