@@ -1,4 +1,4 @@
-import { useCustInfo } from "@/context/AuthContext/AuthContext";
+import { useCustInfo } from "@/context/SessionContext/SessionContext";
 import QueryError from "@/component/ui/QueryError";
 import QueryLoading from "@/component/ui/QueryLoading";
 import useQueryPawnById from "@/hook/query/useQueryPawn";

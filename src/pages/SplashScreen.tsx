@@ -1,46 +1,43 @@
 import { Navigate, useSearchParams } from "react-router-dom";
-import { useAuthContext } from "@/context/AuthContext/AuthContext";
-import { useLineContext } from "@/context/LineContext/LineContext";
+import { useSession } from "@/context/SessionContext/SessionContext";
 import { toSafeAppPath } from "@/lib/safe-path";
+import SessionRetry from "@/layout/SessionGuard/SessionRetry";
+import SessionSplash from "@/layout/SessionGuard/SessionSplash";
 
+/**
+ * "/" only decides where to go, from the session status:
+ * 1. a liff.state deep link wins (liff.line.me/{id}/survey?b=6 opens
+ *    "/?liff.state=/survey?b=6"). liff.init() normally reloads the page at
+ *    that path itself; if we are still here once LINE is ready, route there.
+ * 2. member → ?redirect or /home
+ * 3. guest → /register, passing ?redirect on
+ * 4. error → retry screen (never /register)
+ */
 export default function SplashScreen() {
   const [searchParams] = useSearchParams();
-  const { lineCtx } = useLineContext();
+  const { status, errorKind, lineUid } = useSession();
 
-  const {
-    loginStatus: { isSuccess, isError },
-  } = useAuthContext();
+  if (errorKind === "line") return <SessionRetry />;
 
-  // A deep link (liff.line.me/{id}/survey?b=6) first opens "/" with
-  // ?liff.state=/survey?b=6. liff.init() normally reloads the page at that
-  // path itself, so hold the splash until init settles; if we are still here
-  // afterwards, route there ourselves. Either way it wins over /home and
-  // /register.
   const liffStatePath = toSafeAppPath(searchParams.get("liff.state"));
   if (liffStatePath) {
-    if (lineCtx) return <Navigate to={liffStatePath} replace />;
-  } else if (isSuccess) {
-    const redirectPath = searchParams.get("redirect");
-    return <Navigate to={redirectPath ?? "/home"} replace />;
-  } else if (isError) {
-    return <Navigate to="/register" replace />;
+    return lineUid ? <Navigate to={liffStatePath} replace /> : <SessionSplash />;
   }
 
-  return (
-    <div
-      className="min-h-screen w-full flex flex-col items-center justify-center fixed inset-0"
-      style={{ backgroundColor: "#981C14" }}
-    >
-      <div className="flex items-center justify-center p-8">
-        <img
-          src="/logo/logo.png"
-          alt="logo"
-          className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-md max-w-full h-auto object-contain"
+  const redirect = toSafeAppPath(searchParams.get("redirect"));
+  switch (status) {
+    case "member":
+      return <Navigate to={redirect ?? "/home"} replace />;
+    case "guest":
+      return (
+        <Navigate
+          to={redirect ? `/register?redirect=${encodeURIComponent(redirect)}` : "/register"}
+          replace
         />
-      </div>
-      <div className="text-gold">
-        version {import.meta.env.VITE_APP_VERSION}
-      </div>
-    </div>
-  );
+      );
+    case "error":
+      return <SessionRetry />;
+    default:
+      return <SessionSplash />;
+  }
 }

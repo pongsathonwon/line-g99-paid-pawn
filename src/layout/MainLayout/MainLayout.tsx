@@ -1,15 +1,13 @@
 import { Outlet } from "react-router-dom";
-import { useLineContext } from "@/context/LineContext/LineContext";
-import { useAuthContext } from "@/context/AuthContext/AuthContext";
+import { useSession } from "@/context/SessionContext/SessionContext";
 import ProfileBadge from "@/component/ui/ProfileBadge";
 import BottomNav from "@/component/ui/BottomNav";
 
 function MainLayout() {
-  const { lineCtx } = useLineContext();
+  const { lineProfile, auth } = useSession();
   const pictureUrl =
-    lineCtx?.profile?.pictureUrl ??
+    lineProfile?.pictureUrl ??
     "https://fastly.picsum.photos/id/962/200/200.jpg?hmac=XehF7z9JYkgC-2ZfSP05h7eyumIq9wNKUDoCLklIhr4";
-  const { auth } = useAuthContext();
   const fullname = auth?.fullname ?? "ไม่พบชื่อในระบบ";
   const custNo = auth?.custNo ?? "ไม่พบรหัสลูกค้าในระบบ";
   return (

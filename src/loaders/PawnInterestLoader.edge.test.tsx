@@ -13,10 +13,10 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PawnInterestContext } from "@/context/PawnInterestContext/PawnInterest";
-import { AuthContext } from "@/context/AuthContext/AuthContext";
+import { SessionContext } from "@/context/SessionContext/SessionContext";
+import { createMockSession } from "@/test/setup/session-mock";
 import PawnInterestLoader from "./PawnInterestLoader";
 import type { TGetManyPawmRes } from "@/api/endpoint/pawn";
-import type { TAuthContext } from "@/context/AuthContext/AuthContext";
 import type { TUserInfo } from "@/api/endpoint/auth";
 import dayjs from "dayjs";
 
@@ -41,12 +41,8 @@ const MOCK_USER: TUserInfo = {
   gender: "m",
 };
 
-const makeAuthCtx = (auth: TAuthContext["auth"]): TAuthContext => ({
-  auth,
-  error: null,
-  relogin: vi.fn(),
-  loginStatus: { isPending: false, isSuccess: true, isError: false },
-});
+const makeAuthCtx = (auth: TUserInfo | null) =>
+  createMockSession({ status: auth ? "member" : "guest", auth });
 
 const mockGetInterest = vi.fn();
 
@@ -96,7 +92,7 @@ function renderLoader({ path = `/home/${PAWN_NUMB}`, cachedPawns, custCode = CUS
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={makeAuthCtx(user)}>
+      <SessionContext.Provider value={makeAuthCtx(user)}>
         <PawnInterestContext.Provider value={makePawnInterestCtx(isSuccess)}>
           <MemoryRouter initialEntries={[path]}>
             <Routes>
@@ -112,7 +108,7 @@ function renderLoader({ path = `/home/${PAWN_NUMB}`, cachedPawns, custCode = CUS
             </Routes>
           </MemoryRouter>
         </PawnInterestContext.Provider>
-      </AuthContext.Provider>
+      </SessionContext.Provider>
     </QueryClientProvider>,
   );
 }
@@ -188,7 +184,7 @@ describe("PawnInterestLoader — edge cases & UI", () => {
       const queryClient = new QueryClient();
       render(
         <QueryClientProvider client={queryClient}>
-          <AuthContext.Provider value={makeAuthCtx(MOCK_USER)}>
+          <SessionContext.Provider value={makeAuthCtx(MOCK_USER)}>
             <PawnInterestContext.Provider value={makePawnInterestCtx()}>
               <MemoryRouter initialEntries={["/home"]}>
                 <Routes>
@@ -203,7 +199,7 @@ describe("PawnInterestLoader — edge cases & UI", () => {
                 </Routes>
               </MemoryRouter>
             </PawnInterestContext.Provider>
-          </AuthContext.Provider>
+          </SessionContext.Provider>
         </QueryClientProvider>,
       );
       expect(mockGetInterest).not.toHaveBeenCalled();

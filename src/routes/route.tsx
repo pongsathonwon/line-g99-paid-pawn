@@ -4,8 +4,11 @@ import { lazy } from "react";
 // Eagerly load critical components
 import SplashScreen from "../pages/SplashScreen";
 import NotfoundPage from "../pages/NotfoundPage";
-import Protected from "../layout/MainLayout/Protected";
-import PreventReRegister from "../layout/RegisterLayout/PreventReRegister";
+import {
+  RequireGuest,
+  RequireLine,
+  RequireMember,
+} from "@/layout/SessionGuard/SessionGuards";
 import MainLayout from "../layout/MainLayout/MainLayout";
 import PawnInterestLoader from "@/loaders/PawnInterestLoader";
 
@@ -73,21 +76,29 @@ export const APP_ROUTES = createBrowserRouter([
     element: <SplashScreen />,
     errorElement: <NotfoundPage />,
   },
-  // Post-visit survey: open to linked and unlinked LINE users alike, so it
-  // stays outside Protected and PreventReRegister.
+  // Post-visit survey: open to guests and members alike, needs LINE only.
   {
-    path: "survey",
-    element: <SurveyPage />,
-  },
-  {
-    path: "survey/linked",
-    element: <SurveyLinkedPage />,
+    element: (
+      <RequireLine>
+        <Outlet />
+      </RequireLine>
+    ),
+    children: [
+      {
+        path: "survey",
+        element: <SurveyPage />,
+      },
+      {
+        path: "survey/linked",
+        element: <SurveyLinkedPage />,
+      },
+    ],
   },
   {
     element: (
-      <PreventReRegister>
+      <RequireGuest>
         <Outlet />
-      </PreventReRegister>
+      </RequireGuest>
     ),
     children: [
       {
@@ -114,9 +125,9 @@ export const APP_ROUTES = createBrowserRouter([
   },
   {
     element: (
-      <Protected>
+      <RequireMember>
         <MainLayout />
-      </Protected>
+      </RequireMember>
     ),
     children: [
       {

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { SURVEY_API } from "@/api/endpoint/survey";
 import { Button } from "@/component/Button";
-import { buttonVariants } from "@/component/button.variants";
 import QueryLoading from "@/component/ui/QueryLoading";
 import { SURVEY_TEXT } from "@/component/feature/SurveyForm/survey.locale";
 import {
@@ -15,8 +14,7 @@ import {
   clearSurveyTestMode,
   getSurveyTestMode,
 } from "@/lib/survey-test-mode";
-import { useAuthContext } from "@/context/AuthContext/AuthContext";
-import { useLineContext } from "@/context/LineContext/LineContext";
+import { useSession } from "@/context/SessionContext/SessionContext";
 import SurveyLayout, {
   ReloginButton,
   SurveyMessage,
@@ -27,29 +25,28 @@ const t = SURVEY_TEXT;
 
 /** Reached from the register flow (?redirect=/survey/linked) once it succeeds. */
 function SurveyLinkedPage() {
-  const { lineCtx } = useLineContext();
-  const isLineReady = Boolean(lineCtx?.isLogin);
-  const { relogin } = useAuthContext();
+  const { refresh, isRefreshing } = useSession();
+  const navigate = useNavigate();
   // test mode set on /survey before the register flow; the headers come
   // from sessionStorage, the banner uses the stored uid
   const [testMode, setTestMode] = useState(getSurveyTestMode);
 
   const linkQuery = useQuery({
     queryKey: ["survey-link", testMode?.test, testMode?.uid],
-    queryFn: async () => {
-      const res = await SURVEY_API.link();
-      // The g99-online login failed before registering; refresh it so the
-      // "home" button lands on the pawn list instead of the register page.
-      if (res.isMember) await relogin().catch(() => undefined);
-      return res;
-    },
-    enabled: isLineReady,
+    queryFn: SURVEY_API.link,
     retry: retryOnServiceUnavailable,
     staleTime: Infinity,
   });
 
+  // the g99-online session still says "guest" from before registering:
+  // log in again first so /home opens the pawn list
+  const goHome = async () => {
+    await refresh();
+    navigate("/home");
+  };
+
   const renderContent = () => {
-    if (!isLineReady || linkQuery.isPending) return <QueryLoading />;
+    if (linkQuery.isPending) return <QueryLoading />;
     if (linkQuery.isError) {
       if (isTestKeyRefused(linkQuery.error)) {
         return (
@@ -94,9 +91,14 @@ function SurveyLinkedPage() {
         {linked > 0 && (
           <p className="text-gray-600">{t.linked.linkedResponses(linked)}</p>
         )}
-        <Link to="/home" className={buttonVariants({ fullWidth: true })}>
+        <Button
+          type="button"
+          fullWidth
+          disabled={isRefreshing}
+          onClick={goHome}
+        >
           {t.home}
-        </Link>
+        </Button>
       </SurveyMessage>
     );
   };

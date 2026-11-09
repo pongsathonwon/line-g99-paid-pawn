@@ -2,7 +2,7 @@ import { type PropsWithChildren } from "react";
 import { PawnInterestContext } from "./PawnInterest";
 import { useMutation } from "@tanstack/react-query";
 import { getPawnInterest } from "@/api/endpoint/pawn";
-import { useCustInfo } from "../AuthContext/AuthContext";
+import { useCustInfo } from "../SessionContext/SessionContext";
 
 function PawnInterestContextProvider({ children }: PropsWithChildren) {
   const custInfo = useCustInfo();

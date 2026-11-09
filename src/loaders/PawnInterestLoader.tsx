@@ -1,5 +1,5 @@
 import { usePawnInterest } from "@/context/PawnInterestContext/PawnInterest";
-import { useCustInfo } from "@/context/AuthContext/AuthContext";
+import { useCustInfo } from "@/context/SessionContext/SessionContext";
 import { mapDateIntoState, transformPawnStatus } from "@/hook/query/lib";
 import type { TGetManyPawmRes } from "@/api/endpoint/pawn";
 import { useEffect } from "react";

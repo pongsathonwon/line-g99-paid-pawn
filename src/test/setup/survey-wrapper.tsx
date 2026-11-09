@@ -3,17 +3,14 @@ import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import type { ReactElement } from "react";
-import { LineContext, type TLineStatus } from "@/context/LineContext/LineContext";
-import { AuthContext, type TAuthContext } from "@/context/AuthContext/AuthContext";
+import {
+  SessionContext,
+  type TSessionContext,
+} from "@/context/SessionContext/SessionContext";
 import { ToastContext } from "@/context/ToastContext/ToastContext";
 import type { TToastContext } from "@/types/toast.type";
-import type { TMaybe } from "@/types/base.type";
+import { createMockSession } from "./session-mock";
 import LocationProbe from "./LocationProbe";
-
-export const mockLineLogin: TLineStatus = {
-  isLogin: true,
-  profile: { userId: "Usurvey0001", displayName: "ลูกค้าทดสอบ" },
-};
 
 export const createMockToast = (): TToastContext => ({
   toasts: [],
@@ -25,21 +22,10 @@ export const createMockToast = (): TToastContext => ({
   info: vi.fn(),
 });
 
-export const createMockAuth = (
-  overrides: Partial<TAuthContext> = {},
-): TAuthContext => ({
-  auth: null,
-  error: null,
-  relogin: vi.fn().mockResolvedValue(undefined),
-  loginStatus: { isPending: false, isSuccess: false, isError: false },
-  ...overrides,
-});
-
 type TRenderOptions = {
   path: string;
   initialEntry: string;
-  lineCtx?: TMaybe<TLineStatus>;
-  auth?: TAuthContext;
+  session?: TSessionContext;
   toast?: TToastContext;
   /** more routes next to `path`, e.g. a stand-in register page */
   routes?: { path: string; element: ReactElement }[];
@@ -54,8 +40,7 @@ export const renderWithSurveyProviders = (
   {
     path,
     initialEntry,
-    lineCtx = mockLineLogin,
-    auth = createMockAuth(),
+    session = createMockSession(),
     toast = createMockToast(),
     routes = [],
   }: TRenderOptions,
@@ -69,8 +54,7 @@ export const renderWithSurveyProviders = (
   const result = render(
     <ToastContext.Provider value={toast}>
       <QueryClientProvider client={queryClient}>
-        <LineContext.Provider value={{ lineCtx }}>
-          <AuthContext.Provider value={auth}>
+        <SessionContext.Provider value={session}>
             <MemoryRouter initialEntries={[initialEntry]}>
               <Routes>
                 <Route path={path} element={ui} />
@@ -80,10 +64,9 @@ export const renderWithSurveyProviders = (
                 <Route path="*" element={<LocationProbe />} />
               </Routes>
             </MemoryRouter>
-          </AuthContext.Provider>
-        </LineContext.Provider>
+        </SessionContext.Provider>
       </QueryClientProvider>
     </ToastContext.Provider>,
   );
-  return { ...result, toast, auth, queryClient };
+  return { ...result, toast, session, queryClient };
 };

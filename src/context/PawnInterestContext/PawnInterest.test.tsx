@@ -7,7 +7,7 @@ import {
   usePawnInterest,
   usePawnInterestContext,
 } from "./PawnInterest";
-import * as AuthContext from "../AuthContext/AuthContext";
+import * as AuthContext from "../SessionContext/SessionContext";
 import * as PawnApi from "@/api/endpoint/pawn";
 import type { TGetPawnInterestRes } from "@/api/endpoint/pawn";
 
@@ -17,7 +17,7 @@ vi.mock("@/api/endpoint/pawn", () => ({
 }));
 
 // Mock auth context
-vi.mock("../AuthContext/AuthContext", () => ({
+vi.mock("../SessionContext/SessionContext", () => ({
   useCustInfo: vi.fn(),
 }));
 

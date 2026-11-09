@@ -1,13 +1,18 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/component/Button";
 import { toSafeAppPath } from "@/lib/safe-path";
+import { useSession } from "@/context/SessionContext/SessionContext";
 
 export function SuccessStep() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { refresh, isRefreshing } = useSession();
   const redirect = toSafeAppPath(searchParams.get("redirect"));
   const handleContinue = async () => {
-    navigate(redirect ?? "/home");
+    // log in again first: the session still says "guest" from before
+    // registering, which would bounce /home back to /register
+    await refresh();
+    navigate(redirect ?? "/home", { replace: true });
   };
 
   return (
@@ -40,7 +45,13 @@ export function SuccessStep() {
         </p>
       </div>
 
-      <Button type="button" onClick={handleContinue} color="primary" fullWidth>
+      <Button
+        type="button"
+        onClick={handleContinue}
+        color="primary"
+        fullWidth
+        disabled={isRefreshing}
+      >
         {redirect ? "ดำเนินการต่อ" : "กลับสู่เมนูหลัก"}
       </Button>
     </div>

@@ -1,9 +1,9 @@
 import { getHistPaid } from "@/api/endpoint/pawn";
-import { useAuthContext } from "@/context/AuthContext/AuthContext";
+import { useCustInfo } from "@/context/SessionContext/SessionContext";
 import { useQuery } from "@tanstack/react-query";
 
 function useHistPaid() {
-  const { auth } = useAuthContext();
+  const auth = useCustInfo();
   const custCode = auth?.custNo ?? "";
   const q = useQuery({
     queryKey: ["hist-paid", custCode],

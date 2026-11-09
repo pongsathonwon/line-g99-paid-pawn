@@ -17,7 +17,6 @@ import {
   clearSurveyTestMode,
   syncSurveyTestMode,
 } from "@/lib/survey-test-mode";
-import { useLineContext } from "@/context/LineContext/LineContext";
 import { useToast } from "@/context/ToastContext/ToastContext";
 import SurveyLayout, {
   ReloginButton,
@@ -34,15 +33,12 @@ function SurveyPage() {
   const [testMode, setTestMode] = useState(() =>
     syncSurveyTestMode(searchParams),
   );
-  const { lineCtx } = useLineContext();
-  const isLineReady = Boolean(lineCtx?.isLogin);
   const toast = useToast();
   const [result, setResult] = useState<TSurveyResponseRes | null>(null);
 
   const formQuery = useQuery({
     queryKey: ["survey-form", branchParam, testMode?.test, testMode?.uid],
     queryFn: () => SURVEY_API.getForm(branchParam),
-    enabled: isLineReady,
     retry: retryOnServiceUnavailable,
     staleTime: Infinity,
   });
@@ -77,7 +73,7 @@ function SurveyPage() {
 
   const renderContent = () => {
     if (result) return <SurveyThankYou isMember={result.isMember} />;
-    if (!isLineReady || formQuery.isPending) return <QueryLoading />;
+    if (formQuery.isPending) return <QueryLoading />;
     if (formQuery.isError) {
       if (isTestKeyRefused(formQuery.error)) {
         return <TestKeyRefused onExit={exitTestMode} />;

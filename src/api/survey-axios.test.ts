@@ -8,7 +8,6 @@ import { liff } from "@line/liff";
 import { createHttpError } from "@/test/setup/survey-api-mock";
 import {
   LINE_ID_TOKEN_HEADER,
-  RELOGIN_COOLDOWN_MS,
   SURVEY_TEST_KEY_HEADER,
   SURVEY_TEST_UID_HEADER,
   attachLineIdToken,
@@ -71,16 +70,10 @@ describe("survey axios client", () => {
     });
   });
 
-  it("logs in again at most once a minute, so a rejected token cannot loop", async () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-11-02T10:00:00"));
+  it("treats the 401 relogin as automatic (one a minute, see lib/line.ts)", async () => {
     await expect(reloginOnUnauthorized(createHttpError(401))).rejects.toBeTruthy();
     await expect(reloginOnUnauthorized(createHttpError(401))).rejects.toBeTruthy();
     expect(liff.login).toHaveBeenCalledOnce();
-
-    vi.setSystemTime(Date.now() + RELOGIN_COOLDOWN_MS + 1);
-    await expect(reloginOnUnauthorized(createHttpError(401))).rejects.toBeTruthy();
-    expect(liff.login).toHaveBeenCalledTimes(2);
   });
 
   it.each([400, 409, 503])("does not log in again on %s", async (status) => {

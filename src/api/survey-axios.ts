@@ -1,5 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
-import { liff } from "@line/liff";
+import { getLineIdToken, loginWithLine } from "@/lib/line";
 import { getSurveyTestMode } from "@/lib/survey-test-mode";
 
 /**
@@ -15,7 +15,7 @@ export const SURVEY_TEST_KEY_HEADER = "X-Survey-Test-Key";
 export const SURVEY_TEST_UID_HEADER = "X-Survey-Test-Uid";
 
 export const attachLineIdToken = (config: InternalAxiosRequestConfig) => {
-  const idToken = liff.getIDToken();
+  const idToken = getLineIdToken();
   if (idToken) config.headers.set(LINE_ID_TOKEN_HEADER, idToken);
   return config;
 };
@@ -31,20 +31,14 @@ export const attachSurveyTestMode = (config: InternalAxiosRequestConfig) => {
   return config;
 };
 
-const RELOGIN_AT_KEY = "G99_SURVEY_RELOGIN_AT";
-export const RELOGIN_COOLDOWN_MS = 60_000;
-
 // 401 = the ID token is missing, invalid or expired: log in to LINE again to
-// get a fresh one. At most once a minute, so a token the API never accepts
-// (no openid scope, wrong channel id) cannot loop; the page then shows its
-// own "log in again" button. 503 (LINE unreachable) is left to the caller.
+// get a fresh one. An automatic login, so lib/line.ts lets it through at most
+// once a minute (a token the API never accepts cannot loop); the page then
+// shows its own "log in again" button. 503 (LINE unreachable) is left to the
+// caller.
 export const reloginOnUnauthorized = (error: unknown) => {
   if (error instanceof AxiosError && error.response?.status === 401) {
-    const lastRelogin = Number(sessionStorage.getItem(RELOGIN_AT_KEY) ?? 0);
-    if (Date.now() - lastRelogin > RELOGIN_COOLDOWN_MS) {
-      sessionStorage.setItem(RELOGIN_AT_KEY, String(Date.now()));
-      liff.login({ redirectUri: window.location.href });
-    }
+    loginWithLine({ redirectUri: window.location.href, auto: true });
   }
   return Promise.reject(error);
 };

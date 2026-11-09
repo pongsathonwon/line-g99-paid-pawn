@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import { liff } from "@line/liff";
 import { Button } from "@/component/Button";
 import { SURVEY_TEXT } from "@/component/feature/SurveyForm/survey.locale";
+import { useSession } from "@/context/SessionContext/SessionContext";
 
 type TSurveyLayoutProps = PropsWithChildren<{
   /** set in test mode: shows the fixed test banner */
@@ -62,12 +62,9 @@ export function SurveyMessage({
 }
 
 export function ReloginButton() {
+  const { login } = useSession();
   return (
-    <Button
-      type="button"
-      fullWidth
-      onClick={() => liff.login({ redirectUri: window.location.href })}
-    >
+    <Button type="button" fullWidth onClick={() => login()}>
       {SURVEY_TEXT.relogin}
     </Button>
   );

@@ -1,6 +1,6 @@
 import React, { type PropsWithChildren, useState } from "react";
 import { Button } from "@/component/Button";
-import { useLineContext } from "@/context/LineContext/LineContext";
+import { useSession } from "@/context/SessionContext/SessionContext";
 import { REGISTER_LOCALE_TEXT } from "@/component/feature/RegisterForm/register.locale";
 import { useRegisterMutation } from "./useRegisterMutation";
 import useScrollPosition from "./useScrollPosition";
@@ -33,7 +33,7 @@ function TermStep({
   isVerified,
   mode,
 }: PropsWithChildren<TTermStepProps>) {
-  const { lineCtx } = useLineContext();
+  const { lineUid } = useSession();
   const { mutate, isPending } = useRegisterMutation(mode);
   const [isChecked, setIsChecked] = useState(isConsent);
   const { hasScrolledToBottom, termsBoxRef } =
@@ -50,8 +50,6 @@ function TermStep({
     if (!isChecked || !hasScrolledToBottom) {
       return;
     }
-
-    const lineUid = lineCtx?.profile?.userId;
 
     if (!lineUid) return;
 

@@ -9,6 +9,7 @@ import {
   mockSurveyForm,
 } from "@/test/setup/survey-api-mock";
 import { renderWithSurveyProviders } from "@/test/setup/survey-wrapper";
+import { createMockSession } from "@/test/setup/session-mock";
 
 vi.mock("@/api/endpoint/survey", async () => {
   const { createSurveyApiMock } = await import("@/test/setup/survey-api-mock");
@@ -44,11 +45,16 @@ describe("SurveyPage", () => {
     vi.clearAllMocks();
   });
 
-  it("shows loading and does not call the API before LIFF is ready", () => {
-    renderPage({ lineCtx: null });
-    expect(screen.getByText("กำลังโหลดข้อมูล...")).toBeInTheDocument();
-    expect(SURVEY_API.getForm).not.toHaveBeenCalled();
-  });
+  it.each(["guest", "member"] as const)(
+    "works for a %s session (the survey needs LINE only)",
+    async (status) => {
+      vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
+      renderPage({ session: createMockSession({ status }) });
+      expect(
+        await screen.findByRole("heading", { name: "แบบประเมินหลังใช้บริการ" }),
+      ).toBeInTheDocument();
+    },
+  );
 
   it("shows loading while the form is fetched", async () => {
     vi.mocked(SURVEY_API.getForm).mockReturnValue(new Promise(() => {}));
@@ -89,10 +95,12 @@ describe("SurveyPage", () => {
 
   it("shows the invalid-token state on 401 and offers a LINE login", async () => {
     vi.mocked(SURVEY_API.getForm).mockRejectedValue(createHttpError(401));
-    renderPage();
+    const { session } = renderPage();
     expect(await screen.findByText(SURVEY_TEXT.errors.unauthorized)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: SURVEY_TEXT.relogin }));
-    expect(liff.login).toHaveBeenCalledWith({ redirectUri: window.location.href });
+    // the button goes through the session's login, not liff directly
+    expect(session.login).toHaveBeenCalledOnce();
+    expect(liff.login).not.toHaveBeenCalled();
   });
 
   it("shows a load error with retry on other failures", async () => {
