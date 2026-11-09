@@ -1,10 +1,23 @@
 import { defineConfig } from 'vitest/config'
+import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from "path";
 
+// `npm run dev:mock` (mode "mock"): fake LINE login and fake APIs from
+// src/dev-mock, for working on screens without LINE. Never used by `build`.
+const devMockPlugin = (): Plugin => ({
+  name: "g99-dev-mock",
+  transformIndexHtml: (html) =>
+    html.replace(
+      '<script type="module" src="/src/main.tsx"></script>',
+      '<script type="module" src="/src/dev-mock/install.ts"></script>' +
+        '<script type="module" src="/src/main.tsx"></script>',
+    ),
+});
+
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   define: {
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   },
@@ -15,10 +28,14 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
+    ...(mode === "mock" ? [devMockPlugin()] : []),
   ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      ...(mode === "mock"
+        ? { "@line/liff": path.resolve(__dirname, "./src/dev-mock/liff.ts") }
+        : {}),
     },
   },
   build: {
@@ -57,7 +74,8 @@ export default defineConfig({
         'src/**/*.d.ts',
         'src/main.tsx',
         'src/vite-env.d.ts',
-        'src/test'
+        'src/test',
+        'src/dev-mock'
       ],
       thresholds: {
         lines: 80,
@@ -67,4 +85,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
