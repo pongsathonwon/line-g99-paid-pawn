@@ -154,13 +154,16 @@ type TMockFail = "simatic" | "simatic-once" | "duplicate" | "window" | "notfound
 const FAILS: TMockFail[] = ["simatic", "simatic-once", "duplicate", "window", "notfound", "empty"];
 const FAIL_KEY = "G99_DEV_MOCK_FAIL";
 
+// read on page load only, so "simatic-once" is not re-armed by a retry while
+// the param is still in the address bar
+const params = new URLSearchParams(window.location.search);
+if (params.has("mock-fail")) {
+  const fromUrl = params.get("mock-fail") as TMockFail;
+  if (FAILS.includes(fromUrl)) sessionStorage.setItem(FAIL_KEY, fromUrl);
+  else sessionStorage.removeItem(FAIL_KEY);
+}
+
 const readMockFail = (): TMockFail | null => {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("mock-fail")) {
-    const fromUrl = params.get("mock-fail") as TMockFail;
-    if (FAILS.includes(fromUrl)) sessionStorage.setItem(FAIL_KEY, fromUrl);
-    else sessionStorage.removeItem(FAIL_KEY);
-  }
   const stored = sessionStorage.getItem(FAIL_KEY) as TMockFail | null;
   return stored && FAILS.includes(stored) ? stored : null;
 };

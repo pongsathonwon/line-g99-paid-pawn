@@ -120,7 +120,7 @@ describe("SurveyTxnPage (rate one transaction)", () => {
     const { toast } = renderPage();
     await fillAndSubmit();
 
-    await waitFor(() => expect(toast.warning).toHaveBeenCalledWith("ประเมินรายการนี้แล้ว"));
+    await waitFor(() => expect(toast.warning).toHaveBeenCalledWith("ประเมินรายการนี้แล้ว", 4000));
     expect(await screen.findByRole("heading", { name: t.list.heading })).toBeInTheDocument();
     // the list is asked again, not taken from the cache
     expect(SURVEY_API.getTransactions).toHaveBeenCalledTimes(2);
@@ -131,7 +131,7 @@ describe("SurveyTxnPage (rate one transaction)", () => {
     const { toast } = renderPage();
     await fillAndSubmit();
 
-    await waitFor(() => expect(toast.warning).toHaveBeenCalledWith(t.errors.setChanged));
+    await waitFor(() => expect(toast.warning).toHaveBeenCalledWith(t.errors.setChanged, 4000));
     await waitFor(() => expect(SURVEY_API.getForm).toHaveBeenCalledTimes(2));
     expect(screen.getByRole("heading", { name: t.form.heading })).toBeInTheDocument();
   });
@@ -169,7 +169,7 @@ describe("SurveyTxnPage (rate one transaction)", () => {
     vi.mocked(SURVEY_API.submitResponse).mockRejectedValue(error);
     const { toast } = renderPage();
     await fillAndSubmit();
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(message));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(message, 4000));
     expect(submitButton()).toBeEnabled();
   });
 

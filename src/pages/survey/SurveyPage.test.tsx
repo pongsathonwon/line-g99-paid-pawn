@@ -77,7 +77,8 @@ describe("SurveyPage (transaction list)", () => {
       expect.stringContaining("จำนำ"),
     ]);
     const first = within(cards()[0]);
-    expect(first.getByText(/14:05/)).toHaveTextContent(/^8 .+ 2569 14:05 · สาขา G006$/);
+    expect(first.getByText(/14:05/)).toHaveTextContent(/^8 .+ 2569 14:05$/);
+    expect(first.getByText("สาขา G006")).toBeInTheDocument();
     expect(first.getByText("เลขที่เอกสาร C060012345")).toBeInTheDocument();
     expect(first.getByText("1,500.00 บาท")).toBeInTheDocument();
     expect(screen.getByText(t.list.hint(30))).toBeInTheDocument();

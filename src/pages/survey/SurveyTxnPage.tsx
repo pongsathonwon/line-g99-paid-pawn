@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useMutation,
@@ -33,6 +33,8 @@ import {
 } from "./useSurveyTransactions";
 
 const t = SURVEY_TEXT;
+// long enough to read before the page changes (the app default is 1 s)
+const TOAST_MS = 4000;
 
 /** Submit refused for this transaction: the page shows why, with a way back. */
 type TBlocked = "notFound" | "notEligible";
@@ -51,6 +53,11 @@ function SurveyTxnPage() {
   const toast = useToast();
   const [result, setResult] = useState<TSurveyResponseRes | null>(null);
   const [blocked, setBlocked] = useState<TBlocked | null>(null);
+
+  // opened from a scrolled list: start at the transaction summary
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const formQuery = useQuery({
     queryKey: ["survey-form", testMode?.test, testMode?.uid],
@@ -75,7 +82,7 @@ function SurveyTxnPage() {
       const code = getResultCode(error);
       if (code === "40901") {
         // someone (or another device) rated it first
-        toast.warning(t.errors.alreadySurveyed);
+        toast.warning(t.errors.alreadySurveyed, TOAST_MS);
         refreshList();
         backToList();
         return;
@@ -93,19 +100,19 @@ function SurveyTxnPage() {
       }
       if (status === 409) {
         // 40900: the question set was replaced while the page was open
-        toast.warning(t.errors.setChanged);
+        toast.warning(t.errors.setChanged, TOAST_MS);
         formQuery.refetch();
         return;
       }
       if (isTestKeyRefused(error)) {
-        toast.error(t.testMode.refusedTitle);
+        toast.error(t.testMode.refusedTitle, TOAST_MS);
         return;
       }
       if (isMemberServiceDown(error)) {
-        toast.error(`${t.errors.memberServiceDown} ${t.errors.memberServiceDownHint}`);
+        toast.error(`${t.errors.memberServiceDown} ${t.errors.memberServiceDownHint}`, TOAST_MS);
         return;
       }
-      toast.error(status === 401 ? t.errors.unauthorized : t.errors.submit);
+      toast.error(status === 401 ? t.errors.unauthorized : t.errors.submit, TOAST_MS);
     },
   });
 

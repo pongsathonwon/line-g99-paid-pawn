@@ -31,14 +31,18 @@ function SurveyTxnCard({ txn, to }: TSurveyTxnCardProps) {
           )}
         </div>
         <span className="text-sm text-gray-600">
-          {formatTxnAt(txn.txnAt)} · {t.branch} {txn.branchShortName}
+          <span className="whitespace-nowrap">{formatTxnAt(txn.txnAt)}</span>
+          {" · "}
+          <span className="whitespace-nowrap">
+            {t.branch} {txn.branchShortName}
+          </span>
         </span>
         <span className="text-xs text-gray-500">
           {t.docNumb} {txn.docNumb}
         </span>
       </div>
       <div className="flex items-center gap-1 shrink-0">
-        <span className="font-semibold text-gray-900">
+        <span className="font-semibold text-gray-900 whitespace-nowrap">
           {formatAmount(txn.amount)}
         </span>
         {isLink && <ChevronRight aria-hidden className="w-5 h-5 text-gray-400" />}
