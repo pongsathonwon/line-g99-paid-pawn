@@ -8,7 +8,7 @@ import {
   createSurveySchema,
   getRequiredRatingKeys,
   isValidRating,
-  toSurveyRequest,
+  toSurveyAnswers,
 } from "./survey.schema";
 import { SURVEY_TEXT } from "./survey.locale";
 
@@ -17,8 +17,6 @@ const schema = createSurveySchema(questions);
 
 const allFive = { q11: 5, q12: 5, q13: 5, q14: 5, q15: 5 };
 const validValues = {
-  branchCode: 6,
-  txnType: "PAWN",
   ratings: allFive,
   texts: { q16: "" },
 };
@@ -96,18 +94,6 @@ describe("createSurveySchema", () => {
     expect(result.success).toBe(false);
     expect(result.error?.issues[0].message).toBe(SURVEY_TEXT.errors.textRequired);
   });
-
-  it("requires a branch", () => {
-    expect(issuesAt({ ...validValues, branchCode: null }, "branchCode")[0].message).toBe(
-      SURVEY_TEXT.errors.branch,
-    );
-  });
-
-  it("requires a transaction type", () => {
-    expect(issuesAt({ ...validValues, txnType: "" }, "txnType")[0].message).toBe(
-      SURVEY_TEXT.errors.txnType,
-    );
-  });
 });
 
 describe("survey form helpers", () => {
@@ -129,70 +115,35 @@ describe("survey form helpers", () => {
     expect(isValidRating(value)).toBe(expected);
   });
 
-  it("presets the branch from the form and starts with no ratings", () => {
-    expect(createDefaultValues(mockSurveyForm)).toEqual({
-      branchCode: 6,
-      txnType: "",
+  it("starts with no ratings and empty comments", () => {
+    expect(createDefaultValues(questions)).toEqual({
       ratings: {},
       texts: { q16: "" },
     });
   });
 });
 
-describe("toSurveyRequest", () => {
-  it("sends entry 'qr' when the preset branch was kept", () => {
-    const req = toSurveyRequest(
-      { ...validValues, texts: { q16: "  บริการดีมาก  " } },
-      mockSurveyForm,
-    );
-    expect(req).toEqual({
-      setId: 1,
-      branchCode: 6,
-      txnType: "PAWN",
-      entry: "qr",
-      answers: [
-        { questionId: 11, rating: 5 },
-        { questionId: 12, rating: 5 },
-        { questionId: 13, rating: 5 },
-        { questionId: 14, rating: 5 },
-        { questionId: 15, rating: 5 },
-        { questionId: 16, text: "บริการดีมาก" },
-      ],
-    });
-  });
-
-  it("sends entry 'manual' when the branch was changed", () => {
-    const req = toSurveyRequest({ ...validValues, branchCode: 30 }, mockSurveyForm);
-    expect(req.entry).toBe("manual");
-  });
-
-  it("sends entry 'manual' when there was no preset branch", () => {
-    const req = toSurveyRequest(validValues, {
-      ...mockSurveyForm,
-      presetBranchCode: null,
-    });
-    expect(req.entry).toBe("manual");
-  });
-
-  it("keeps the qr/manual rule in test mode (the server records 'test')", () => {
-    const testForm = { ...mockSurveyForm, testMode: true, effectiveUid: "U1" };
-    expect(toSurveyRequest(validValues, testForm).entry).toBe("qr");
-    expect(toSurveyRequest({ ...validValues, branchCode: 30 }, testForm).entry).toBe("manual");
+describe("toSurveyAnswers", () => {
+  it("lists ratings and the trimmed comment in question order", () => {
+    expect(
+      toSurveyAnswers({ ...validValues, texts: { q16: "  บริการดีมาก  " } }, questions),
+    ).toEqual([
+      { questionId: 11, rating: 5 },
+      { questionId: 12, rating: 5 },
+      { questionId: 13, rating: 5 },
+      { questionId: 14, rating: 5 },
+      { questionId: 15, rating: 5 },
+      { questionId: 16, text: "บริการดีมาก" },
+    ]);
   });
 
   it("leaves out an empty comment and unanswered optional ratings", () => {
-    const form = {
-      ...mockSurveyForm,
-      questionSet: {
-        ...mockSurveyForm.questionSet,
-        questions: [
-          ...questions,
-          { questionId: 20, seq: 7, questionKey: "extra", kind: "RATING_1_5" as const, isRequired: false, textTh: "extra" },
-          { questionId: 21, seq: 8, questionKey: "future", kind: "CHOICE" as never, isRequired: false, textTh: "future" },
-        ],
-      },
-    };
-    const req = toSurveyRequest({ ...validValues, texts: { q16: "   " } }, form);
-    expect(req.answers.map((a) => a.questionId)).toEqual([11, 12, 13, 14, 15]);
+    const more = [
+      ...questions,
+      { questionId: 20, seq: 7, questionKey: "extra", kind: "RATING_1_5" as const, isRequired: false, textTh: "extra" },
+      { questionId: 21, seq: 8, questionKey: "future", kind: "CHOICE" as never, isRequired: false, textTh: "future" },
+    ];
+    const answers = toSurveyAnswers({ ...validValues, texts: { q16: "   " } }, more);
+    expect(answers.map((a) => a.questionId)).toEqual([11, 12, 13, 14, 15]);
   });
 });

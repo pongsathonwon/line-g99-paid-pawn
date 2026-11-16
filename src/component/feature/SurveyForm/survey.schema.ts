@@ -1,10 +1,5 @@
 import { z } from "zod";
-import type {
-  TSurveyAnswer,
-  TSurveyForm,
-  TSurveyQuestion,
-  TSurveyResponseReq,
-} from "@/api/endpoint/survey";
+import type { TSurveyAnswer, TSurveyQuestion } from "@/api/endpoint/survey";
 import { SURVEY_TEXT } from "./survey.locale";
 
 export const SURVEY_TEXT_MAX_LENGTH = 1000;
@@ -29,8 +24,6 @@ const isText = (q: TSurveyQuestion) => q.kind === "TEXT";
 /** Built from the question set, so a new set version needs no code change. */
 export const createSurveySchema = (questions: TSurveyQuestion[]) =>
   z.object({
-    branchCode: z.number({ error: t.branch }).int(t.branch),
-    txnType: z.string({ error: t.txnType }).min(1, t.txnType),
     ratings: z.object(
       Object.fromEntries(
         questions
@@ -53,26 +46,23 @@ export const createSurveySchema = (questions: TSurveyQuestion[]) =>
     ),
   });
 
+// Branch and type are not on the form in v2: they come from the transaction.
 export type TSurveyFormValues = {
-  branchCode: number | null;
-  txnType: string;
   ratings: Record<string, number | undefined>;
   texts: Record<string, string>;
 };
 
 export type TSurveyFormOutput = {
-  branchCode: number;
-  txnType: string;
   ratings: Record<string, number | undefined>;
   texts: Record<string, string>;
 };
 
-export const createDefaultValues = (form: TSurveyForm): TSurveyFormValues => ({
-  branchCode: form.presetBranchCode,
-  txnType: "",
+export const createDefaultValues = (
+  questions: TSurveyQuestion[],
+): TSurveyFormValues => ({
   ratings: {},
   texts: Object.fromEntries(
-    form.questionSet.questions
+    questions
       .filter(isText)
       .map((q) => [answerKey(q.questionId), ""]),
   ),
@@ -86,22 +76,12 @@ export const getRequiredRatingKeys = (questions: TSurveyQuestion[]) =>
 export const isValidRating = (value: unknown) =>
   ratingSchema.safeParse(value).success;
 
-export const toSurveyRequest = (
+/** The `answers` of POST /responses, in question order. */
+export const toSurveyAnswers = (
   values: TSurveyFormOutput,
-  form: TSurveyForm,
-): TSurveyResponseReq => ({
-  setId: form.questionSet.setId,
-  branchCode: values.branchCode,
-  txnType: values.txnType,
-  // "qr" only while the branch is still the one preset from the QR's ?b=.
-  // Also in test mode: GoldenApi accepts only qr/manual and records "test"
-  // itself.
-  entry:
-    form.presetBranchCode !== null &&
-    values.branchCode === form.presetBranchCode
-      ? "qr"
-      : "manual",
-  answers: form.questionSet.questions.flatMap((q): TSurveyAnswer[] => {
+  questions: TSurveyQuestion[],
+): TSurveyAnswer[] =>
+  questions.flatMap((q): TSurveyAnswer[] => {
     const key = answerKey(q.questionId);
     if (isRating(q)) {
       const rating = values.ratings[key];
@@ -112,5 +92,4 @@ export const toSurveyRequest = (
       return text ? [{ questionId: q.questionId, text }] : [];
     }
     return [];
-  }),
-});
+  });

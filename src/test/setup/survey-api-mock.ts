@@ -2,13 +2,14 @@ import { vi } from "vitest";
 import { AxiosError, AxiosHeaders, type AxiosResponse } from "axios";
 import type {
   TSurveyForm,
-  TSurveyLinkRes,
   TSurveyResponseRes,
+  TSurveyTransaction,
+  TSurveyTransactions,
 } from "@/api/endpoint/survey";
 
 /**
- * Mock data for SURVEY_API tests, shaped like GoldenApi docs/SURVEY_API.md
- * (question set v1 from the design, §2 and §3).
+ * Mock data for SURVEY_API tests, shaped like GoldenApi docs/SURVEY_API.md v2
+ * (question set v1 from the design).
  */
 export const mockSurveyForm: TSurveyForm = {
   questionSet: {
@@ -24,40 +25,71 @@ export const mockSurveyForm: TSurveyForm = {
       { questionId: 16, seq: 6, questionKey: "comment", kind: "TEXT", isRequired: false, textTh: "ความเห็นเพิ่มเติม" },
     ],
   },
-  txnTypes: [
-    { code: "BUY_GOLD", label: "ซื้อทอง" },
-    { code: "SELL_GOLD", label: "ขายทอง" },
-    { code: "CHANGE_GOLD", label: "เปลี่ยนทอง" },
-    { code: "PAWN", label: "จำนำ" },
-    { code: "PAY_INTEREST", label: "ต่อดอก" },
-    { code: "REDEEM", label: "ไถ่ถอน" },
-    { code: "OTHER", label: "อื่นๆ" },
-  ],
-  branches: [
-    { branchCode: 0, branchShortName: "G000", branchName: "สำนักงานใหญ่" },
-    { branchCode: 6, branchShortName: "G006", branchName: "สาขา 6" },
-    { branchCode: 30, branchShortName: "G030", branchName: "สาขา 30" },
-  ],
-  presetBranchCode: 6,
-  member: { isMember: false, custCode: null },
+};
+
+export const mockTxnChange: TSurveyTransaction = {
+  txnType: "CHANGE_GOLD",
+  label: "เปลี่ยนทอง",
+  docNumb: "C060012345",
+  txnAt: "2026-11-08T14:05:00",
+  branchCode: 6,
+  branchShortName: "G006",
+  amount: 1500,
+  surveyed: false,
+};
+
+export const mockTxnPawn: TSurveyTransaction = {
+  txnType: "PAWN",
+  label: "จำนำ",
+  docNumb: "P010000777",
+  txnAt: "2026-11-01T09:30:00",
+  branchCode: 1,
+  branchShortName: "G001",
+  amount: 25000,
+  surveyed: false,
+};
+
+export const mockTxnRated: TSurveyTransaction = {
+  txnType: "PAY_INTEREST",
+  label: "ต่อดอก",
+  docNumb: "R060054321",
+  txnAt: "2026-11-09T10:12:00",
+  branchCode: 1,
+  branchShortName: "G001",
+  amount: 750,
+  surveyed: true,
+};
+
+/** A member's list, in the order GoldenApi returned it. */
+export const mockSurveyTransactions: TSurveyTransactions = {
+  isMember: true,
+  custCode: "4401837",
+  windowDays: 30,
+  windowFrom: "2026-10-10",
+  windowTo: "2026-11-09",
+  items: [mockTxnChange, mockTxnRated, mockTxnPawn],
+};
+
+export const mockNonMemberTransactions: TSurveyTransactions = {
+  isMember: false,
+  custCode: null,
+  windowDays: 30,
+  windowFrom: "2026-10-10",
+  windowTo: "2026-11-09",
+  items: [],
+};
+
+export const TEST_UID = "U0bf26f4085b0a41af588f6cb1774409e";
+
+/** /transactions in test mode (X-Survey-Test-Key accepted). */
+export const mockTestTransactions: TSurveyTransactions = {
+  ...mockSurveyTransactions,
+  testMode: true,
+  effectiveUid: TEST_UID,
 };
 
 export const mockSurveyResponseRes: TSurveyResponseRes = {
   responseId: 1024,
-  isMember: true,
-};
-
-export const mockSurveyLinkRes: TSurveyLinkRes = {
-  linked: 2,
-  isMember: true,
-};
-
-/** A /form answer in test mode (X-Survey-Test-Key accepted). */
-export const mockSurveyTestForm: TSurveyForm = {
-  ...mockSurveyForm,
-  member: { isMember: true, custCode: "4401837" },
-  testMode: true,
-  effectiveUid: "U0bf26f4085b0a41af588f6cb1774409e",
 };
 
 /** An axios error with an HTTP status, as the survey client would reject with. */
@@ -90,18 +122,18 @@ export const createTestKeyRefusedError = (errorMessage = "invalid test key") =>
  * Mock SURVEY_API module. Use in vi.mock("@/api/endpoint/survey", ...).
  */
 export const createSurveyApiMock = () => {
+  const mockGetTransactions = vi.fn();
   const mockGetForm = vi.fn();
   const mockSubmitResponse = vi.fn();
-  const mockLink = vi.fn();
 
   return {
+    mockGetTransactions,
     mockGetForm,
     mockSubmitResponse,
-    mockLink,
     SURVEY_API: {
+      getTransactions: mockGetTransactions,
       getForm: mockGetForm,
       submitResponse: mockSubmitResponse,
-      link: mockLink,
     },
   };
 };

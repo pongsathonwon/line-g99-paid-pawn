@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import { lazy } from "react";
 
 // Eagerly load critical components
@@ -66,8 +66,8 @@ const HistoryDetailPage = lazyWithReload(
 );
 const TermPage = lazyWithReload(() => import("@/pages/TermPage"));
 const SurveyPage = lazyWithReload(() => import("@/pages/survey/SurveyPage"));
-const SurveyLinkedPage = lazyWithReload(
-  () => import("@/pages/survey/SurveyLinkedPage"),
+const SurveyTxnPage = lazyWithReload(
+  () => import("@/pages/survey/SurveyTxnPage"),
 );
 
 export const APP_ROUTES = createBrowserRouter([
@@ -76,7 +76,8 @@ export const APP_ROUTES = createBrowserRouter([
     element: <SplashScreen />,
     errorElement: <NotfoundPage />,
   },
-  // Post-visit survey: open to guests and members alike, needs LINE only.
+  // Post-visit survey v2: needs LINE only. Survey membership comes from
+  // GoldenApi (/transactions isMember), not the g99-online session (PV-26).
   {
     element: (
       <RequireLine>
@@ -89,10 +90,15 @@ export const APP_ROUTES = createBrowserRouter([
         element: <SurveyPage />,
       },
       {
-        path: "survey/linked",
-        element: <SurveyLinkedPage />,
+        path: "survey/t/:txnType/:docNumb",
+        element: <SurveyTxnPage />,
       },
     ],
+  },
+  // v1 return page after register; v2 has nothing to link (POST /link is gone)
+  {
+    path: "survey/linked",
+    element: <Navigate to="/survey" replace />,
   },
   {
     element: (
