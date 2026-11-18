@@ -65,10 +65,10 @@ const renderApp = (initialEntry: string) =>
               <Route path="/home" element={<div>pawn list</div>} />
             </Route>
             <Route
-              path="/survey/linked"
+              path="/survey"
               element={
                 <RequireLine>
-                  <div>survey linked</div>
+                  <div>survey list</div>
                 </RequireLine>
               }
             />
@@ -106,10 +106,10 @@ describe("session flows", () => {
     vi.mocked(AUTH_API.login)
       .mockRejectedValueOnce(notRegistered())
       .mockResolvedValueOnce(mockAuthLoginResponse);
-    renderApp("/thai-register?redirect=%2Fsurvey%2Flinked");
+    renderApp("/thai-register?redirect=%2Fsurvey%3Fb%3D6");
 
     fireEvent.click(await screen.findByRole("button", { name: "ดำเนินการต่อ" }));
-    expect(await screen.findByText("survey linked")).toBeInTheDocument();
+    expect(await screen.findByText("survey list")).toBeInTheDocument();
   });
 
   it("a guest opening /home is sent to register, then back to /home", async () => {
@@ -133,7 +133,7 @@ describe("session flows", () => {
 
   it("a g99-online outage does not block the survey", async () => {
     vi.mocked(AUTH_API.login).mockRejectedValue(createHttpError(500));
-    renderApp("/survey/linked");
-    expect(await screen.findByText("survey linked")).toBeInTheDocument();
+    renderApp("/survey");
+    expect(await screen.findByText("survey list")).toBeInTheDocument();
   });
 });

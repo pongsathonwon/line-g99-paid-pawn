@@ -1,12 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { liff } from "@line/liff";
 import SurveyPage from "./SurveyPage";
 import { SURVEY_API } from "@/api/endpoint/survey";
 import { SURVEY_TEXT } from "@/component/feature/SurveyForm/survey.locale";
 import {
   createHttpError,
-  mockSurveyForm,
+  mockNonMemberTransactions,
+  mockSurveyTransactions,
+  mockTxnChange,
+  mockTxnRated,
 } from "@/test/setup/survey-api-mock";
 import { renderWithSurveyProviders } from "@/test/setup/survey-wrapper";
 import { createMockSession } from "@/test/setup/session-mock";
@@ -20,6 +23,8 @@ vi.mock("@line/liff", () => ({
   liff: { login: vi.fn(), getIDToken: vi.fn() },
 }));
 
+const t = SURVEY_TEXT;
+
 const renderPage = (
   options: Partial<Parameters<typeof renderWithSurveyProviders>[1]> = {},
 ) =>
@@ -29,158 +34,138 @@ const renderPage = (
     ...options,
   });
 
-const fillAndSubmit = async () => {
-  await screen.findByRole("radiogroup", { name: SURVEY_TEXT.txnTypeLabel });
-  fireEvent.click(screen.getByRole("radio", { name: "ต่อดอก" }));
-  mockSurveyForm.questionSet.questions
-    .filter((q) => q.kind === "RATING_1_5")
-    .forEach((q) =>
-      fireEvent.click(screen.getAllByRole("radio", { name: "5 ดาว" })[q.seq - 1]),
-    );
-  fireEvent.click(screen.getByRole("button", { name: SURVEY_TEXT.submit }));
-};
+const cards = () => screen.getAllByTestId("survey-txn-card");
+const location = () => screen.getByTestId("location");
 
-describe("SurveyPage", () => {
+describe("SurveyPage (transaction list)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStorage.clear();
+  });
+
+  it("shows loading while the list is fetched, and asks with the QR branch", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockReturnValue(new Promise(() => {}));
+    renderPage();
+    expect(screen.getByText("กำลังโหลดข้อมูล...")).toBeInTheDocument();
+    await waitFor(() => expect(SURVEY_API.getTransactions).toHaveBeenCalledWith("6"));
+  });
+
+  it("asks without b when the QR had none or b is not a number", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockResolvedValue(mockSurveyTransactions);
+    renderPage({ initialEntry: "/survey?b=abc" });
+    await waitFor(() => expect(SURVEY_API.getTransactions).toHaveBeenCalledWith(null));
   });
 
   it.each(["guest", "member"] as const)(
-    "works for a %s session (the survey needs LINE only)",
+    "lists the transactions for a %s g99-online session (membership is GoldenApi's)",
     async (status) => {
-      vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
+      vi.mocked(SURVEY_API.getTransactions).mockResolvedValue(mockSurveyTransactions);
       renderPage({ session: createMockSession({ status }) });
-      expect(
-        await screen.findByRole("heading", { name: "แบบประเมินหลังใช้บริการ" }),
-      ).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: t.list.heading })).toBeInTheDocument();
+      expect(cards()).toHaveLength(3);
     },
   );
 
-  it("shows loading while the form is fetched", async () => {
-    vi.mocked(SURVEY_API.getForm).mockReturnValue(new Promise(() => {}));
+  it("keeps the API's order and shows type, date and time, branch, doc number and amount", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockResolvedValue(mockSurveyTransactions);
     renderPage();
-    expect(screen.getByText("กำลังโหลดข้อมูล...")).toBeInTheDocument();
-    await waitFor(() => expect(SURVEY_API.getForm).toHaveBeenCalledWith("6"));
+    await screen.findByRole("heading", { name: t.list.heading });
+
+    expect(cards().map((c) => c.textContent)).toEqual([
+      expect.stringContaining("เปลี่ยนทอง"),
+      expect.stringContaining("ต่อดอก"),
+      expect.stringContaining("จำนำ"),
+    ]);
+    const first = within(cards()[0]);
+    expect(first.getByText(/14:05/)).toHaveTextContent(/^8 .+ 2569 14:05$/);
+    expect(first.getByText("สาขา G006")).toBeInTheDocument();
+    expect(first.getByText("เลขที่เอกสาร C060012345")).toBeInTheDocument();
+    expect(first.getByText("1,500.00 บาท")).toBeInTheDocument();
+    expect(screen.getByText(t.list.hint(30))).toBeInTheDocument();
   });
 
-  it("asks for the form without a branch when the QR had no b", async () => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue({
-      ...mockSurveyForm,
-      presetBranchCode: null,
-    });
-    renderPage({ initialEntry: "/survey" });
-    await waitFor(() => expect(SURVEY_API.getForm).toHaveBeenCalledWith(null));
-    expect(await screen.findByLabelText(/สาขาที่ใช้บริการ/)).toHaveValue("");
-  });
-
-  it("shows the form once loaded", async () => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
+  it("links an unrated card to its form, keeping ?b", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockResolvedValue(mockSurveyTransactions);
     renderPage();
-    expect(
-      await screen.findByRole("heading", { name: "แบบประเมินหลังใช้บริการ" }),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText(/สาขาที่ใช้บริการ/)).toHaveValue("6");
-  });
+    await screen.findByRole("heading", { name: t.list.heading });
 
-  it("falls back to the default title when the set has none", async () => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue({
-      ...mockSurveyForm,
-      questionSet: { ...mockSurveyForm.questionSet, title: "" },
-    });
-    renderPage();
-    expect(
-      await screen.findByRole("heading", { name: SURVEY_TEXT.title }),
-    ).toBeInTheDocument();
-  });
-
-  it("shows the invalid-token state on 401 and offers a LINE login", async () => {
-    vi.mocked(SURVEY_API.getForm).mockRejectedValue(createHttpError(401));
-    const { session } = renderPage();
-    expect(await screen.findByText(SURVEY_TEXT.errors.unauthorized)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: SURVEY_TEXT.relogin }));
-    // the button goes through the session's login, not liff directly
-    expect(session.login).toHaveBeenCalledOnce();
-    expect(liff.login).not.toHaveBeenCalled();
-  });
-
-  it("shows a load error with retry on other failures", async () => {
-    vi.mocked(SURVEY_API.getForm)
-      .mockRejectedValueOnce(createHttpError(500))
-      .mockResolvedValueOnce(mockSurveyForm);
-    renderPage();
-    expect(await screen.findByText(SURVEY_TEXT.errors.loadForm)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: SURVEY_TEXT.retry }));
-    expect(
-      await screen.findByRole("heading", { name: "แบบประเมินหลังใช้บริการ" }),
-    ).toBeInTheDocument();
-  });
-
-  it("thanks a member without offering to link", async () => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
-    vi.mocked(SURVEY_API.submitResponse).mockResolvedValue({
-      responseId: 1,
-      isMember: true,
-    });
-    renderPage();
-    await fillAndSubmit();
-
-    expect(await screen.findByText(SURVEY_TEXT.thankYou.title)).toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: SURVEY_TEXT.thankYou.linkAccount }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: SURVEY_TEXT.home })).toHaveAttribute(
-      "href",
-      "/home",
-    );
-    expect(vi.mocked(SURVEY_API.submitResponse).mock.calls[0][0]).toMatchObject({
-      setId: 1,
-      branchCode: 6,
-      txnType: "PAY_INTEREST",
-      entry: "qr",
-    });
-  });
-
-  it("thanks a non-member and links to register with redirect to /survey/linked", async () => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
-    vi.mocked(SURVEY_API.submitResponse).mockResolvedValue({
-      responseId: 2,
-      isMember: false,
-    });
-    renderPage();
-    await fillAndSubmit();
-
-    expect(await screen.findByText(SURVEY_TEXT.thankYou.title)).toBeInTheDocument();
-    const link = screen.getByRole("link", { name: SURVEY_TEXT.thankYou.linkAccount });
-    expect(link).toHaveAttribute("href", "/register?redirect=%2Fsurvey%2Flinked");
+    const link = screen.getByRole("link", { name: new RegExp(mockTxnChange.docNumb) });
+    expect(link).toHaveAttribute("href", "/survey/t/CHANGE_GOLD/C060012345?b=6");
     fireEvent.click(link);
-    expect(screen.getByTestId("location")).toHaveTextContent(
-      "/register?redirect=%2Fsurvey%2Flinked",
-    );
+    expect(location()).toHaveTextContent("/survey/t/CHANGE_GOLD/C060012345?b=6");
   });
 
-  it("reloads the form when the question set was replaced (409)", async () => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
-    vi.mocked(SURVEY_API.submitResponse).mockRejectedValue(createHttpError(409));
-    const { toast } = renderPage();
-    await fillAndSubmit();
+  it("shows a rated card with ประเมินแล้ว and no link", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockResolvedValue(mockSurveyTransactions);
+    renderPage();
+    await screen.findByRole("heading", { name: t.list.heading });
 
-    await waitFor(() =>
-      expect(toast.warning).toHaveBeenCalledWith(SURVEY_TEXT.errors.setChanged),
-    );
-    await waitFor(() => expect(SURVEY_API.getForm).toHaveBeenCalledTimes(2));
-    expect(screen.queryByText(SURVEY_TEXT.thankYou.title)).not.toBeInTheDocument();
+    const rated = cards()[1];
+    expect(rated).toHaveTextContent(mockTxnRated.docNumb);
+    expect(within(rated).getByText(t.list.surveyed)).toBeInTheDocument();
+    expect(rated).toHaveAttribute("aria-disabled", "true");
+    expect(rated.tagName).not.toBe("A");
+    expect(screen.getAllByRole("link")).toHaveLength(2);
+    expect(screen.getAllByText(t.list.surveyed)).toHaveLength(1);
+  });
+
+  it("shows the empty state when there is nothing in the last 30 days", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockResolvedValue({
+      ...mockSurveyTransactions,
+      items: [],
+    });
+    renderPage();
+    expect(await screen.findByText("ไม่พบรายการในช่วง 30 วันที่ผ่านมา")).toBeInTheDocument();
+    expect(screen.queryByTestId("survey-txn-card")).not.toBeInTheDocument();
   });
 
   it.each([
-    [401, SURVEY_TEXT.errors.unauthorized],
-    [400, SURVEY_TEXT.errors.submit],
-  ])("shows a toast when submit fails with %s", async (status, message) => {
-    vi.mocked(SURVEY_API.getForm).mockResolvedValue(mockSurveyForm);
-    vi.mocked(SURVEY_API.submitResponse).mockRejectedValue(createHttpError(status));
-    const { toast } = renderPage();
-    await fillAndSubmit();
+    ["/survey?b=6", "/register?redirect=%2Fsurvey%3Fb%3D6"],
+    ["/survey", "/register?redirect=%2Fsurvey"],
+  ])("sends a non-member on %s to register, coming back to the list", async (entry, target) => {
+    vi.mocked(SURVEY_API.getTransactions).mockResolvedValue(mockNonMemberTransactions);
+    renderPage({ initialEntry: entry, session: createMockSession({ status: "guest" }) });
+    await waitFor(() => expect(location()).toHaveTextContent(target));
+  });
 
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(message));
-    expect(screen.queryByText(SURVEY_TEXT.thankYou.title)).not.toBeInTheDocument();
+  it("does not loop to register when g99-online already says member; retry instead", async () => {
+    vi.mocked(SURVEY_API.getTransactions)
+      .mockResolvedValueOnce(mockNonMemberTransactions)
+      .mockResolvedValueOnce(mockSurveyTransactions);
+    renderPage({ session: createMockSession({ status: "member" }) });
+
+    expect(await screen.findByText(t.errors.notMember)).toBeInTheDocument();
+    expect(screen.queryByTestId("location")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: t.retry }));
+    expect(await screen.findByRole("heading", { name: t.list.heading })).toBeInTheDocument();
+  });
+
+  it("shows the retry screen on 503 50003 (Simatic down) without retrying by itself", async () => {
+    vi.mocked(SURVEY_API.getTransactions)
+      .mockRejectedValueOnce(createHttpError(503, "50003"))
+      .mockResolvedValueOnce(mockSurveyTransactions);
+    renderPage();
+
+    expect(await screen.findByText(t.errors.memberServiceDown)).toBeInTheDocument();
+    expect(screen.getByText(t.errors.memberServiceDownHint)).toBeInTheDocument();
+    expect(SURVEY_API.getTransactions).toHaveBeenCalledTimes(1);
+    expect(liff.login).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: t.retry }));
+    expect(await screen.findByRole("heading", { name: t.list.heading })).toBeInTheDocument();
+  });
+
+  it("shows a generic retry for other errors", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockRejectedValue(createHttpError(500, "50001"));
+    renderPage();
+    expect(await screen.findByText(t.errors.loadList)).toBeInTheDocument();
+    expect(screen.queryByText(t.errors.memberServiceDown)).not.toBeInTheDocument();
+  });
+
+  it("offers a LINE login again on 401", async () => {
+    vi.mocked(SURVEY_API.getTransactions).mockRejectedValue(createHttpError(401));
+    const { session } = renderPage();
+    fireEvent.click(await screen.findByRole("button", { name: t.relogin }));
+    expect(session.login).toHaveBeenCalled();
   });
 });

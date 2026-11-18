@@ -6,14 +6,18 @@ import path from "path";
 
 // `npm run dev:mock` (mode "mock"): fake LINE login and fake APIs from
 // src/dev-mock, for working on screens without LINE. Never used by `build`.
+// install.ts goes in <head>, so it runs before main.tsx (module scripts run
+// in document order). A tag, not a string replace: after an HMR update Vite
+// serves main.tsx as "/src/main.tsx?t=…", which a replace would miss.
 const devMockPlugin = (): Plugin => ({
   name: "g99-dev-mock",
-  transformIndexHtml: (html) =>
-    html.replace(
-      '<script type="module" src="/src/main.tsx"></script>',
-      '<script type="module" src="/src/dev-mock/install.ts"></script>' +
-        '<script type="module" src="/src/main.tsx"></script>',
-    ),
+  transformIndexHtml: () => [
+    {
+      tag: "script",
+      attrs: { type: "module", src: "/src/dev-mock/install.ts" },
+      injectTo: "head",
+    },
+  ],
 });
 
 // https://vite.dev/config/

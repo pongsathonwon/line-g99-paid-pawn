@@ -7,15 +7,14 @@ import {
   type Resolver,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 import { Button } from "@/component/Button";
 import FormControl from "@/component/FormControl/FormControl";
 import { formControlInputVariants } from "@/component/FormControl/formControl.variants";
 import StarRating from "@/component/ui/StarRating/StarRating";
 import type {
-  TSurveyForm,
+  TSurveyAnswer,
+  TSurveyQuestionSet,
   TSurveyQuestion,
-  TSurveyResponseReq,
 } from "@/api/endpoint/survey";
 import { SURVEY_TEXT } from "./survey.locale";
 import {
@@ -25,7 +24,7 @@ import {
   createSurveySchema,
   getRequiredRatingKeys,
   isValidRating,
-  toSurveyRequest,
+  toSurveyAnswers,
   type TSurveyFormOutput,
   type TSurveyFormValues,
 } from "./survey.schema";
@@ -33,13 +32,19 @@ import {
 const t = SURVEY_TEXT;
 
 type TSurveyFormProps = {
-  form: TSurveyForm;
-  onSubmit: (req: TSurveyResponseReq) => void;
+  questionSet: TSurveyQuestionSet;
+  /** the answers, ready for POST /responses */
+  onSubmit: (answers: TSurveyAnswer[]) => void;
   isPending?: boolean;
 };
 
-function SurveyForm({ form, onSubmit, isPending = false }: TSurveyFormProps) {
-  const { questions } = form.questionSet;
+/** The star rows and the comment. The transaction is shown by the page. */
+function SurveyForm({
+  questionSet,
+  onSubmit,
+  isPending = false,
+}: TSurveyFormProps) {
+  const { questions } = questionSet;
   const sortedQuestions = useMemo(
     () => [...questions].sort((a, b) => a.seq - b.seq),
     [questions],
@@ -63,7 +68,7 @@ function SurveyForm({ form, onSubmit, isPending = false }: TSurveyFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<TSurveyFormValues, unknown, TSurveyFormOutput>({
-    defaultValues: createDefaultValues(form),
+    defaultValues: createDefaultValues(questions),
     resolver,
   });
 
@@ -73,7 +78,7 @@ function SurveyForm({ form, onSubmit, isPending = false }: TSurveyFormProps) {
   );
 
   const submit = (values: TSurveyFormOutput) =>
-    onSubmit(toSurveyRequest(values, form));
+    onSubmit(toSurveyAnswers(values, questions));
 
   return (
     <form
@@ -81,89 +86,6 @@ function SurveyForm({ form, onSubmit, isPending = false }: TSurveyFormProps) {
       className="flex flex-col gap-6"
       noValidate
     >
-      <Controller
-        name="branchCode"
-        control={control}
-        render={({ field }) => (
-          <FormControl id="survey-branch" state={errors.branchCode ? "error" : "default"}>
-            <FormControl.Label>
-              {t.branchLabel}
-              <span className="text-red-500 ml-1">*</span>
-            </FormControl.Label>
-            <select
-              id="survey-branch"
-              ref={field.ref}
-              name={field.name}
-              value={field.value ?? ""}
-              onBlur={field.onBlur}
-              onChange={(e) =>
-                field.onChange(
-                  e.target.value === "" ? null : Number(e.target.value),
-                )
-              }
-              className={formControlInputVariants({
-                state: errors.branchCode ? "error" : "default",
-              })}
-            >
-              <option value="">{t.branchPlaceholder}</option>
-              {form.branches.map((branch) => (
-                <option key={branch.branchCode} value={branch.branchCode}>
-                  {branch.branchShortName}
-                  {branch.branchName ? ` ${branch.branchName}` : ""}
-                </option>
-              ))}
-            </select>
-            {errors.branchCode && (
-              <FormControl.Error>{errors.branchCode.message}</FormControl.Error>
-            )}
-          </FormControl>
-        )}
-      />
-
-      <Controller
-        name="txnType"
-        control={control}
-        render={({ field }) => (
-          <fieldset className="flex flex-col gap-2">
-            <legend className="font-medium text-gray-700 mb-2">
-              {t.txnTypeLabel}
-              <span className="text-red-500 ml-1">*</span>
-            </legend>
-            <div
-              role="radiogroup"
-              aria-label={t.txnTypeLabel}
-              className="flex flex-wrap gap-2"
-            >
-              {form.txnTypes.map((txn) => {
-                const isActive = field.value === txn.code;
-                return (
-                  <button
-                    key={txn.code}
-                    type="button"
-                    role="radio"
-                    aria-checked={isActive}
-                    onClick={() => field.onChange(txn.code)}
-                    className={clsx(
-                      "rounded-full border px-4 py-2 text-sm font-medium transition",
-                      isActive
-                        ? "border-brand-red bg-brand-red text-white"
-                        : "border-gray-300 bg-white text-gray-800 hover:border-gray-400",
-                    )}
-                  >
-                    {txn.label}
-                  </button>
-                );
-              })}
-            </div>
-            {errors.txnType && (
-              <span role="alert" className="text-sm text-red-600">
-                {errors.txnType.message}
-              </span>
-            )}
-          </fieldset>
-        )}
-      />
-
       <p className="text-sm text-gray-500">{t.ratingHint}</p>
 
       {sortedQuestions.map((q) =>

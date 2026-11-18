@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { surveyClient } from "../survey-axios";
-import { SURVEY_API } from "./survey";
+import { SURVEY_API, type TSurveyResponseReq } from "./survey";
 import {
   mockSurveyForm,
-  mockSurveyLinkRes,
   mockSurveyResponseRes,
+  mockSurveyTransactions,
 } from "@/test/setup/survey-api-mock";
 
 vi.mock("../survey-axios", () => ({
@@ -23,34 +23,38 @@ describe("SURVEY_API", () => {
     vi.clearAllMocks();
   });
 
-  it("gets the form for the QR branch", async () => {
-    vi.mocked(surveyClient.get).mockResolvedValue(envelope(mockSurveyForm));
-    await expect(SURVEY_API.getForm("6")).resolves.toEqual(mockSurveyForm);
-    expect(surveyClient.get).toHaveBeenCalledWith("form", { params: { b: "6" } });
+  it("gets the transactions with the QR branch", async () => {
+    vi.mocked(surveyClient.get).mockResolvedValue(envelope(mockSurveyTransactions));
+    await expect(SURVEY_API.getTransactions("6")).resolves.toEqual(mockSurveyTransactions);
+    expect(surveyClient.get).toHaveBeenCalledWith("transactions", { params: { b: "6" } });
   });
 
-  it("gets the form without b when the QR had none", async () => {
-    vi.mocked(surveyClient.get).mockResolvedValue(envelope(mockSurveyForm));
-    await SURVEY_API.getForm(null);
-    expect(surveyClient.get).toHaveBeenCalledWith("form", { params: undefined });
+  it("gets the transactions without b when the QR had none", async () => {
+    vi.mocked(surveyClient.get).mockResolvedValue(envelope(mockSurveyTransactions));
+    await SURVEY_API.getTransactions(null);
+    expect(surveyClient.get).toHaveBeenCalledWith("transactions", { params: undefined });
   });
 
-  it("posts a response", async () => {
+  it("gets the question set from /form without any query", async () => {
+    vi.mocked(surveyClient.get).mockResolvedValue(envelope(mockSurveyForm));
+    await expect(SURVEY_API.getForm()).resolves.toEqual(mockSurveyForm);
+    expect(surveyClient.get).toHaveBeenCalledWith("form");
+  });
+
+  it("posts {setId, txnType, docNumb, entry, answers}", async () => {
     vi.mocked(surveyClient.post).mockResolvedValue(envelope(mockSurveyResponseRes));
-    const req = {
+    const req: TSurveyResponseReq = {
       setId: 1,
-      branchCode: 6,
-      txnType: "PAWN",
-      entry: "qr" as const,
+      txnType: "CHANGE_GOLD",
+      docNumb: "C060012345",
+      entry: "qr",
       answers: [{ questionId: 11, rating: 5 }],
     };
     await expect(SURVEY_API.submitResponse(req)).resolves.toEqual(mockSurveyResponseRes);
     expect(surveyClient.post).toHaveBeenCalledWith("responses", req);
   });
 
-  it("posts link", async () => {
-    vi.mocked(surveyClient.post).mockResolvedValue(envelope(mockSurveyLinkRes));
-    await expect(SURVEY_API.link()).resolves.toEqual(mockSurveyLinkRes);
-    expect(surveyClient.post).toHaveBeenCalledWith("link");
+  it("no longer has /link", () => {
+    expect(SURVEY_API).not.toHaveProperty("link");
   });
 });
