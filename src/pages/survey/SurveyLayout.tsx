@@ -9,7 +9,11 @@ type TSurveyLayoutProps = PropsWithChildren<{
   isTestMode?: boolean;
 }>;
 
-function SurveyLayout({ children, isTestMode = false, testUid }: TSurveyLayoutProps) {
+function SurveyLayout({
+  children,
+  isTestMode = false,
+  testUid,
+}: TSurveyLayoutProps) {
   return (
     <div className={`min-h-screen bg-gray-50 ${isTestMode ? "pt-10" : ""}`}>
       {isTestMode && (
@@ -21,9 +25,7 @@ function SurveyLayout({ children, isTestMode = false, testUid }: TSurveyLayoutPr
           {SURVEY_TEXT.testMode.banner(testUid)}
         </div>
       )}
-      <header className="flex justify-center h-16 border-b bg-white">
-        <img src="/logo/logo.png" alt="Golden 99" className="h-15" />
-      </header>
+
       <main className="max-w-md mx-auto px-4 py-6 flex flex-col gap-6">
         {children}
       </main>
